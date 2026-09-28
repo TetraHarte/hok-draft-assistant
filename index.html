@@ -1,0 +1,360 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#0f172a"/>
+<meta name="color-scheme" content="dark"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="format-detection" content="telephone=no"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+
+<title>HoK Solo Draft Assistant — iPhone</title>
+<style>
+:root{--bg:#07111f;--panel:#0f172a;--line:#263750;--text:#f3f7fd;--muted:#b5c3d7;--accent:#68b5ff;--good:#6ee7b7;--warn:#fbbf24;--bad:#fb7185}
+*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#07111f,#0a1322 50%,#08111d);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;min-height:100vh;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);font-size:16px;line-height:1.35;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+button,input,select{font:inherit}button{color:var(--text);cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}.app{max-width:960px;margin:auto;padding:16px;transform-origin:top center}h1{font-size:27px;margin:4px 0 2px}.sub{color:var(--muted);font-size:15px;margin-bottom:14px}
+.panel{background:rgba(15,23,42,.97);border:1px solid var(--line);border-radius:16px;padding:13px;margin-bottom:11px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.row{display:flex;gap:8px;align-items:center}.grow{flex:1}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+label{display:block;color:var(--muted);font-size:14px;margin-bottom:6px} select,input[type=text]{width:100%;background:#0a1425;color:var(--text);border:1px solid var(--line);border-radius:11px;padding:13px 12px;outline:none;min-height:46px}
+.btn{border:1px solid var(--line);background:#16243a;color:var(--text);border-radius:11px;padding:11px 13px;font-weight:750;font-size:14px}.btn.primary{background:var(--accent);border-color:var(--accent);color:#06101d}.btn.active{background:#214d7d;border-color:#4b86be}
+.tabs{display:flex;gap:7px;margin-bottom:11px;position:sticky;top:0;z-index:10;background:#07111f;padding:5px 0}.tab{flex:1}.hidden{display:none!important}.section-title{font-size:17px;font-weight:800;margin-bottom:9px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.slots{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.slot{min-height:68px;border:1px dashed #455a79;border-radius:11px;padding:5px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:12px;background:#0b1526;position:relative}.slot.filled{border-style:solid;color:var(--text);background:#142239}.slot .x{position:absolute;right:3px;top:0;border:0;background:transparent;color:#c4d0df;font-size:17px}.slot small{display:block;color:#b8c7da;font-size:10px;margin-top:3px}
+.modebar{display:flex;gap:6px;overflow-x:auto;overflow-y:hidden;margin:8px 0;-webkit-overflow-scrolling:touch}.mode{white-space:nowrap}.hero-list{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;padding-right:2px}.picker-list{max-height:none!important;overflow:visible!important}.picker-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:8px 0}.picker-toolbar .btn{padding:10px 12px}.pager{display:flex;align-items:center;justify-content:center;gap:9px;margin-top:10px}.pager .btn{min-width:104px}.pager-info{min-width:74px;text-align:center;color:var(--muted);font-size:13px}.picker-empty{grid-column:1/-1;border:1px dashed #3d526f;border-radius:11px;padding:18px;text-align:center;color:var(--muted);font-size:13px}.result-count{font-size:12px;color:var(--muted);text-align:right}
+.hero{border:1px solid var(--line);background:#0c1728;border-radius:12px;padding:11px;display:flex;justify-content:space-between;gap:8px;align-items:center;color:var(--text);text-align:left;width:100%}.hero-name{font-size:16px;font-weight:850;color:#fff;letter-spacing:.1px}.hero-meta{font-size:12px;color:#c7d5e8;font-weight:600;margin-top:2px}.pill{font-size:11px;border:1px solid #4d617f;border-radius:999px;padding:3px 6px;color:#c7d5e8;white-space:nowrap}.pill.owned{color:var(--good);border-color:#2e725d}.tierS{color:#ffd166}.tierA{color:#83d7ff}.tierB{color:#b9c8db}.tierC{color:#9aa9bd}
+.rec{border:1px solid var(--line);border-radius:13px;padding:11px;margin-bottom:8px;background:#0b1627}.rec-head{display:flex;justify-content:space-between;gap:8px}.rank{font-size:14px;color:var(--accent);font-weight:900}.score{font-size:14px;color:var(--good);font-weight:900}.reason{font-size:14px;color:#d2deed;margin-top:5px;line-height:1.4}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.tag{font-size:11px;padding:4px 7px;border-radius:999px;border:1px solid #415673;color:#bfd0e6}.issues{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 9px}.issue{font-size:12px;padding:5px 8px;border-radius:999px;background:#2a2016;color:#ffd39a;border:1px solid #72512c}.enemyissue{background:#251a25;color:#f4c6ef;border-color:#664366}.ok{font-size:13px;color:var(--good);margin-bottom:8px}.muted{color:var(--muted);font-size:13px}.statline{display:flex;justify-content:space-between;gap:8px;color:#aebfd4;font-size:12px;margin-top:7px}.account-row{margin-bottom:7px}.footer{color:#7589a6;text-align:center;font-size:12px;padding:10px 0 20px}
+.status{font-size:13px;padding:9px 11px;border-radius:10px;background:#0b1728;border:1px solid #263b59;margin-bottom:10px;color:#cbd9eb}
+.breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}.metric{background:#0a1424;border:1px solid #283b57;border-radius:9px;padding:7px;text-align:center}.metric strong{display:block;font-size:14px;color:#fff}.metric span{font-size:10px;color:#9fb2cc;text-transform:uppercase;letter-spacing:.45px}.match-good{color:#7ce5ba;border-color:#2f6e5c}.match-bad{color:#ff9aad;border-color:#74404b}.syn-good{color:#9fd5ff;border-color:#376386}.source-note{font-size:11px;color:#8094b0;line-height:1.35;margin-top:8px}.recommendation-label{font-size:11px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:#9cb0ca;margin-top:8px;margin-bottom:4px}
+.draft-summary{border:1px solid #315276;background:#0b1a2d;border-radius:13px;padding:11px;margin-bottom:10px}.draft-summary-title{font-size:13px;font-weight:900;color:#fff;margin-bottom:6px}.draft-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.summary-cell{background:#091524;border:1px solid #263f5d;border-radius:9px;padding:7px}.summary-cell strong{display:block;color:#fff;font-size:12px}.summary-cell span{display:block;color:#a9bdd6;font-size:10px;margin-top:2px}.pick-badge{display:inline-flex;align-items:center;border:1px solid #426383;border-radius:999px;padding:3px 7px;font-size:10px;font-weight:850;margin-left:6px;color:#d7e8fb}.pick-badge.counter{color:#82e2ba;border-color:#31705a}.pick-badge.teamfix{color:#ffd78d;border-color:#765b2d}.pick-badge.synergy{color:#9fd5ff;border-color:#376386}.pick-badge.safe{color:#c8d8eb;border-color:#506682}.pick-badge.carry{color:#e5b6ff;border-color:#69477b}.pick-badge.risk{color:#ff9aad;border-color:#74404b}.confidence{font-size:10px;font-weight:850;padding:3px 7px;border-radius:999px;border:1px solid #405873;color:#bdd0e5}.confidence.high{color:#7ce5ba;border-color:#2f6e5c}.confidence.medium{color:#ffd78d;border-color:#765b2d}.confidence.low{color:#b9c8db;border-color:#506070}.warning-line{margin-top:7px;font-size:11px;color:#ffb3bf;font-weight:700}
+
+
+/* v0.5 Diamond–Grandmaster live draft clock */
+.draft-clock{border:1px solid #315f8c;background:linear-gradient(180deg,#0b1b30,#091523);border-radius:15px;padding:13px;margin-bottom:11px}
+.clock-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}.clock-title{font-size:16px;font-weight:900;color:#fff}.clock-rank-note{font-size:11px;color:#9db5d0}
+.phase-buttons{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px}.phase-btn{padding:9px 7px;font-size:12px}.phase-btn.active{background:#1f5689;border-color:#63a9e9}
+.clock-main{display:grid;grid-template-columns:150px 1fr;gap:11px;align-items:stretch}.timer-box{display:flex;flex-direction:column;align-items:center;justify-content:center;background:#07111e;border:1px solid #2a4563;border-radius:13px;padding:10px;min-height:112px}.timer-value{font-size:38px;line-height:1;font-weight:950;letter-spacing:1px;color:#fff;font-variant-numeric:tabular-nums}.timer-label{font-size:10px;color:#92a9c3;text-transform:uppercase;letter-spacing:.7px;margin-top:5px}.timer-box.commit{border-color:#8b692e;background:#211a0d}.timer-box.commit .timer-value{color:#ffd477}.timer-box.emergency{border-color:#8c3d4a;background:#251116;animation:pulseUrgent .8s infinite alternate}.timer-box.emergency .timer-value{color:#ff94a7}@keyframes pulseUrgent{from{box-shadow:0 0 0 rgba(251,113,133,0)}to{box-shadow:0 0 18px rgba(251,113,133,.24)}}
+.clock-controls{display:flex;gap:6px;margin-top:8px}.clock-controls .btn{padding:7px 9px;font-size:11px}.phase-guide{background:#0a1727;border:1px solid #29425f;border-radius:12px;padding:10px}.phase-guide strong{display:block;color:#fff;font-size:13px;margin-bottom:4px}.phase-guide p{margin:0;color:#c1d0e3;font-size:12px;line-height:1.4}.decision-mode{display:inline-flex;margin-top:7px;padding:4px 8px;border-radius:999px;border:1px solid #45617e;color:#cbd9e9;font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.45px}.decision-mode.commit{color:#ffd477;border-color:#8b692e}.decision-mode.emergency{color:#ff9daf;border-color:#8c3d4a}
+.phase-math{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:9px}.phase-math div{background:#081421;border:1px solid #263d58;border-radius:9px;padding:7px;text-align:center}.phase-math strong{display:block;color:#fff;font-size:11px}.phase-math span{display:block;color:#8ea5bf;font-size:9px;margin-top:2px}
+.urgent-banner{border:1px solid #8c3d4a;background:#251116;color:#ffb7c3;border-radius:10px;padding:9px 10px;margin-bottom:8px;font-size:12px;font-weight:800}.commit-banner{border:1px solid #8b692e;background:#211a0d;color:#ffe0a0;border-radius:10px;padding:9px 10px;margin-bottom:8px;font-size:12px;font-weight:800}
+
+.power-account{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:#0b1627;margin-bottom:10px}.power-account strong{font-size:15px}.uid-line{font-size:11px;color:#c9d7e9;margin-top:3px}.uid-missing{color:#fbbf24}.power-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}.power-stat{border:1px solid var(--line);background:#0b1627;border-radius:12px;padding:10px}.power-stat strong{display:block;font-size:18px;color:#fff}.power-stat span{display:block;font-size:10px;color:var(--muted);margin-top:3px}.power-row{border:1px solid var(--line);background:#0c1728;border-radius:13px;padding:11px;margin-bottom:8px}.power-row-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}.power-current{font-size:18px;font-weight:900;color:#fff}.power-delta{font-size:10px;font-weight:800}.power-delta.up{color:var(--good)}.power-delta.down{color:var(--bad)}.power-delta.flat{color:var(--muted)}.power-controls{display:grid;grid-template-columns:1fr auto;gap:8px;margin-top:9px}.power-controls input{min-width:0}.power-history{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}.history-chip{font-size:9px;border:1px solid #40516b;border-radius:999px;padding:3px 6px;color:#bcd0e6}.account-editor{width:100%}.account-editor-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.8fr) auto;gap:8px;align-items:end}.account-editor-grid input{width:100%}.account-note{font-size:10px;color:var(--muted);margin-top:5px;line-height:1.35}.uid-badge{font-size:10px;border:1px solid #40516b;border-radius:999px;padding:4px 7px;color:#c9d7e9}.uid-badge.linked{color:var(--good);border-color:#2e725d}.power-source{font-size:10px;color:var(--muted);line-height:1.4;margin-top:8px}.power-empty{padding:14px;border:1px dashed #40516b;border-radius:12px;color:var(--muted);font-size:12px}
+@media(max-width:600px){.power-summary{grid-template-columns:1fr}.account-editor-grid{grid-template-columns:1fr}.power-account{align-items:flex-start;flex-direction:column}}
+@media(max-width:800px){.phase-buttons{grid-template-columns:1fr 1fr}.clock-main{grid-template-columns:1fr}.phase-math{grid-template-columns:1fr 1fr}.timer-value{font-size:42px}}
+
+/* v0.6 Gold–Platinum blind-pick mode */
+.blind-panel{border:1px solid #3f6a55;background:linear-gradient(180deg,#0b211b,#091814);border-radius:15px;padding:13px;margin-bottom:11px}
+.blind-head{display:flex;align-items:center;justify-content:space-between;gap:10px}.blind-title{font-size:16px;font-weight:900;color:#fff}.blind-copy{font-size:12px;color:#c5ddd2;line-height:1.45;margin-top:5px}.blind-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}.blind-cell{background:#081612;border:1px solid #2d5947;border-radius:9px;padding:8px}.blind-cell strong{display:block;color:#fff;font-size:12px}.blind-cell span{display:block;color:#9fc5b5;font-size:10px;margin-top:2px}.blind-badge{font-size:10px;font-weight:850;padding:4px 8px;border:1px solid #3f8066;border-radius:999px;color:#8fe2bc;white-space:nowrap}.rank-mode-note{font-size:12px;color:#b7c8da;margin-top:8px}.blind-mode .enemy-only,.blind-mode .ban-only{display:none!important}.blind-mode #draftClock{display:none!important}.draft-mode #blindPickPanel{display:none!important}
+@media(max-width:700px){.blind-grid{grid-template-columns:1fr}}
+
+/* v0.3.3 desktop display scaling: approximates browser zoom without changing Chrome itself */
+.scale-panel{display:flex;align-items:end;gap:10px;margin-bottom:11px;padding:10px 12px;background:#0d192a;border:1px solid var(--line);border-radius:13px}
+.scale-panel .scale-copy{flex:1;min-width:0}.scale-panel .scale-title{font-weight:850;font-size:14px;color:#fff}.scale-panel .scale-note{font-size:11px;color:var(--muted);margin-top:2px}.scale-panel select{width:130px;min-width:130px}
+@media(min-width:801px){
+  body[data-ui-scale="100"] .app{zoom:1}
+  body[data-ui-scale="115"] .app{zoom:1.15}
+  body[data-ui-scale="125"] .app{zoom:1.25}
+  body[data-ui-scale="135"] .app{zoom:1.35}
+  .panel{padding:15px;margin-bottom:13px}
+  .hero-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .hero{min-height:58px;padding:11px}
+  .slot{min-height:66px}
+}
+@media(max-width:800px){
+  body .app{zoom:1!important;max-width:800px}
+  .scale-panel{display:none}
+}
+@media(max-width:600px){.draft-summary-grid{grid-template-columns:1fr}.breakdown{grid-template-columns:repeat(2,1fr)}.app{padding:12px}.hero-name{font-size:16px}.hero-meta{font-size:12px}.pill{font-size:10px}.grid{grid-template-columns:1fr 1fr}.hero-list{grid-template-columns:1fr}.slots{gap:5px}.slot{min-height:56px}.rankfield{grid-column:1/-1}}
+
+/* v0.8 quick account switcher */
+.account-switch-shell{border:1px solid #315276;background:#0b1829;border-radius:15px;padding:11px;margin-bottom:11px}.account-switch-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.account-switch-title{font-size:14px;font-weight:900;color:#fff}.account-switch-note{font-size:10px;color:#91a7c1;margin-top:2px}.quick-accounts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.quick-account{border:1px solid #314762;background:#0a1424;border-radius:12px;padding:9px 10px;text-align:left;min-width:0;transition:border-color .12s,background .12s,transform .12s}.quick-account:hover{border-color:#4f7196}.quick-account.active{background:#173354;border-color:#68b5ff;box-shadow:inset 0 0 0 1px rgba(104,181,255,.22)}.quick-account-name{font-size:13px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.quick-account-meta{font-size:9px;color:#9fb2ca;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.quick-account-rank{display:inline-block;margin-top:5px;font-size:9px;font-weight:850;border:1px solid #425c79;border-radius:999px;padding:2px 6px;color:#c9d8e9}.quick-account.active .quick-account-rank{color:#8fd3ff;border-color:#4c83b2}.quick-account-empty{grid-column:1/-1;color:var(--muted);font-size:11px;padding:6px}.account-profile-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,.9fr) minmax(130px,.7fr) auto;gap:8px;align-items:end}.account-profile-grid input,.account-profile-grid select{width:100%}.active-account-summary{font-size:11px;color:#b9cce2}.manage-accounts-btn{padding:7px 9px;font-size:11px}
+@media(max-width:760px){.quick-accounts{grid-template-columns:repeat(2,minmax(0,1fr))}.account-profile-grid{grid-template-columns:1fr 1fr}.account-profile-grid .profile-save-wrap{grid-column:1/-1}.account-profile-grid .profile-save-wrap .btn{width:100%}}
+@media(max-width:430px){.quick-accounts{grid-template-columns:1fr 1fr}.quick-account{padding:8px}.quick-account-name{font-size:12px}.account-profile-grid{grid-template-columns:1fr}}
+
+
+/* v0.11 Camp Power dashboard + account-aware drafting */
+.sync-dashboard{border:1px solid #34516f;background:linear-gradient(180deg,#0a1b2f,#091624);border-radius:14px;padding:12px;margin-bottom:11px}
+.sync-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.sync-title{font-size:15px;font-weight:900;color:#fff}.sync-sub{font-size:10px;color:#9db2cb;margin-top:3px;line-height:1.4}
+.sync-badge{font-size:10px;font-weight:900;padding:5px 8px;border-radius:999px;border:1px solid #4b607b;color:#b8c9dc;white-space:nowrap}.sync-badge.good{color:#7ce5ba;border-color:#2f6e5c}.sync-badge.stale{color:#ffd28c;border-color:#76572e}
+.sync-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:9px}.sync-cell{border:1px solid #2d4059;background:#091524;border-radius:10px;padding:8px}.sync-cell strong{display:block;color:#fff;font-size:13px}.sync-cell span{display:block;color:#94a9c1;font-size:9px;margin-top:2px}
+.sync-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}.sync-primary{font-size:13px;padding:11px 14px}
+.stale-warning{border:1px solid #75572d;background:#241b0d;color:#ffd28c;border-radius:10px;padding:8px 10px;font-size:11px;font-weight:750;margin-top:8px}
+.power-toolbar{display:grid;grid-template-columns:1fr 190px;gap:8px;margin-top:8px}.power-sort-wrap label{margin-bottom:4px}
+.power-sync-history{margin-top:10px;border-top:1px solid #233650;padding-top:8px}.sync-history-row{display:flex;justify-content:space-between;gap:10px;font-size:10px;color:#b7c7da;padding:5px 0;border-bottom:1px solid rgba(64,81,107,.35)}.sync-history-row:last-child{border-bottom:0}
+.power-card-actions{margin-top:8px}.manual-fallback summary{font-size:10px;color:#879bb5;cursor:pointer}.manual-fallback[open] summary{color:#b8c9dc}.manual-fallback .power-controls{margin-top:7px}
+.power-source-label{display:inline-block;margin-top:4px;font-size:9px;padding:2px 6px;border:1px solid #345b70;border-radius:999px;color:#8bd3ef}
+.comfort-good{color:#7ce5ba;border-color:#2f6e5c}.comfort-mid{color:#9fd5ff;border-color:#376386}
+.account-sync-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#53667e;margin-right:4px}.account-sync-dot.good{background:#6ee7b7}.account-sync-dot.stale{background:#fbbf24}
+@media(min-width:601px){.breakdown{grid-template-columns:repeat(5,1fr)}}
+@media(max-width:700px){.sync-grid{grid-template-columns:repeat(2,1fr)}.power-toolbar{grid-template-columns:1fr}.sync-top{flex-direction:column}.sync-actions .btn{flex:1}}
+
+
+/* v0.12-v0.14 reliability, Power progression and adaptive-build UI */
+.sync-pipeline{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.sync-step{font-size:9px;font-weight:850;border:1px solid #324862;color:#7f93aa;border-radius:999px;padding:4px 7px}
+.sync-step.active{border-color:#4f86bd;color:#a9d7ff;background:#0f2944}.sync-step.done{border-color:#2f6e5c;color:#7ce5ba;background:#0b2a23}.sync-step.fail{border-color:#7d3b43;color:#ff9ca7;background:#2e1015}
+.sync-failure{margin-top:9px;border:1px solid #7d3b43;background:#281116;color:#ffd0d4;border-radius:11px;padding:9px 10px;font-size:11px;line-height:1.45}
+.sync-failure strong{display:block;color:#fff;margin-bottom:3px}.sync-failure .row{margin-top:7px}
+.data-safety{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.safety-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.safety-card{border:1px solid #2d4059;background:#091524;border-radius:11px;padding:9px;display:flex;flex-direction:column;gap:7px}.safety-card strong{color:#fff}.safety-card span{font-size:10px;color:#97abc2;line-height:1.4}.safety-card input{font-size:10px}
+.power-progress-card{border:1px solid #314760;background:#0a1728;border-radius:11px;padding:9px;margin-top:7px}
+.power-mainline{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}.power-mainline strong{font-size:25px;color:#fff}.power-status-pill{font-size:9px;font-weight:900;border:1px solid #50627a;border-radius:999px;padding:3px 6px;color:#b9c9dc}.power-status-pill.ranked{border-color:#756630;color:#ffe594}.power-status-pill.opportunity{border-color:#2f6e5c;color:#7ce5ba}
+.progress-track{height:7px;border-radius:999px;background:#17263a;overflow:hidden;margin-top:7px}.progress-fill{height:100%;background:linear-gradient(90deg,#4d8fd0,#77d6b2);border-radius:999px}
+.power-break-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}.power-break-cell{border:1px solid #273b52;border-radius:9px;padding:7px;background:#091321}.power-break-cell strong{display:block;color:#fff;font-size:12px}.power-break-cell span{display:block;font-size:8px;color:#8ea4bd;margin-top:2px}
+.power-advice{margin-top:8px;border-left:3px solid #4d8fd0;padding:6px 8px;background:#0a1a2c;border-radius:0 8px 8px 0;font-size:10px;color:#bed0e2;line-height:1.45}.power-advice strong{color:#fff}
+.extended-missing{font-size:9px;color:#8297b0;margin-top:6px}
+.manual-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:7px}.manual-metrics input{min-width:0}
+.build-preview{margin-top:10px;border:1px solid #304966;background:#091727;border-radius:12px;padding:10px}.build-head{display:flex;justify-content:space-between;gap:8px;align-items:center}.build-title{font-weight:900;color:#fff;font-size:12px}.build-badge{font-size:9px;font-weight:900;border:1px solid #396180;color:#9dd7ff;border-radius:999px;padding:3px 6px}
+.item-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:8px}.item-card{border:1px solid #344a64;background:#0b1c30;border-radius:9px;padding:6px 4px;text-align:center;min-width:0}.item-card.core{border-color:#4676a6}.item-card.counter{border-color:#8b6631}.item-card.defense{border-color:#456d61}.item-card .item-icon{width:28px;height:28px;margin:0 auto 4px;border-radius:8px;background:linear-gradient(145deg,#203d5c,#12243a);display:flex;align-items:center;justify-content:center;color:#d8e8f7;font-weight:950;font-size:9px}.item-card .item-name{font-size:8px;line-height:1.15;color:#c4d2e0;word-break:break-word}.item-card .item-num{font-size:8px;color:#6f86a0;margin-top:3px}
+.build-reason{font-size:10px;color:#aebfd1;line-height:1.45;margin-top:7px}.build-swaps{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.swap-chip{font-size:9px;border:1px dashed #4c6179;border-radius:8px;padding:4px 6px;color:#b7c8da}
+.build-details{margin-top:8px}.build-details summary{font-size:10px;color:#9cc8ec;cursor:pointer}.build-variants{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:7px}.variant-card{border:1px solid #2b4058;border-radius:9px;padding:7px;background:#081421}.variant-card.recommended{border-color:#4679a8}.variant-card strong{display:block;color:#fff;font-size:10px}.variant-card span{display:block;color:#8fa5bd;font-size:8px;margin-top:3px;line-height:1.35}
+.diag-list{font-size:9px;color:#93a9c1;margin-top:7px}.diag-line{display:flex;justify-content:space-between;gap:8px;padding:3px 0;border-bottom:1px solid rgba(70,90,115,.25)}.diag-line:last-child{border-bottom:0}
+@media(max-width:760px){.safety-grid{grid-template-columns:1fr}.item-strip{grid-template-columns:repeat(3,1fr)}.build-variants{grid-template-columns:1fr}.power-break-grid{grid-template-columns:repeat(2,1fr)}.manual-metrics{grid-template-columns:1fr 1fr}}
+
+
+/* v0.16 manual-first Hero Power */
+.quick-power-panel{margin:12px 0;border:1px solid #35516e;background:#091727;border-radius:12px;padding:10px}
+.quick-power-head{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.quick-power-head strong{display:block;color:#fff;font-size:12px}
+.quick-power-head span{display:block;color:#8fa6bd;font-size:9px;margin-top:2px}
+.quick-actions{display:flex;gap:6px;flex-wrap:wrap}
+.quick-power-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:9px}
+.quick-power-item{border:1px solid #2e445c;background:#081421;border-radius:10px;padding:7px}
+.quick-power-item.dirty{border-color:#78662e;background:#171507}
+.quick-power-label{display:flex;justify-content:space-between;gap:6px;align-items:center;margin-bottom:5px}
+.quick-power-label strong{font-size:10px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quick-power-label span{font-size:8px;color:#8097af}
+.quick-power-input{width:100%;box-sizing:border-box;background:#07111d;color:#fff;border:1px solid #334c67;border-radius:8px;padding:7px 8px;font-size:13px;font-weight:850}
+.quick-power-input:focus{outline:2px solid #4c8ccb;outline-offset:1px}
+.manual-power-card{border:1px solid #314760;background:#0a1728;border-radius:11px;padding:9px;margin-top:7px}
+.manual-power-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px}
+.manual-power-stats>div{border:1px solid #273b52;border-radius:9px;padding:7px;background:#091321}
+.manual-power-stats strong{display:block;color:#fff;font-size:12px}.manual-power-stats span{display:block;font-size:8px;color:#8ea4bd;margin-top:2px}
+.manual-primary{display:flex;gap:6px;align-items:center;margin-top:9px}.manual-primary .power-input{max-width:190px}
+.manual-note{font-size:9px;color:#8198b0;margin-top:5px}
+@media(max-width:1100px){.quick-power-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.quick-power-grid{grid-template-columns:repeat(2,1fr)}.quick-power-head{align-items:flex-start;flex-direction:column}.manual-power-stats{grid-template-columns:1fr 1fr}}
+
+
+/* v0.16.1 iPhone / PWA compatibility */
+html{background:#07111f;min-height:100%}
+body{min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overscroll-behavior-y:none}
+button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulation;-webkit-tap-highlight-color:rgba(104,181,255,.16)}
+.mobile-readiness{display:none;border:1px solid #315276;background:#0b1829;border-radius:14px;padding:10px;margin-bottom:11px}
+.mobile-ready-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mobile-ready-head strong{font-size:13px;color:#fff}.mobile-ready-head span{font-size:9px;font-weight:900;border:1px solid #43617e;border-radius:999px;padding:3px 7px;color:#bcd0e5}
+.mobile-ready-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.mobile-ready-grid>div{border:1px solid #2b4059;background:#091524;border-radius:9px;padding:7px}
+.mobile-ready-grid strong{display:block;color:#fff;font-size:11px}.mobile-ready-grid span{display:block;color:#8fa5be;font-size:8px;margin-top:2px}
+.mobile-ready-note{font-size:9px;color:#a9bdd3;line-height:1.45;margin-top:7px}
+.mobile-install-help{margin-top:7px}.mobile-install-help summary{font-size:10px;color:#9dcfff;cursor:pointer}.mobile-install-help div{font-size:9px;line-height:1.5;color:#a9bdd3;padding-top:6px}
+@media(max-width:600px){
+  body{font-size:16px}
+  .app{padding:10px 10px calc(16px + env(safe-area-inset-bottom));width:100%;overflow-x:hidden}
+  h1{font-size:23px;line-height:1.15}
+  .sub{font-size:13px}
+  .mobile-readiness{display:block}
+  .tabs{top:env(safe-area-inset-top);padding:6px 0;background:rgba(7,17,31,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  .tab{min-height:46px;padding:9px 6px;font-size:12px}
+  .btn{min-height:44px;padding:10px 12px}
+  input,select,textarea,.quick-power-input,.power-input{font-size:16px!important;min-height:44px}
+  .modebar{scrollbar-width:none}.modebar::-webkit-scrollbar{display:none}
+  .mode{min-height:42px}
+  .slots{display:flex;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding-bottom:4px}
+  .slot{flex:0 0 88px;min-height:64px;scroll-snap-align:start}
+  .hero-list{grid-template-columns:1fr}
+  .hero{min-height:58px}
+  .quick-power-grid{grid-template-columns:1fr 1fr}
+  .quick-power-input{padding:10px}
+  .quick-power-item{padding:8px}
+  .item-strip{grid-template-columns:repeat(3,1fr)}
+  .phase-buttons{grid-template-columns:1fr 1fr}
+  .clock-main{grid-template-columns:1fr}
+  .timer-box{min-height:98px}
+  .panel{border-radius:14px;padding:11px}
+  .sync-actions{display:grid;grid-template-columns:1fr}
+  .sync-actions .btn{width:100%}
+  .account-switch-head{align-items:flex-start;flex-direction:column}
+  .quick-account{min-height:62px}
+  .power-row{overflow:hidden}
+  .manual-primary{align-items:stretch}.manual-primary .power-input{max-width:none;flex:1}
+  .manual-primary .btn{flex:0 0 auto}
+}
+@media(max-width:430px){
+  .mobile-ready-grid{grid-template-columns:1fr 1fr}
+  .quick-power-grid{grid-template-columns:1fr}
+  .quick-accounts{grid-template-columns:1fr 1fr}
+  .statline{flex-direction:column;gap:3px}
+  .build-head{align-items:flex-start}
+}
+@media(display-mode:standalone){
+  body{background:#07111f}
+  .mobile-mode-standalone{display:block}
+}
+
+</style>
+<link rel="manifest" href="./manifest.webmanifest"/>
+<link rel="apple-touch-icon" href="./icons/icon-180.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="./icons/icon-192.png"/>
+</head>
+<body>
+<div class="app">
+<h1>HoK Solo Draft Assistant</h1>
+<div class="sub">v0.16.1 • Desktop + iPhone PWA • manual Hero Power • adaptive builds</div>
+<div id="status" class="status">v0.16.1 loading…</div>
+<div id="mobileReadiness" class="mobile-readiness">
+  <div class="mobile-ready-head"><strong>iPhone Compatibility Check</strong><span id="mobileModeBadge">Checking…</span></div>
+  <div class="mobile-ready-grid">
+    <div><strong id="mobileViewport">—</strong><span>viewport</span></div>
+    <div><strong id="mobileStorage">—</strong><span>local data</span></div>
+    <div><strong id="mobileOffline">—</strong><span>offline cache</span></div>
+    <div><strong id="mobileInstall">—</strong><span>app mode</span></div>
+  </div>
+  <div id="mobileReadyNote" class="mobile-ready-note">Checking Safari/PWA capabilities…</div>
+  <details class="mobile-install-help"><summary>iPhone setup / data transfer</summary>
+    <div>For a full PWA test, open the HTTPS-hosted iPhone build in Safari, use Share → Add to Home Screen, then launch it from the Home Screen. Desktop and iPhone browser storage are separate, so use Accounts → Export Backup on desktop and Validate & Restore on iPhone.</div>
+  </details>
+</div>
+<div class="scale-panel" id="scalePanel">
+  <div class="scale-copy">
+    <div class="scale-title">Desktop UI size</div>
+    <div class="scale-note">Use Chrome at 100%. This scales the app itself; it does not affect iPhone layout.</div>
+  </div>
+  <div>
+    <label for="uiScale">Size</label>
+    <select id="uiScale">
+      <option value="100">100%</option>
+      <option value="115">115%</option>
+      <option value="125">125%</option>
+      <option value="135">135%</option>
+    </select>
+  </div>
+</div>
+
+<div class="account-switch-shell" id="accountSwitchShell">
+  <div class="account-switch-head">
+    <div><div class="account-switch-title">Quick Account Switch</div><div class="account-switch-note">Optimized for your four HoK accounts. Each account keeps its own UID, rank, roster, draft workspace and Hero Power history.</div></div>
+    <button type="button" class="btn manage-accounts-btn" id="manageAccountsBtn">Manage</button>
+  </div>
+  <div class="quick-accounts" id="quickAccounts"></div>
+</div>
+
+<div class="tabs" id="mainTabs">
+<button type="button" class="btn tab active" data-tab="draft">Draft</button>
+<button type="button" class="btn tab" data-tab="roster">Roster</button>
+<button type="button" class="btn tab" data-tab="power">Power</button>
+<button type="button" class="btn tab" data-tab="accounts">Accounts</button>
+</div>
+
+<section id="draftTab">
+<div class="panel"><div class="grid">
+<div><label>Account</label><select id="accountSelect"></select></div>
+<div><label>Your role</label><select id="roleSelect"><option>Clash Lane</option><option>Jungle</option><option>Mid Lane</option><option>Farm Lane</option><option>Roam</option></select></div>
+<div class="rankfield"><label>Rank environment</label><select id="rankSelect"><option>Gold</option><option>Platinum</option><option>Diamond</option><option>Master</option><option>Grandmaster</option></select></div>
+</div></div>
+<div class="blind-panel" id="blindPickPanel">
+  <div class="blind-head"><div><div class="blind-title">Gold–Platinum Blind Pick Mode</div><div class="blind-copy">No bans and no tactical enemy draft to react to. Build your pick from your owned roster, assigned role, visible teammate choices/intentions, and solo-queue safety.</div></div><span class="blind-badge" id="blindRankBadge">Blind Pick</span></div>
+  <div class="blind-grid"><div class="blind-cell"><strong>1. Role fit</strong><span>Only recommend owned heroes for your selected lane.</span></div><div class="blind-cell"><strong>2. Team repair</strong><span>Fill frontline, CC, engage, peel, or damage gaps teammates create.</span></div><div class="blind-cell"><strong>3. Solo safety</strong><span>Favor self-sufficient and forgiving blind picks when enemy information is unavailable.</span></div></div>
+  <div class="rank-mode-note" id="rankModeNote">Gold profile active.</div>
+</div>
+<div class="draft-clock" id="draftClock">
+  <div class="clock-head"><div><div class="clock-title">Diamond–Grandmaster Live Draft Clock</div><div class="clock-rank-note" id="clockRankNote">Phase-aware decision support</div></div><span class="pill" id="phaseTotalLabel">Pick phase: ~200s total</span></div>
+  <div class="phase-buttons" id="phaseButtons">
+    <button type="button" class="btn phase-btn" data-phase="intention">Intention • 20s</button>
+    <button type="button" class="btn phase-btn" data-phase="ban">Ban Turn • 30s</button>
+    <button type="button" class="btn phase-btn active" data-phase="pick">Pick Turn • 20s</button>
+    <button type="button" class="btn phase-btn" data-phase="adjustment">Adjustment • 20s</button>
+  </div>
+  <div class="clock-main">
+    <div class="timer-box" id="timerBox"><div class="timer-value" id="timerValue">00:20</div><div class="timer-label" id="timerLabel">pick turn remaining</div><div class="clock-controls"><button type="button" class="btn primary" id="timerStart">Start</button><button type="button" class="btn" id="timerReset">Reset</button></div></div>
+    <div class="phase-guide"><strong id="phaseGuideTitle">Pick Turn — make the decision, not the whole analysis</strong><p id="phaseGuideText">Enter the visible ally/enemy picks first. The assistant keeps recommendations live so when your turn arrives you should already be choosing among the top few owned heroes.</p><span class="decision-mode" id="decisionMode">Normal decision mode</span></div>
+  </div>
+  <div class="phase-math"><div><strong>15–20s</strong><span>pre-ban / intention</span></div><div><strong>~60–90s</strong><span>ban phase total</span></div><div><strong>10 × 20s</strong><span>up to ~200s picks</span></div><div><strong>20s</strong><span>adjust / trade</span></div></div>
+</div>
+<div class="panel">
+<div class="section-title"><span id="allySectionTitle">Allies</span><span class="muted" id="allySectionHint">tap a slot, then a hero</span></div><div class="slots" id="allySlots"></div>
+<div class="enemy-only"><div class="section-title" style="margin-top:13px"><span>Enemies</span></div><div class="slots" id="enemySlots"></div></div>
+<div class="ban-only"><div class="section-title" style="margin-top:13px"><span>Bans</span></div><div class="slots" id="banSlots"></div></div>
+</div>
+<div class="panel"><div class="section-title"><span>Hero Picker</span><button type="button" class="btn" id="clearDraft">Clear</button></div><div class="modebar" id="modeButtons"></div><input id="heroSearch" type="text" placeholder="Search hero or alias (e.g. Princess Frost)..."/><div class="modebar" id="pickerLaneFilters"></div><div class="picker-toolbar"><button type="button" class="btn" id="pickerOwnedToggle">Owned only: Off</button><span class="result-count" id="pickerResultCount"></span></div><div class="hero-list picker-list" id="heroPicker"></div><div class="pager"><button type="button" class="btn" id="pickerPrev">Previous</button><span class="pager-info" id="pickerPageInfo">1 / 1</span><button type="button" class="btn" id="pickerNext">Next</button></div></div>
+<div class="panel"><div class="section-title"><span>Solo Queue Recommendations</span><button type="button" class="btn primary" id="analyzeBtn">Analyze</button></div><div id="teamIssues"></div><div id="draftSummary"></div><div id="recommendations"><div class="muted">Recommendations update automatically as teammate selections change.</div></div><div class="source-note">Gold/Platinum Blind Pick intentionally ignores hidden enemy draft data. Diamond–Grandmaster uses direct matchup signals. Hero Power remains a capped comfort signal. Build previews are draft-aware heuristics and should be adapted to the actual match.</div></div>
+</section>
+
+<section id="rosterTab" class="hidden"><div class="panel"><div class="section-title"><span>Owned Heroes</span><span class="muted"><span id="ownedCount"></span> / 118</span></div><input id="rosterSearch" type="text" placeholder="Search hero, alias, lane or archetype..."/><div class="modebar" id="rosterFilters"></div><div class="hero-list" id="rosterList"></div></div></section>
+
+<section id="powerTab" class="hidden">
+<div class="panel">
+  <div class="section-title"><span>Hero Power Tracker</span><span class="muted">account-specific Camp data</span></div>
+
+  <div class="sync-dashboard">
+    <div class="sync-top">
+      <div>
+        <div class="sync-title">Honor of Kings Camp Sync</div>
+        <div class="sync-sub">Manual-first mode: enter Hero Power yourself. The Chrome extension remains the desktop home for the assistant and can open the active account's Camp profile as a reference.</div>
+      </div>
+      <span id="campSyncBadge" class="sync-badge">NOT SYNCED</span>
+    </div>
+    <div class="sync-grid" id="campSyncSummary"></div>
+    <div id="campStaleWarning"></div>
+    <div class="sync-actions">
+      <button type="button" class="btn primary sync-primary" id="campOpenProfile">Open Camp Profile</button>
+      <button type="button" class="btn" id="campCopyHelper">Quick Power Entry</button>
+    </div>
+    <div id="campSyncInfo" class="muted" style="margin-top:7px">Open Camp when you want to check current Hero Power, then enter the value below.</div>
+    <div id="syncPipeline" style="display:none"></div>
+    <div id="syncFailureBox" style="display:none"></div>
+</div>
+
+  <div id="powerAccountHeader"></div>
+  <div class="power-summary" id="powerSummary"></div>
+
+  <div class="power-toolbar">
+    <input id="powerSearch" type="text" placeholder="Search an owned or Camp-tracked hero..."/>
+    <div class="power-sort-wrap">
+      <label for="powerSort">Sort</label>
+      <select id="powerSort">
+        <option value="highest">Highest Power</option>
+        <option value="gain">Biggest Gain</option>
+        <option value="loss">Biggest Loss</option>
+        <option value="lowest">Lowest Power</option>
+        <option value="name">Hero Name</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="modebar" id="powerLaneFilters"></div>
+  <div id="quickPowerPanel" class="quick-power-panel">
+    <div class="quick-power-head">
+      <div><strong>Quick Power Entry</strong><span>Owned heroes • Enter saves and advances to the next hero</span></div>
+      <div class="quick-actions"><button type="button" class="btn" id="saveAllPower">Save All Changed</button><button type="button" class="btn" id="clearPowerDrafts">Clear Unsaved</button></div>
+    </div>
+    <div id="quickPowerGrid" class="quick-power-grid"></div>
+  </div>
+  <div id="powerList" style="margin-top:9px"></div>
+
+  <details class="power-sync-history">
+    <summary class="muted" style="cursor:pointer">Manual Power history</summary>
+    <div id="campSyncHistory"></div>
+  </details>
+
+  <div class="power-source">Hero Power is manual in v0.16. Each save stays account-specific and keeps current Power, personal best, timestamped history, and Draft comfort scoring.</div>
+</div>
+</section>
+
+<section id="accountsTab" class="hidden"><div class="panel"><div class="section-title"><span>Accounts</span><span class="muted">label + HoK UID + rank + separate data</span></div>
+<div class="account-editor"><div class="account-editor-grid"><div><label>Account label</label><input id="newAccountName" type="text" placeholder="e.g. Main / Alt Account"/></div><div><label>HoK UID</label><input id="newAccountUid" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter UID"/></div><button type="button" class="btn primary" id="addAccount">Add Account</button></div><div class="account-note">No HoK password is requested. Each account profile stores its own rank, owned roster, current draft workspace and Hero Power history. The UID is only the account identifier.</div></div>
+<div id="accountList" style="margin-top:12px"></div>
+<div class="data-safety">
+  <div class="section-title"><span>Data Safety</span><span class="muted">local, portable, recoverable</span></div>
+  <div class="safety-grid">
+    <div class="safety-card"><strong>Backup</strong><span>Export all accounts, rosters, Power history, ranking targets and settings.</span><button type="button" class="btn" id="exportBackup">Export Backup</button></div>
+    <div class="safety-card"><strong>Restore</strong><span>Validate a backup before replacing current local data.</span><input id="importBackupFile" type="file" accept=".json,application/json"/><button type="button" class="btn" id="importBackup">Validate & Restore</button></div>
+    <div class="safety-card"><strong>Diagnostics</strong><span>Export sanitized sync states, endpoint names and errors. No auth headers are collected.</span><button type="button" class="btn" id="exportDiagnostics">Export Diagnostics</button></div>
+  </div>
+  <div class="account-note" id="backupStatus">Automatic pre-migration and last-known-good snapshots are kept locally when possible.</div>
+</div></div></section>
+<div class="footer">v0.16.1 • desktop extension + iPhone PWA compatibility • manual Hero Power • $0.</div>
+</div>
+
+<script src="./app.js"></script>
+</body></html>
