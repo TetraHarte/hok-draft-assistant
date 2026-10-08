@@ -136,7 +136,7 @@ label{display:block;color:var(--muted);font-size:14px;margin-bottom:6px} select,
 @media(max-width:760px){.quick-power-grid{grid-template-columns:repeat(2,1fr)}.quick-power-head{align-items:flex-start;flex-direction:column}.manual-power-stats{grid-template-columns:1fr 1fr}}
 
 
-/* v0.16.1 iPhone / PWA compatibility */
+/* v0.16.2 iPhone / PWA compatibility */
 html{background:#07111f;min-height:100%}
 body{min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);overscroll-behavior-y:none}
 button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulation;-webkit-tap-highlight-color:rgba(104,181,255,.16)}
@@ -192,6 +192,35 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
   .mobile-mode-standalone{display:block}
 }
 
+
+/* v0.16.2 — Gold / Platinum Quick Decision (above Hero Picker) */
+.quick-decision{border:1px solid #4577a3;background:linear-gradient(180deg,#102642,#0b192d);border-radius:15px;padding:12px;margin-bottom:11px}
+.quick-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.quick-head strong{font-size:17px}.quick-head small{display:block;color:#afc9e6;font-size:11px;margin-top:2px}
+.quick-time{font-size:25px;font-weight:950;letter-spacing:.4px;font-variant-numeric:tabular-nums;color:#d7e9ff}
+.quick-time.commit{color:#ffd47b}.quick-time.emergency{color:#ff9dab}
+.quick-tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:7px}
+.quick-tools .btn{padding:8px 10px;min-height:37px;font-size:12px}
+.quick-note{font-size:13px;font-weight:750;color:#e5f0ff;margin:6px 0}
+.quick-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.quick-card{border:1px solid #345475;background:#0a1729;border-radius:10px;padding:9px;min-width:0}
+.quick-first{border-color:#80bded;background:#142e49}
+.quick-label{font-size:10px;letter-spacing:.4px;font-weight:900;color:#9dc8ef}
+.quick-card strong{display:block;font-size:18px;line-height:1.2;margin-top:3px;overflow-wrap:anywhere}
+.quick-sub{font-size:11px;color:#b4c6dc;margin-top:5px}.quick-score{font-size:14px;color:#7ce4b5;font-weight:900;margin-top:5px}.quick-score span{font-size:10px;color:#a1b6ce;font-weight:500}
+.quick-uncertainty{font-size:11px;color:#9bb5d1;margin-top:7px;line-height:1.4}
+.quick-commit{border-color:#85652b}.quick-emergency{border-color:#9b4954}
+.quick-emergency .quick-card:not(:first-child){display:none}
+.quick-entry{display:flex;align-items:center;gap:8px;margin-top:9px}
+.quick-entry label{font-size:12px;white-space:nowrap;margin:0}.quick-entry input{min-height:39px!important;padding:9px;font-size:16px}
+.quick-matches{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.quick-match{border:1px solid #3a607f;border-radius:9px;padding:8px;background:#102844;text-align:left;min-height:37px;font-size:12px}
+.quick-match small{font-size:10px;color:#adbed4;margin-left:4px}
+@media(max-width:600px){
+ .quick-decision{padding:9px}.quick-head strong{font-size:15px}.quick-time{font-size:22px}
+ .quick-card{padding:7px}.quick-card strong{font-size:14px}.quick-label{font-size:9px}.quick-sub{font-size:9px}
+ .quick-tools .btn{min-height:39px}.quick-entry{display:block}.quick-entry label{margin-bottom:6px}
+}
 </style>
 <link rel="manifest" href="./manifest.webmanifest"/>
 <link rel="apple-touch-icon" href="./icons/icon-180.png"/>
@@ -200,8 +229,8 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
 <body>
 <div class="app">
 <h1>HoK Solo Draft Assistant</h1>
-<div class="sub">v0.16.1 • Desktop + iPhone PWA • manual Hero Power • adaptive builds</div>
-<div id="status" class="status">v0.16.1 loading…</div>
+<div class="sub">v0.16.2 • Desktop + iPhone PWA • manual Hero Power • adaptive builds</div>
+<div id="status" class="status">v0.16.2 loading…</div>
 <div id="mobileReadiness" class="mobile-readiness">
   <div class="mobile-ready-head"><strong>iPhone Compatibility Check</strong><span id="mobileModeBadge">Checking…</span></div>
   <div class="mobile-ready-grid">
@@ -275,6 +304,15 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
 <div class="section-title"><span id="allySectionTitle">Allies</span><span class="muted" id="allySectionHint">tap a slot, then a hero</span></div><div class="slots" id="allySlots"></div>
 <div class="enemy-only"><div class="section-title" style="margin-top:13px"><span>Enemies</span></div><div class="slots" id="enemySlots"></div></div>
 <div class="ban-only"><div class="section-title" style="margin-top:13px"><span>Bans</span></div><div class="slots" id="banSlots"></div></div>
+</div>
+<div class="quick-decision hidden" id="quickDecisionPanel">
+  <div class="quick-head"><div><strong>Quick Decision • Blind Pick</strong><small>Best available now — no need to wait for all four teammates</small></div><span class="quick-time" id="quickTime">0:30</span></div>
+  <div class="quick-tools"><button type="button" class="btn primary" id="quickStart">Start 30s</button><button type="button" class="btn" id="quickReset">Reset</button><button type="button" class="btn" id="quickHold">Hold picks</button></div>
+  <div class="quick-note" id="quickNote">Ready when you are.</div>
+  <div class="quick-choice-grid" id="quickChoices"></div>
+  <div class="quick-uncertainty" id="quickUncertainty"></div>
+  <div class="quick-entry"><label for="quickAllyInput">Fast teammate entry</label><input id="quickAllyInput" type="text" autocomplete="off" placeholder="Type 2+ letters, tap hero, repeat" /></div>
+  <div class="quick-matches" id="quickAllyMatches"></div>
 </div>
 <div class="panel"><div class="section-title"><span>Hero Picker</span><button type="button" class="btn" id="clearDraft">Clear</button></div><div class="modebar" id="modeButtons"></div><input id="heroSearch" type="text" placeholder="Search hero or alias (e.g. Princess Frost)..."/><div class="modebar" id="pickerLaneFilters"></div><div class="picker-toolbar"><button type="button" class="btn" id="pickerOwnedToggle">Owned only: Off</button><span class="result-count" id="pickerResultCount"></span></div><div class="hero-list picker-list" id="heroPicker"></div><div class="pager"><button type="button" class="btn" id="pickerPrev">Previous</button><span class="pager-info" id="pickerPageInfo">1 / 1</span><button type="button" class="btn" id="pickerNext">Next</button></div></div>
 <div class="panel"><div class="section-title"><span>Solo Queue Recommendations</span><button type="button" class="btn primary" id="analyzeBtn">Analyze</button></div><div id="teamIssues"></div><div id="draftSummary"></div><div id="recommendations"><div class="muted">Recommendations update automatically as teammate selections change.</div></div><div class="source-note">Gold/Platinum Blind Pick intentionally ignores hidden enemy draft data. Diamond–Grandmaster uses direct matchup signals. Hero Power remains a capped comfort signal. Build previews are draft-aware heuristics and should be adapted to the actual match.</div></div>
@@ -353,7 +391,7 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
   </div>
   <div class="account-note" id="backupStatus">Automatic pre-migration and last-known-good snapshots are kept locally when possible.</div>
 </div></div></section>
-<div class="footer">v0.16.1 • desktop extension + iPhone PWA compatibility • manual Hero Power • $0.</div>
+<div class="footer">v0.16.2 • desktop extension + iPhone PWA compatibility • manual Hero Power • $0.</div>
 </div>
 
 <script src="./app.js"></script>
