@@ -1,7 +1,7 @@
 {
-  "name": "HoK Solo Draft Assistant",
-  "short_name": "HoK Draft",
-  "description": "Solo-queue Honor of Kings draft assistant with manual Hero Power and adaptive builds.",
+  "name": "Solo Draft Assistant",
+  "short_name": "Solo Draft",
+  "description": "Offline-friendly Honor of Kings and Mobile Legends solo-queue draft workspaces.",
   "id": "./index.html",
   "start_url": "./index.html?source=pwa",
   "scope": "./",
