@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="en" data-theme="native">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#0b1022"><title>MLBB Solo Draft Assistant</title><style>:root{--bg:#0b1022;--bg2:#101633;--panel:#161a34;--surface:#22213b;--border:#484163;--border-hi:#8465ac;--accent:#d7ac52;--accent-dark:#171528;--text:#fff5dd;--muted:#b7b8d3;--good:#75dead;--warn:#f4c876;--bad:#ff929e;--field:#12172c;--nav:#282350;--glow:#352652}
+html[data-theme="classic"]{--bg:#07111f;--bg2:#0a1322;--panel:#0f172a;--surface:#16243a;--border:#263750;--border-hi:#4b86be;--accent:#68b5ff;--accent-dark:#07111f;--text:#f3f7fd;--muted:#b5c3d7;--good:#6ee7b7;--warn:#fbbf24;--bad:#fb7185;--field:#0a1425;--nav:#214d7d;--glow:#153050}
+*{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-height:100vh;color:var(--text);background:linear-gradient(180deg,var(--bg),var(--bg2) 45%,var(--bg));font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}.app{max-width:960px;margin:auto;padding:16px 16px 32px}h1{font-size:26px;margin:0;font-weight:850;letter-spacing:-.025em}h2{margin:0;font-size:17px}p{margin:8px 0}a{color:inherit;text-decoration:none}input,button,select{font:inherit}button{cursor:pointer;color:var(--text)}button:disabled{opacity:.45;cursor:default}input,select{background:var(--field);border:1px solid var(--border);border-radius:9px;min-height:43px;padding:9px 11px;color:var(--text);max-width:100%;width:100%}input[type="checkbox"]{width:auto;min-height:0;accent-color:var(--accent)}label{font-size:12px;color:var(--muted);display:block;margin-bottom:5px}input:focus,select:focus,button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}.hidden{display:none!important}.site-head{display:flex;align-items:start;justify-content:space-between;flex-wrap:wrap;gap:12px}.heading p{color:var(--muted);font-size:12px;margin:4px 0 0}.theme-line{display:flex;gap:7px;align-items:center}.theme-line label{margin:0}.theme-line select{width:auto;min-height:36px;font-size:12px;padding:6px 9px}.games{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:16px 0 10px}.game{display:flex;align-items:center;gap:10px;border:1px solid var(--border);border-radius:14px;background:var(--panel);min-height:66px;padding:10px 13px}.game.current{border-color:var(--accent);background:linear-gradient(110deg,var(--glow),var(--panel))}.game:hover{border-color:var(--border-hi)}.game-icon{min-width:38px;height:38px;display:grid;place-items:center;border-radius:10px;border:1px solid var(--border-hi);background:var(--field);font-weight:900;color:var(--accent);font-size:13px}.game b{display:block;font-size:14px}.game small{display:block;color:var(--muted);font-size:10px;margin-top:3px}.active{margin-left:auto;color:var(--good);font-size:10px}.workspace{border:1px solid var(--border);background:var(--panel);border-radius:11px;padding:11px 13px;display:flex;justify-content:space-between;gap:10px;align-items:center}.workspace b{display:block;font-size:13px}.overline{font-size:10px;color:var(--accent);display:block;font-weight:700;letter-spacing:.06em}.workspace-right{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:11px}.workspace-right>span{background:var(--surface);padding:5px 7px;border-radius:100px}.workspace-right .ready{color:var(--good)}#status{font-size:12px;margin:10px 0;background:var(--panel);border:1px solid var(--border);padding:9px 12px;border-radius:9px;color:var(--muted)}.tabs{display:flex;gap:7px;margin:11px 0;position:sticky;top:0;background:var(--bg);padding:6px 0;z-index:10}.tab{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 7px;font-size:13px;font-weight:750}.tab.active{background:var(--nav);border-color:var(--border-hi);color:var(--text)}.panel{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:14px;margin-bottom:11px;box-shadow:0 9px 25px rgba(0,0,0,.09)}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 12px}.small-flag{font-size:10px;color:var(--accent);font-weight:800;letter-spacing:.04em}.form-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.info{font-size:12px;color:var(--muted);background:var(--field);border:1px solid var(--border);border-radius:9px;padding:10px 12px;margin-top:11px}.btn{border-radius:9px;border:1px solid var(--border);background:var(--surface);padding:9px 13px;font-size:12px;font-weight:750;min-height:37px}.btn.primary{background:var(--accent);color:var(--accent-dark);border-color:var(--accent)}.subtle{font-size:12px;color:var(--muted);line-height:1.5}.clock-grid{display:grid;grid-template-columns:1fr 120px 2fr;gap:10px;align-items:end}.timer{font-size:37px;font-weight:900;line-height:1;text-align:center;color:var(--accent);font-variant-numeric:tabular-nums;padding:6px}.timer.low{color:var(--bad)}.clock-buttons{display:flex;gap:8px}.deck{margin-bottom:13px}.line-head{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:800;margin-bottom:7px}.line-head span+span{color:var(--muted);font-size:11px;font-weight:500}.slot-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}.slot{min-height:68px;display:grid;align-content:center;gap:4px;background:var(--field);border:1px dashed var(--border-hi);border-radius:10px;padding:5px;cursor:pointer;color:var(--muted);text-align:center;overflow:hidden}.slot .slot-type{font-size:10px}.slot strong{font-size:11px;color:var(--text);overflow-wrap:anywhere;line-height:1.25}.slot.filled{border-style:solid;background:var(--surface)}.slot.selected{outline:2px solid var(--accent);outline-offset:-2px}.slot:hover{border-color:var(--accent)}.ban-grid{grid-template-columns:repeat(5,minmax(0,1fr));margin-top:9px}details{border-top:1px solid var(--border);padding-top:9px}summary{cursor:pointer;font-weight:750;font-size:13px}.picker{margin-top:13px;border-top:1px solid var(--border);padding-top:12px}.picker-controls{display:flex;gap:10px;align-items:center;margin:8px 0}.picker-controls select{flex:1}.inline-check{min-width:125px;display:flex;gap:7px;align-items:center;margin:0;font-size:12px}.hero-list,.roster-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:9px 0}.hero-item{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0;background:var(--field);border:1px solid var(--border);border-radius:10px;padding:10px;text-align:left}.hero-item:hover,.hero-item:focus{border-color:var(--accent)}.hero-item b{font-size:13px;display:block}.hero-item span,.hero-item small{font-size:10px;color:var(--muted);display:block;margin-top:2px}.hero-item .owned-tag{color:var(--good)}.hero-item .mark{padding:5px 8px;border-radius:7px;background:var(--surface);border:1px solid var(--border);white-space:nowrap;font-size:11px}.pagination{display:flex;gap:12px;align-items:center;justify-content:center}.pagination span{color:var(--muted);font-size:12px}.empty{font-size:12px;color:var(--muted);padding:15px;text-align:center;grid-column:1/-1}.issues{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}.issue{border:1px solid #867043;background:rgba(203,153,51,.13);color:var(--warn);font-size:11px;font-weight:650;border-radius:100px;padding:5px 9px}.safe{color:var(--good);font-size:13px}.rec{border:1px solid var(--border);background:var(--field);border-radius:11px;padding:12px;margin-bottom:8px}.rec-top{display:flex;justify-content:space-between;align-items:center;gap:6px}.rec-top strong{font-size:15px}.rec-score{font-size:14px;font-weight:850;color:var(--good)}.rec-reason{font-size:12px;color:var(--muted);margin-top:5px}.pill-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}.pill{font-size:10px;border:1px solid var(--border-hi);color:var(--muted);border-radius:100px;padding:3px 7px}.roster-item{padding:11px;background:var(--field);border:1px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:10px}.roster-item strong{font-size:13px}.roster-item small{display:block;color:var(--muted);font-size:11px}.roster-item .btn{min-width:79px}.roster-item.owned{border-color:#297257}.power-row,.account-row{display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid var(--border);padding:10px 0}.power-row small,.account-row small{color:var(--muted);display:block;font-size:11px}.power-row span{color:var(--accent);font-weight:850}.btn-holder{display:flex;align-items:end}.btn-holder button{width:100%;min-height:43px}.actions{display:flex;gap:8px;flex-wrap:wrap}.file-upload{display:inline-flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:9px;padding:8px 12px;background:var(--surface);cursor:pointer;margin:0;font-size:12px;font-weight:750;color:var(--text)}.file-upload input{display:none}footer{text-align:center;color:var(--muted);font-size:11px;padding:15px 0 35px}
+@media(max-width:600px){.app{padding:13px 11px 24px}.site-head h1{font-size:23px}.theme-line{width:100%;justify-content:space-between}.games{gap:6px}.game{padding:9px 7px;gap:6px;min-height:61px}.game-icon{min-width:28px;height:32px;font-size:11px}.game b{font-size:11px}.game small{font-size:9px}.active{display:none}.workspace{flex-wrap:wrap}.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.btn-holder{grid-column:1/-1}.clock-grid{grid-template-columns:1fr 1fr}.clock-buttons{grid-column:1/-1}.clock-buttons .btn{flex:1}.slot{min-height:66px;padding:3px}.slot strong{font-size:10px}.panel{padding:11px}.tab{font-size:11px;padding:10px 4px}.roster-grid{grid-template-columns:1fr}}
+@media(max-width:350px){.hero-list{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.picker-controls{flex-wrap:wrap}.inline-check{min-width:0}}
+</style></head>
+<body>
+<main class="app">
+<header class="site-head"><div class="heading"><h1>Solo Draft Assistant</h1><p>Two games. Independent profiles and draft engines.</p></div><div class="theme-line"><label for="appearance">Appearance</label><select id="appearance"><option value="native">Game colors</option><option value="classic">Classic blue</option></select></div></header>
+<nav class="games" aria-label="Game workspaces"><a href="../index.html" class="game"><span class="game-icon">HoK</span><span><b>Honor of Kings</b><small>Existing draft assistant</small></span></a><a href="./index.html" class="game current" aria-current="page"><span class="game-icon">ML</span><span><b>Mobile Legends</b><small>Independent workspace</small></span><strong class="active">ACTIVE</strong></a></nav>
+<div class="workspace"><div><span class="overline">ACTIVE WORKSPACE</span><b>Mobile Legends: Bang Bang</b></div><div class="workspace-right"><span id="accountBadge">MLBB Profile</span><span class="ready">MLBB THEME</span></div></div>
+<div id="status" role="status">MLBB draft workspace ready. No HoK data is read or modified.</div>
+<nav class="tabs" aria-label="Workspace sections"><button class="tab active" data-tab="draft" aria-pressed="true">Draft</button><button class="tab" data-tab="roster" aria-pressed="false">Roster</button><button class="tab" data-tab="power" aria-pressed="false">Power</button><button class="tab" data-tab="accounts" aria-pressed="false">Accounts</button></nav>
+<section id="draftTab" class="page">
+ <section class="panel"><div class="section-head"><h2>Ranked Draft Settings</h2><span class="small-flag">MLBB ENGINE</span></div><div class="form-grid"><div><label for="accountSelect">Account</label><select id="accountSelect"></select></div><div><label for="rankSelect">Rank</label><select id="rankSelect"><option>Warrior</option><option>Elite</option><option>Master</option><option>Grandmaster</option><option>Epic</option><option>Legend</option><option>Mythic</option><option>Mythical Honor</option><option>Mythical Glory</option><option>Mythical Immortal</option></select></div><div><label for="roleSelect">Assigned lane</label><select id="roleSelect"><option>EXP Lane</option><option>Jungle</option><option>Mid Lane</option><option>Gold Lane</option><option>Roam</option></select></div></div><div id="rankNote" class="info"></div></section>
+ <section class="panel"><div class="section-head"><h2>Decision Clock</h2><span class="small-flag">MANUAL SYNC</span></div><div class="clock-grid"><div class="timer" id="timerDisplay">0:30</div><div><label for="timerSeconds">Seconds</label><select id="timerSeconds"><option value="20">20</option><option value="25">25</option><option value="30" selected>30</option><option value="35">35</option><option value="40">40</option><option value="45">45</option><option value="60">60</option></select></div><div class="clock-buttons"><button class="btn primary" id="timerStart">Start</button><button class="btn" id="timerReset">Reset</button></div></div><p class="subtle">This is a decision aid, not a verified match clock. Set it to the countdown shown in your game.</p></section>
+ <section class="panel"><div class="section-head"><h2>Visible Draft</h2><button class="btn" id="clearDraft">Clear draft</button></div><div class="deck"><div class="line-head">Allies <span id="allyCount">0/5</span></div><div class="slot-grid" id="allySlots"></div></div><div class="deck"><div class="line-head">Enemies <span>Only if visible</span></div><div class="slot-grid" id="enemySlots"></div></div><details><summary>Bans <span id="banCount">(0)</span></summary><div class="slot-grid ban-grid" id="banSlots"></div></details><div class="picker"><div class="line-head"><span id="pickerMode">Select a draft slot</span><button type="button" class="btn" id="clearSlot">Clear selected</button></div><input id="heroSearch" type="search" placeholder="Search 133 MLBB heroes" autocomplete="off"><div class="picker-controls"><select id="heroLaneFilter" aria-label="Filter hero lane"><option value="all">All lanes</option><option>EXP Lane</option><option>Jungle</option><option>Mid Lane</option><option>Gold Lane</option><option>Roam</option></select><label class="inline-check"><input type="checkbox" id="ownedOnly"> Owned only</label></div><div class="hero-list" id="heroPicker"></div><div class="pagination"><button class="btn" id="prevPage">Previous</button><span id="pagerText">1 / 1</span><button class="btn" id="nextPage">Next</button></div></div></section>
+ <section class="panel"><div class="section-head"><h2>Solo Queue Recommendations</h2><button class="btn primary" id="analyze">Analyze</button></div><div id="teamIssues"></div><div id="recommendations"></div><p class="subtle">Hero traits and scoring are preliminary gameplay heuristics, not official counter or win-rate statistics. Unknown allied slots are treated as unknown—not missing roles.</p></section>
+</section>
+<section id="rosterTab" class="page hidden"><section class="panel"><div class="section-head"><h2>MLBB Hero Roster</h2><strong id="ownedCount">0 / 133 owned</strong></div><div class="info">Mark heroes as owned to restrict recommendations to your actual account. These selections never alter your HoK roster.</div><div class="form-grid"><div><label for="rosterSearch">Search</label><input type="search" id="rosterSearch" placeholder="Find hero"></div><div><label for="rosterLane">Lane</label><select id="rosterLane"><option value="all">All lanes</option><option>EXP Lane</option><option>Jungle</option><option>Mid Lane</option><option>Gold Lane</option><option>Roam</option></select></div></div><div class="roster-grid" id="rosterGrid"></div></section></section>
+<section id="powerTab" class="page hidden"><section class="panel"><div class="section-head"><h2>MLBB Hero Proficiency</h2><span class="small-flag">MANUAL</span></div><p class="subtle">Track your own familiarity with MLBB heroes separately from HoK's Hero Power. Values entered here are personal notes, not imported in-game mastery or MMR.</p><div class="form-grid"><div><label for="powerHero">Hero</label><select id="powerHero"></select></div><div><label for="powerValue">Manual familiarity (0–100)</label><input id="powerValue" type="number" min="0" max="100" step="1" value="0"></div><div class="btn-holder"><button id="savePower" class="btn primary">Save familiarity</button></div></div><div id="powerList"></div></section></section>
+<section id="accountsTab" class="page hidden"><section class="panel"><div class="section-head"><h2>MLBB Accounts</h2><span class="small-flag">SEPARATE STORAGE</span></div><div class="form-grid"><div><label for="newAccountName">New profile name</label><input id="newAccountName" type="text" maxlength="40" placeholder="e.g. MLBB Main"></div><div><label for="newAccountId">Account ID (optional)</label><input id="newAccountId" type="text" maxlength="40" placeholder="Optional, no password"></div><div class="btn-holder"><button id="addAccount" class="btn primary">Add profile</button></div></div><div id="accountList"></div></section><section class="panel"><h2>Data Safety</h2><p class="subtle">MLBB uses its own storage and backup schema. This workspace rejects HoK backups to prevent accidental overwrites.</p><div class="actions"><button class="btn primary" id="exportBackup">Export MLBB backup</button><label class="file-upload">Choose MLBB JSON<input type="file" id="importFile" accept=".json,application/json"></label><button class="btn" id="importBackup">Validate &amp; restore</button></div><p class="info" id="backupInfo">Local autosave is enabled where your browser permits it.</p></section></section>
+<footer>Multi-Game Integration v0.17 staging · 133 MLBB heroes · HoK engine remains separate · $0</footer>
+</main>
+<script>/* MLBB roster primary lane: 133 heroes, Sep 29 2026, corroborated against MLBB Guides and Liquipedia.
+   Traits are an INITIAL team-composition model and are not official Moonton statistics. */
+'use strict';
+window.MLBB_HERO_DATA=(()=>{
+ const lanes={
+  'EXP Lane':`Aldous|Alice|Argus|Arlott|Benedetta|Chou|Cici|Dyrroth|Edith|Esmeralda|Freya|Guinevere|Lapu-Lapu|Lukas|Masha|Minsitthar|Paquito|Phoveus|Ruby|Silvanna|Sora|Sun|Terizla|Thamuz|Uranus|X.Borg|Yu Zhong|Zilong`,
+  'Jungle':`Aamon|Alpha|Alucard|Aulus|Balmond|Bane|Barats|Baxia|Fanny|Fredrinn|Gusion|Hanzo|Harley|Hayabusa|Helcurt|Hirara|Joy|Julian|Karina|Lancelot|Leomord|Ling|Martis|Natalia|Nolan|Popol and Kupa|Roger|Saber|Suyou|Yi Sun-shin|Yin`,
+  'Mid Lane':`Aurora|Cecilion|Chang'e|Cyclops|Eudora|Faramis|Gord|Kadita|Kagura|Kimmy|Lunox|Luo Yi|Lylia|Nana|Novaria|Odette|Pharsa|Selena|Vale|Valentina|Valir|Vexana|Xavier|Yve|Zetian|Zhask|Zhuxin`,
+  'Gold Lane':`Beatrix|Brody|Bruno|Claude|Clint|Granger|Hanabi|Harith|Irithel|Ixia|Karrie|Layla|Lesley|Melissa|Miya|Moskov|Natan|Obsidia|Wanwan`,
+  'Roam':`Akai|Angela|Atlas|Badang|Belerick|Carmilla|Chip|Diggie|Estes|Floryn|Franco|Gatotkaca|Gloo|Grock|Hilda|Hylos|Jawhead|Johnson|Kaja|Kalea|Khaleed|Khufra|Lolita|Marcel|Mathilda|Minotaur|Rafaela|Tigreal`
+ };
+ const cls={};const set=(names,c)=>names.split('|').forEach(n=>cls[n]=c);
+ set('Akai|Atlas|Belerick|Franco|Gatotkaca|Gloo|Grock|Hylos|Johnson|Khufra|Minotaur|Tigreal','Tank');
+ set('Angela|Carmilla|Chip|Diggie|Estes|Floryn|Kaja|Kalea|Lolita|Marcel|Mathilda|Rafaela','Support');
+ set('Alice|Esmeralda|Edith|Uranus|Fredrinn|Barats|Baxia','Tank');
+ set('Aamon|Fanny|Gusion|Hanzo|Harley|Hayabusa|Helcurt|Hirara|Joy|Karina|Lancelot|Ling|Natalia|Nolan|Saber|Suyou|Benedetta|Sora','Assassin');
+ set('Aurora|Cecilion|Chang\'e|Cyclops|Eudora|Faramis|Gord|Kadita|Kagura|Kimmy|Lunox|Luo Yi|Lylia|Nana|Novaria|Odette|Pharsa|Selena|Vale|Valentina|Valir|Vexana|Xavier|Yve|Zetian|Zhask|Zhuxin|Harith','Mage');
+ set('Beatrix|Brody|Bruno|Claude|Clint|Granger|Hanabi|Irithel|Ixia|Karrie|Layla|Lesley|Melissa|Miya|Moskov|Natan|Obsidia|Wanwan|Popol and Kupa|Yi Sun-shin|Roger','Marksman');
+ const base={
+ 'EXP Lane':{frontline:1,cc:1,engage:1,peel:0,sustain:1,magic:0,physical:2,burst:1,solo:2,mobility:1},
+ 'Jungle':{frontline:0,cc:1,engage:1,peel:0,sustain:0,magic:0,physical:2,burst:2,solo:1,mobility:2},
+ 'Mid Lane':{frontline:0,cc:1,engage:0,peel:1,sustain:0,magic:2,physical:0,burst:2,solo:1,mobility:1},
+ 'Gold Lane':{frontline:0,cc:0,engage:0,peel:0,sustain:0,magic:0,physical:2,burst:1,solo:1,mobility:1},
+ 'Roam':{frontline:2,cc:2,engage:2,peel:1,sustain:0,magic:0,physical:1,burst:0,solo:1,mobility:1}
+ };
+ const overrides={};
+ // F frontline, C control, E engage, P peel, S sustain/healing, M magic, D physical, B burst, Q solo safety, V mobility.
+ const codes={F:'frontline',C:'cc',E:'engage',P:'peel',S:'sustain',M:'magic',D:'physical',B:'burst',Q:'solo',V:'mobility'};
+ const mod=(names,rules)=>names.split('|').forEach(n=>{overrides[n]={...(overrides[n]||{})};rules.split(',').forEach(k=>{const field=codes[k[0]],v=Number(k.slice(1));if(field)overrides[n][field]=v})});
+ mod('Tigreal|Atlas|Khufra|Minotaur|Gatotkaca|Carmilla','F2,C2,E2,P1,S0');
+ mod('Akai|Gloo|Grock|Chip|Johnson','F2,C2,E2,P1');
+ mod('Franco|Kaja','F1,C2,E1,P1');
+ mod('Lolita','F2,C2,E1,P2');mod('Belerick|Hylos','F2,C2,E1,P1');
+ mod('Angela|Estes|Floryn|Rafaela','F0,C1,E0,P2,S2,M1,D0');
+ mod('Diggie','F0,C1,E0,P2,S0,M1,D0');
+ mod('Mathilda|Kalea','F0,C1,E1,P2,S1,M1,D0,V2');
+ mod('Marcel','F0,C1,E0,P2,M1,D0');
+ mod('Hilda|Khaleed|Jawhead|Badang','F1,C1,E2,P0,D2');
+ mod('Edith','F2,C2,E1,P1,M2,D1,Q2');
+ mod('Terizla|Ruby|Minsitthar|Yu Zhong|Lapu-Lapu|Phoveus','F2,C2,E2,S1,Q2');
+ mod('Uranus|Esmeralda|Alice','F2,S2,M2,D0,C0,E1,B0,Q2');
+ mod('Thamuz|Argus|Sun|Masha|Cici','F1,C0,E1,S2,D2,B1,Q2');
+ mod('Paquito|Arlott|Chou|Guinevere|Silvanna','F1,C2,E2,B2,V2');
+ mod('Zilong|Benedetta|Sora','F0,C1,E2,B2,V2');
+ mod('Barats|Fredrinn|Baxia','F2,C2,E2,P1,S1,Q2');
+ mod('Balmond|Alpha|Aulus|Leomord|Martis','F1,C1,E1,S1,D2,Q2');
+ mod('Gusion|Harley|Joy|Julian|Karina','M2,D0,F0,B2,V2');
+ mod('Fanny|Ling|Lancelot|Hayabusa|Nolan|Hirara|Aamon','F0,C0,E2,V2,B2,Q0');
+ mod('Aurora|Eudora|Nana|Vexana|Zetian|Luo Yi|Zhuxin|Selena|Valir','C2,M2,E1');
+ mod('Pharsa|Xavier|Novaria|Cecilion|Gord|Yve|Chang\'e','C1,M2,E0');
+ mod('Faramis','C1,P2,S1,M2');
+ mod('Harith|Kimmy','M2,D1,C0,V2');
+ mod('Natan','M2,D1');
+ mod('Wanwan|Claude|Moskov|Melissa','V2,D2');
+ mod('Brody|Clint|Lesley|Granger','B2,D2');
+ const flex={
+  'EXP Lane':'Chou|Arlott|Ruby|Terizla|Gatotkaca|Hilda|Badang|Khaleed|Edith|Esmeralda',
+  'Jungle':'Harith|Bane|Alice|Dyrroth|Julian|Fredrinn|Yi Sun-shin',
+  'Roam':'Chou|Ruby|Edith|Faramis|Selena|Khaleed|Hilda|Baxia|Badang|Gatotkaca|Arlott',
+  'Mid Lane':'Harith|Faramis|Valir|Kadita|Selena|Kimmy|Lunox',
+  'Gold Lane':'Harith|Kimmy|Roger|Popol and Kupa'
+ };
+ const note={
+  'Tigreal':'Area crowd control and initiation; needs follow-up.',
+  'Atlas':'Group engage and teamfight setup.',
+  'Khufra':'Anti-dash control and initiation.',
+  'Minotaur':'Durable teamfight initiation with healing support.',
+  'Estes':'Strong sustained healing; needs a frontline elsewhere.',
+  'Angela':'Protects a diver or carry with support ultimate.',
+  'Floryn':'Teamwide sustain; limited frontline presence.',
+  'Rafaela':'Healing and mobility support, not a primary frontline.',
+  'Diggie':'Protection against crowd-control-heavy opponents.',
+  'Lolita':'Projectile defense and protective frontline.',
+  'Terizla':'Physical frontline, close-range crowd control and teamfights.',
+  'Ruby':'Sustain and repeated displacement for extended fights.',
+  'Edith':'Frontline and CC, with mixed damage profile.',
+  'Yu Zhong':'Diversion and frontline pressure in extended fights.',
+  'Fanny':'Very high execution demand; do not infer player comfort.',
+  'Lancelot':'Mobile dive threat; relies on mechanics.',
+  'Saber':'Single-target pickoff and burst threat.',
+  'Aurora':'Reliable area control and magical burst.',
+  'Valir':'Anti-dive control and sustained magic damage.',
+  'Nana':'Disruption and mage follow-up.',
+  'Karrie':'Strong against high-health frontliners through sustained damage.',
+  'Claude':'Sustained mobile marksman damage; needs protected positioning.',
+  'Beatrix':'Flexible ranged damage; weapon management matters.',
+  'Wanwan':'High mobility with conditional ultimate activation.'
+ };
+ const heroes=[];
+ for(const [lane,str] of Object.entries(lanes))for(const name of str.split('|')){
+   let tr={...base[lane]};const classification=cls[name]||'Fighter';
+   if(lane==='Roam'&&classification==='Support')tr={...tr,frontline:0,cc:1,engage:0,peel:2,sustain:1,magic:1,physical:0};
+   if(lane==='EXP Lane'&&classification==='Tank')tr={...tr,frontline:2,magic:1,physical:1};
+   if(lane==='Jungle'&&classification==='Mage')tr={...tr,magic:2,physical:0};
+   if(lane==='Gold Lane'&&classification==='Mage')tr={...tr,magic:2,physical:0};
+   Object.assign(tr,overrides[name]||{});
+   const other=Object.entries(flex).filter(([ln,st])=>ln!==lane&&st.split('|').includes(name)).map(([ln])=>ln);
+   heroes.push({name,lane,flex:other,cls:classification,traits:tr,note:note[name]||''});
+ }
+ return Object.freeze({heroes,lanes:Object.keys(lanes),metadata:{source:'MLBB Guides + Liquipedia lane lists, patch 2.2.16 (Sep–Oct 2026)',traitModel:'Version 1 heuristic; not win-rate or official in-game stats'}});
+})();
+</script><script>/* Mobile Legends Solo Draft Assistant v0.17 staging.
+ * Offline heuristic. Isolated storage and JSON schema. No access to HoK state.
+ */
+(()=>{'use strict';
+const H=window.MLBB_HERO_DATA.heroes;const byName=new Map(H.map(x=>[x.name,x]));
+const KEY='mlbb_solo_draft_state_v1',THEME='solo_draft_appearance_v1';
+const $=id=>document.getElementById(id);
+const blanks=n=>Array(n).fill(null);
+const ranks=['Warrior','Elite','Master','Grandmaster','Epic','Legend','Mythic','Mythical Honor','Mythical Glory','Mythical Immortal'];
+const cleanText=(s,max=40)=>String(s??'').trim().slice(0,max);
+const initial=()=>({schemaVersion:1,active:'main',accounts:[{id:'main',name:'MLBB Main',uid:'',rank:'Epic',role:'EXP Lane',owned:[],power:{},allies:blanks(5),enemies:blanks(5),bans:blanks(10)}]});
+const state={data:initial(),tab:'draft',slot:{kind:'allies',index:0},query:'',laneFilter:'all',rosterQuery:'',rosterLane:'all',page:0,pageSize:12,ownedOnly:false,timerSeconds:30,timerEnds:0,timerRunning:false,timerInterval:null};
+function restore(){try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);const safe=validate(parsed);if(safe)state.data=safe}}catch(e){announce('Storage could not be read; in-memory mode is active.')}}
+function active(){return state.data.accounts.find(x=>x.id===state.data.active)||state.data.accounts[0]}
+function announce(t){$('status').textContent=t}
+function uniqueKnown(a,n){return Array.from({length:n},(_,i)=>byName.has(a?.[i])?a[i]:null)}
+function validate(payload){
+ if(!payload||payload.schemaVersion!==1||!Array.isArray(payload.accounts)||!payload.accounts.length||payload.accounts.length>16)return null;
+ const ids=new Set(),arr=[];
+ for(const x of payload.accounts){if(!x||typeof x!=='object')return null;const id=cleanText(x.id,70);if(!id||ids.has(id))return null;ids.add(id);
+  const owned=Array.isArray(x.owned)?[...new Set(x.owned.filter(n=>byName.has(n)))]:[];
+  const power={};if(x.power&&typeof x.power==='object')for(const [n,v] of Object.entries(x.power)){if(byName.has(n)&&Number.isInteger(v)&&v>=0&&v<=100)power[n]=v}
+  arr.push({id,name:cleanText(x.name)||'MLBB Profile',uid:cleanText(x.uid),rank:ranks.includes(x.rank)?x.rank:'Epic',role:window.MLBB_HERO_DATA.lanes.includes(x.role)?x.role:'EXP Lane',owned,power,allies:uniqueKnown(x.allies,5),enemies:uniqueKnown(x.enemies,5),bans:uniqueKnown(x.bans,10)});
+ }
+ return {schemaVersion:1,active:ids.has(payload.active)?payload.active:arr[0].id,accounts:arr};
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state.data))}catch(e){announce('Changes are in memory only. Export a backup before closing.')}}
+function escapeAttr(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function mk(tag,cls,txt){const el=document.createElement(tag);if(cls)el.className=cls;if(txt!==undefined)el.textContent=txt;return el}
+function setOptions(el,values,selected){el.replaceChildren(...values.map(([value,label])=>{const o=document.createElement('option');o.value=value;o.textContent=label;return o}));if(selected!==undefined)el.value=selected}
+function distinctRows(){const a=active();return [...a.allies,...a.enemies,...a.bans].filter(Boolean)}
+function isPickAvailable(h){return !distinctRows().includes(h.name)}
+function roleCompatible(h,lane){return h.lane===lane||h.flex.includes(lane)}
+function rankInfo(rank){const i=ranks.indexOf(rank);if(i<4)return 'Below Epic: no standard draft bans. Use team-role balance for your choice.';if(rank==='Epic')return 'Epic draft: typically 3 bans per team; use visible picks and bans only.';if(rank==='Legend')return 'Legend draft: typically 4 bans per team. Counter recommendations are conditional on enemies entered.';return 'Mythic+: typically 5 bans per team. Treat draft format as an estimate if your match displays different rules.'}
+function rankRender(){const a=active();$('rankNote').textContent=rankInfo(a.rank);$('rankSelect').value=a.rank;$('roleSelect').value=a.role}
+function appearance(){let v='native';try{v=localStorage.getItem(THEME)==='classic'?'classic':'native'}catch(e){}$('appearance').value=v;document.documentElement.dataset.theme=v;document.querySelector('.ready').textContent=v==='classic'?'CLASSIC BLUE':'MLBB THEME'}
+function showTab(n){state.tab=n;document.querySelectorAll('.tab').forEach(b=>{const on=b.dataset.tab===n;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on))});document.querySelectorAll('.page').forEach(p=>p.classList.toggle('hidden',p.id!==n+'Tab'));if(n==='roster')renderRoster();if(n==='power')renderPower();if(n==='accounts')renderAccounts()}
+function renderSlots(){const a=active();for(const kind of ['allies','enemies','bans']){const e=$(kind==='allies'?'allySlots':kind==='enemies'?'enemySlots':'banSlots');e.replaceChildren(...a[kind].map((n,i)=>{const b=mk('button','slot'+(n?' filled':'')+(state.slot.kind===kind&&state.slot.index===i?' selected':''));b.type='button';const lab=mk('span','slot-type',kind==='bans'?`Ban ${i+1}`:kind==='allies'?`Ally ${i+1}`:`Enemy ${i+1}`);const text=mk('strong','',n||'+ Pick');b.append(lab,text);b.setAttribute('aria-label',(n?'Edit ':'Set ')+kind+' '+(i+1)+(n?': '+n:''));b.addEventListener('click',()=>{state.slot={kind,index:i};renderSlots();renderPicker();$('heroSearch').focus()});return b}))}
+ $('allyCount').textContent=a.allies.filter(Boolean).length+'/5';$('banCount').textContent=`(${a.bans.filter(Boolean).length})`;
+ const names={allies:'Ally',enemies:'Enemy',bans:'Ban'};$('pickerMode').textContent=`Selecting ${names[state.slot.kind]} ${state.slot.index+1}`;
+}
+function renderPicker(){const a=active(),search=state.query.trim().toLowerCase();let arr=H.filter(h=>(state.laneFilter==='all'||roleCompatible(h,state.laneFilter))&&h.name.toLowerCase().includes(search)&&(!state.ownedOnly||a.owned.includes(h.name)));
+ const pages=Math.max(1,Math.ceil(arr.length/state.pageSize));state.page=Math.min(state.page,pages-1);arr=arr.slice(state.page*state.pageSize,(state.page+1)*state.pageSize);
+ const list=$('heroPicker');list.replaceChildren();
+ for(const h of arr){const b=mk('button','hero-item');b.type='button';const info=mk('div');const n=mk('b','',h.name);const meta=mk('small','',h.lane+(h.flex.length?' · flex '+h.flex.join(', '):''));info.append(n,meta);if(a.owned.includes(h.name))info.append(mk('span','owned-tag','✓ Owned'));const unavailable=distinctRows().includes(h.name);const side=mk('span','',unavailable?'In draft':h.cls);b.disabled=unavailable;b.append(info,side);b.addEventListener('click',()=>placeHero(h.name));list.append(b)}
+ if(!arr.length)list.append(mk('div','empty','No matching heroes. Try a different lane or ownership filter.'));
+ $('pagerText').textContent=`${state.page+1} / ${pages}`;$('prevPage').disabled=state.page===0;$('nextPage').disabled=state.page>=pages-1;
+}
+function placeHero(name){const a=active();if(!byName.has(name))return;if(distinctRows().includes(name)){announce('That hero is already in the draft.');return}a[state.slot.kind][state.slot.index]=name;
+ state.query='';$('heroSearch').value='';save();renderSlots();renderPicker();renderAnalysis();
+ const free=a[state.slot.kind].findIndex(x=>!x);if(free>=0)state.slot.index=free;renderSlots();announce(`${name} assigned to ${state.slot.kind==='bans'?'ban':state.slot.kind==='allies'?'ally':'enemy'} draft.`)
+}
+function teamNumbers(names){const t={frontline:0,cc:0,engage:0,peel:0,sustain:0,magic:0,physical:0,burst:0,solo:0,mobility:0};for(const n of names){const h=byName.get(n);if(h)for(const k of Object.keys(t))t[k]+=h.traits[k]||0}return t}
+const labels={frontline:'frontline',cc:'hard control',engage:'engage',peel:'carry protection',sustain:'sustain / healing',magic:'magic damage',physical:'physical damage'};
+function gapsFor(a){const visible=a.allies.filter(Boolean);const t=teamNumbers(visible),issues=[];
+ if(!visible.length)return {t,issues,visible:0};
+ const spec=[['frontline',2,3],['cc',2,2],['engage',2,2],['magic',2,2],['physical',2,2],['peel',1,1]];
+ for(const [k,target,weight] of spec){if(t[k]<target)issues.push({key:k,weight,deficit:target-t[k]})}
+ return{t,issues,visible:visible.length};
+}
+function roleCoverage(a){return a.allies.map(n=>byName.get(n)?.lane).filter(Boolean)}
+function scoring(h,a,gaps){let score=60,reason=[],traits=h.traits;
+ if(h.lane===a.role){score+=12;reason.push('Primary '+a.role+' pick')}else{score+=3;reason.push('Secondary lane flexibility; confirm viability')}
+ if(gaps.visible>0){for(const g of gaps.issues){const contribution=traits[g.key]||0;if(contribution){let b=Math.min(g.deficit,contribution)*g.weight*5;score+=b;reason.push(`Adds ${labels[g.key]}`)}}}
+ else{score+=(traits.solo||0)*3+(traits.frontline||0)*2;reason.push('Blind-pick baseline; allies not entered')}
+ const allies=a.allies.filter(Boolean);const seen=roleCoverage(a);if(seen.includes(a.role)&&!allies.includes(h.name)){score-=8;reason.push('Check team role overlap')}
+ const enemies=a.enemies.filter(Boolean).map(n=>byName.get(n)).filter(Boolean);
+ if(enemies.length){const enemyT=teamNumbers(a.enemies.filter(Boolean));if(enemyT.engage>=3&&traits.peel>0){score+=traits.peel*3;reason.push('Adds protection against enemy engages')}if(enemyT.frontline>=4&&traits.physical===2&&['Karrie','Claude','Sun','Thamuz'].includes(h.name)){score+=6;reason.push('Extended damage into durable opponents')}if(enemyT.mobility>=5&&traits.cc>=2){score+=traits.cc*3;reason.push('Control against mobile threats')}}
+ const familiarity=a.power[h.name]||0;score+=Math.min(5,Math.floor(familiarity/20));if(familiarity>=60)reason.push('Manually recorded familiarity');
+ // Do not turn an unknown owned roster into fictitious ownership.
+ if(a.owned.length&&a.owned.includes(h.name))score+=3;
+ if(h.note)reason.push(h.note);
+ return {h,score,reason:[...new Set(reason)].slice(0,4)};
+}
+function renderAnalysis(){const a=active(),r=$('recommendations'),gaps=gapsFor(a),issues=$('teamIssues');issues.replaceChildren();r.replaceChildren();
+ if(!gaps.visible){issues.append(mk('div','info','No allies entered yet. Recommendations are provisional blind-pick options; add allies to identify real composition gaps.'))}
+ else if(!gaps.issues.length){issues.append(mk('div','safe','No major composition gaps detected from the visible allies.'))}
+ else{const wrap=mk('div','issues');for(const i of gaps.issues)wrap.append(mk('span','issue','May need '+labels[i.key]));issues.append(wrap)}
+ let options=H.filter(h=>roleCompatible(h,a.role)&&isPickAvailable(h));const ownedOptions=options.filter(h=>a.owned.includes(h.name));
+ if(a.owned.length){if(ownedOptions.length){options=ownedOptions}else{r.append(mk('div','info','No owned heroes available in this role. Showing scouting suggestions only; update your roster.'))}}
+ else r.append(mk('div','info','No MLBB owned heroes marked. Showing scouting suggestions. Go to Roster to personalize picks.'));
+ const ranked=options.map(h=>scoring(h,a,gaps)).sort((x,y)=>y.score-x.score||x.h.name.localeCompare(y.h.name)).slice(0,8);
+ if(!ranked.length){r.append(mk('div','empty','No eligible unpicked heroes. Change your lane or edit the draft.'));return}
+ for(let i=0;i<ranked.length;i++){const x=ranked[i],c=mk('article','rec'),head=mk('div','rec-top'),name=mk('strong','',`${i+1}. ${x.h.name}`),score=mk('span','rec-score',String(x.score)+' pts');head.append(name,score);const reason=mk('div','rec-reason',x.reason.join(' · '));const pills=mk('div','pill-row');pills.append(mk('span','pill',x.h.lane),mk('span','pill',x.h.cls));for(const k of ['frontline','cc','engage','sustain','magic'])if(x.h.traits[k]>=2)pills.append(mk('span','pill',labels[k]));c.append(head,reason,pills);r.append(c)}
+}
+function renderRoster(){const a=active();$('ownedCount').textContent=a.owned.length+' / '+H.length+' owned';const q=state.rosterQuery.toLowerCase();const arr=H.filter(h=>(state.rosterLane==='all'||roleCompatible(h,state.rosterLane))&&h.name.toLowerCase().includes(q));const grid=$('rosterGrid');grid.replaceChildren();for(const h of arr){const on=a.owned.includes(h.name),el=mk('div','roster-item'+(on?' owned':'')),desc=mk('div');desc.append(mk('strong','',h.name),mk('small','',h.lane+' · '+h.cls));const b=mk('button','btn'+(on?' primary':''),on?'Owned ✓':'Mark owned');b.addEventListener('click',()=>{if(on)a.owned=a.owned.filter(n=>n!==h.name);else a.owned.push(h.name);save();renderRoster();renderPicker();renderAnalysis()});el.append(desc,b);grid.append(el)}if(!arr.length)grid.append(mk('div','empty','No matching MLBB heroes.'))}
+function renderPower(){const a=active();setOptions($('powerHero'),H.slice().sort((x,y)=>x.name.localeCompare(y.name)).map(h=>[h.name,h.name]),$('powerHero').value);$('powerValue').value=a.power[$('powerHero').value]||0;const list=$('powerList');list.replaceChildren();const entries=Object.entries(a.power).sort((a,b)=>b[1]-a[1]);for(const [n,v] of entries){const row=mk('div','power-row');row.append(mk('div','',n),mk('span','',String(v)+'/100'));list.append(row)}if(!entries.length)list.append(mk('div','info','No MLBB familiarity values recorded. Add a hero and score above.'))}
+function renderAccounts(){const a=active();$('accountBadge').textContent=a.name;setOptions($('accountSelect'),state.data.accounts.map(x=>[x.id,x.name]),a.id);const list=$('accountList');list.replaceChildren();for(const x of state.data.accounts){const row=mk('div','account-row'),desc=mk('div');desc.append(mk('strong','',x.name+(x.id===state.data.active?' · Active':'')),mk('small','',x.rank+' · '+x.owned.length+' heroes'+(x.uid?' · ID '+x.uid:'')));const b=mk('button','btn',x.id===state.data.active?'Current':'Switch');b.disabled=x.id===state.data.active;b.addEventListener('click',()=>selectAccount(x.id));row.append(desc,b);list.append(row)}}
+function selectAccount(id){if(!state.data.accounts.some(x=>x.id===id))return;state.data.active=id;state.query='';$('heroSearch').value='';state.slot={kind:'allies',index:0};state.page=0;save();renderAll();announce('Switched to '+active().name)}
+function renderAll(){const a=active();setOptions($('accountSelect'),state.data.accounts.map(x=>[x.id,x.name]),a.id);$('accountBadge').textContent=a.name;rankRender();renderSlots();renderPicker();renderAnalysis();if(state.tab==='roster')renderRoster();if(state.tab==='power')renderPower();if(state.tab==='accounts')renderAccounts()}
+function exportBackup(){const p={product:'MLBB Solo Draft Assistant',schemaVersion:1,exportedAt:new Date().toISOString(),...state.data};const blob=new Blob([JSON.stringify(p,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='mlbb-draft-backup-'+new Date().toISOString().slice(0,10)+'.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),3000);$('backupInfo').textContent='MLBB-only backup exported. Your HoK backups are unchanged.'}
+async function importBackup(){const file=$('importFile').files[0];if(!file){$('backupInfo').textContent='Select an MLBB JSON backup first.';return}if(file.size>2000000){$('backupInfo').textContent='Backup exceeds the 2 MB limit.';return}try{const p=JSON.parse(await file.text());if(p.product!=='MLBB Solo Draft Assistant'){throw Error('Not an MLBB backup. HoK backups cannot be imported here.')}const valid=validate(p);if(!valid)throw Error('Invalid or unsupported MLBB schema.');if(!window.confirm('Replace the local MLBB profiles with this validated backup? HoK data will not be changed.'))return;state.data=valid;save();renderAll();$('backupInfo').textContent=`Restored ${valid.accounts.length} MLBB profile(s).`}catch(e){$('backupInfo').textContent='Restore rejected: '+e.message}}
+function clockRender(){let sec=state.timerRunning?Math.max(0,Math.ceil((state.timerEnds-Date.now())/1000)):state.timerSeconds;if(state.timerRunning&&sec<=0){state.timerRunning=false;clearInterval(state.timerInterval);state.timerInterval=null;sec=0;state.timerSeconds=0}const display=$('timerDisplay');display.textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;display.classList.toggle('low',sec<=10);$('timerStart').textContent=state.timerRunning?'Pause':'Start'}
+function clockToggle(){if(state.timerRunning){state.timerSeconds=Math.max(0,Math.ceil((state.timerEnds-Date.now())/1000));state.timerRunning=false;clearInterval(state.timerInterval);state.timerInterval=null}else{if(state.timerSeconds===0)state.timerSeconds=Number($('timerSeconds').value)||30;state.timerEnds=Date.now()+state.timerSeconds*1000;state.timerRunning=true;state.timerInterval=setInterval(clockRender,250)}clockRender()}
+function clockReset(){state.timerSeconds=Number($('timerSeconds').value);state.timerRunning=false;clearInterval(state.timerInterval);state.timerInterval=null;clockRender()}
+if(window.location.protocol==='chrome-extension:'){const link=document.querySelector('.games a[href="https://tetraharte.github.io/hok-draft-assistant/"]');if(link)link.href='../app.html'}
+restore();appearance();
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab)));
+$('appearance').addEventListener('change',e=>{document.documentElement.dataset.theme=e.target.value;document.querySelector('.ready').textContent=e.target.value==='classic'?'CLASSIC BLUE':'MLBB THEME';try{localStorage.setItem(THEME,e.target.value)}catch(_) {}});
+$('accountSelect').addEventListener('change',e=>selectAccount(e.target.value));
+$('rankSelect').addEventListener('change',e=>{active().rank=e.target.value;save();renderAll()});$('roleSelect').addEventListener('change',e=>{active().role=e.target.value;save();renderAnalysis()});
+$('heroSearch').addEventListener('input',e=>{state.query=e.target.value;state.page=0;renderPicker()});$('heroLaneFilter').addEventListener('change',e=>{state.laneFilter=e.target.value;state.page=0;renderPicker()});$('ownedOnly').addEventListener('change',e=>{state.ownedOnly=e.target.checked;state.page=0;renderPicker()});
+$('prevPage').addEventListener('click',()=>{state.page=Math.max(0,state.page-1);renderPicker()});$('nextPage').addEventListener('click',()=>{state.page++;renderPicker()});
+$('clearSlot').addEventListener('click',()=>{const a=active();a[state.slot.kind][state.slot.index]=null;save();renderSlots();renderPicker();renderAnalysis();announce('Selected draft slot cleared.')});
+$('clearDraft').addEventListener('click',()=>{const a=active();a.allies=blanks(5);a.enemies=blanks(5);a.bans=blanks(10);state.slot={kind:'allies',index:0};save();renderAll();announce('MLBB draft slots cleared. Roster and familiarity preserved.')});$('analyze').addEventListener('click',renderAnalysis);
+$('rosterSearch').addEventListener('input',e=>{state.rosterQuery=e.target.value;renderRoster()});$('rosterLane').addEventListener('change',e=>{state.rosterLane=e.target.value;renderRoster()});
+$('powerHero').addEventListener('change',e=>{$('powerValue').value=active().power[e.target.value]||0});$('savePower').addEventListener('click',()=>{const n=$('powerHero').value,v=Number($('powerValue').value);if(!byName.has(n)||!Number.isInteger(v)||v<0||v>100){announce('Familiarity must be an integer from 0 to 100.');return}active().power[n]=v;save();renderPower();renderAnalysis();announce('Saved MLBB familiarity for '+n)});
+$('addAccount').addEventListener('click',()=>{if(state.data.accounts.length>=16){announce('Maximum 16 MLBB profiles.');return}const name=cleanText($('newAccountName').value);if(!name){announce('Enter an MLBB profile name.');return}const p=initial().accounts[0];p.id='mlbb-'+Date.now().toString(36)+'-'+state.data.accounts.length;p.name=name;p.uid=cleanText($('newAccountId').value);state.data.accounts.push(p);state.data.active=p.id;$('newAccountName').value='';$('newAccountId').value='';save();renderAll();announce('Added MLBB profile '+name)});
+$('exportBackup').addEventListener('click',exportBackup);$('importBackup').addEventListener('click',importBackup);
+$('timerStart').addEventListener('click',clockToggle);$('timerReset').addEventListener('click',clockReset);$('timerSeconds').addEventListener('change',clockReset);
+clockRender();renderAll();
+})();
+</script></body></html>
