@@ -1,29 +1,33 @@
-# HoK Solo Draft Assistant v0.16.2 — 30s Blind Pick Quick Decision
+# HoK Solo Draft Assistant v0.17.1 — Clean Draft Layout
 
-Free desktop Chrome extension and iPhone PWA. This update retains the v0.16.1 data schema and JSON backup/restore compatibility.
+Free browser-based draft assistant for Honor of Kings (HoK), with a separate Mobile Legends: Bang Bang (MLBB) workspace. Runs as a desktop web app or an installable iPhone PWA.
 
-## Changes
-- Gold–Platinum quick shortlist **above** Hero Picker, immediately visible even with no teammates entered.
-- Three differentiated choices: best current, frontline backup, damage alternative (depending on roster).
-- 30-second *manual* selection clock. Start it when the in-game selection starts; it cannot detect the game's clock automatically.
-- At 10 seconds the shortlist is held to prevent distracting late switches; at 5 seconds only the primary choice is emphasized. Use **Re-evaluate picks** to override.
-- Missing teammate intentions remain unknown, not immediately treated as missing frontline/CC. Composition repair weighting builds from 3/4 to 4/4 known allies.
-- Fast teammate entry by typing 2 letters and tapping the matching hero; all four ally slots are optional.
-- Dun has hero-specific engage recognition, fixing a classification issue identified during the 3-game trial.
-- Existing detailed draft advice, power, adaptive builds, accounts and backups remain available.
+## Changes in v0.17.1
 
-## Usage
-1. Set the correct account, Clash Lane and Gold/Platinum rank environment.
-2. Check the immediately displayed shortlist before the timer begins.
-3. Optionally type known teammate heroes; **you do not need to enter all four**.
-4. Start the 30-second clock when your selection window begins. At 10 seconds, commit to one of the held picks and select it in HoK.
-5. The tool does not lock your hero in-game and does not read the HoK screen.
+- Removed the full **Hero Picker** panel from the HoK Draft tab.
+- **Solo Queue Recommendations** now follows **Quick Decision** directly.
+- **Clear Draft** remains accessible in the Allies / Teammates section.
+- Gold–Platinum: use **Fast Teammate Entry** to record up to four visible allies. Quick Decision works even before all allies are known.
+- Diamond+: tap an ally, enemy, or ban slot to open a small contextual hero search; select a hero to fill that slot.
+- Updated the service-worker cache identifier to `solo-draft-v0171-clean-layout` for the public PWA update.
+- Preserved existing account, roster, Hero Power, draft timer, MLBB workspace, and recommendation-scoring behavior and saved-data schema.
 
-## Compatibility and backup
-Desktop: load the `chrome-extension-v0161` folder unpacked (folder name kept so existing extension installations can be upgraded without changing the load path). For an already installed extension, replace its files in place, then Reload under chrome://extensions so stored local data remains available.
+## Basic usage
 
-iPhone: publish the *contents* of `iphone-pwa-v0161` to HTTPS/GitHub Pages root; service-worker cache version v0162 ensures a clean offline update. You may have to fully close/reopen the installed PWA after deployment.
+1. Select the correct account, rank, and preferred lane.
+2. For Gold–Platinum, consult the immediate Quick Decision shortlist and add known teammates using Fast Teammate Entry.
+3. For Diamond+, tap draft slots to enter observed allies, enemies, and bans; recommendations update as your draft develops.
+4. Use **Clear** beside Allies / Teammates to reset the draft.
+5. The app does not control the game, automatically read the in-game screen, or automatically start an in-game draft clock.
 
-The iPhone and desktop versions retain independent browser storage; export/import JSON to transfer accounts. Back up both sides before replacing existing app files. This update does not use paid APIs or services.
+## Persistence and backups
 
-GitHub Pages: Settings → Pages → Deploy from main / root.
+Data is stored in the browser/PWA's local storage on each origin. Desktop, local staging (`localhost` or a LAN IP), and the published HTTPS site may have separate saved data. Refreshing a local preview does not prove that the published PWA has migrated correctly.
+
+Before publishing, **export a JSON backup from the currently published app** and keep it somewhere safe. Do not delete the installed PWA or clear Safari website data just to force an update: that may remove locally stored profiles and Hero Power. Keep existing backups until the published update is verified.
+
+## Publishing
+
+GitHub Pages is intended to serve the repository's `main` branch from its root. After reviewing and merging the staging pull request, allow GitHub Pages to deploy, then open the published HTTPS page while online. Close and reopen the installed iPhone PWA, and refresh/reopen again if needed so the service worker can activate its new cache. Verify the on-screen version, Hero Picker removal, recommendations, accounts, roster, Hero Power, and offline availability.
+
+This change updates the web/PWA files in the repository root. It does **not** bundle or update a separate Chrome extension; any installed extension requires its own update procedure.

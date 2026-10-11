@@ -43,7 +43,7 @@ for(const a of state.accounts){
   if(!a.lastGoodSnapshot||typeof a.lastGoodSnapshot!=="object")a.lastGoodSnapshot=null;
 }
 
-let picker={group:"allies",index:0},rosterFilter="All",pickerLaneFilter="All",pickerOwnedOnly=false,pickerPage=1,powerLaneFilter="All",powerSort="highest";const PICKER_PAGE_SIZE=18;
+let picker={group:"allies",index:0},rosterFilter="All",powerLaneFilter="All",powerSort="highest";
 const PHASES={intention:{seconds:20,total:"Pre-ban: ~15–20s",label:"intention",title:"Intention — decide your likely role/hero pool",text:"Use this window to set your role, confirm your account roster, and identify 2–3 safe candidates before bans begin."},ban:{seconds:30,total:"Ban phase: ~60–90s total",label:"ban turn",title:"Ban Turn — remove the biggest draft threat",text:"Use the enemy/ally context already entered. A ban turn is short, so prioritize high-impact threats rather than searching the full roster."},pick:{seconds:20,total:"Pick phase: up to ~200s total",label:"pick turn",title:"Pick Turn — make the decision, not the whole analysis",text:"Enter visible picks continuously. When your turn starts, the assistant should already have your best owned options ranked."},adjustment:{seconds:20,total:"Adjustment: 20s",label:"adjustment",title:"Adjustment — finalize the loadout and swaps",text:"Use the final window for teammate swaps, Arcana, and Challenger Spell checks. Hero recommendations are effectively locked at this point."}};
 function isBlindRank(){return state.rank==="Gold"||state.rank==="Platinum"}
 function isDraftRank(){return !isBlindRank()}
@@ -177,7 +177,7 @@ function activateAccount(id){
   save();
   const next=state.accounts.find(a=>a.id===id);if(!next)return;
   state.active=id;loadWorkspace(next);save();
-  picker={group:"allies",index:0};pickerPage=1;
+  picker={group:"allies",index:0};closeSlotEntry();
   timerRunning=false;if(timerHandle){clearInterval(timerHandle);timerHandle=null}draftPhase="pick";timerRemaining=PHASES.pick.seconds;
   renderAll();renderPower();
   setStatus("Switched to "+next.name+" • "+state.rank+". Roster, draft workspace and Hero Power data changed with the account.");
@@ -621,14 +621,36 @@ async function importCampHarFile(file){
 
 
 function renderSlots(){for(const g of ["allies","enemies","bans"]){const root=$(g==="allies"?"allySlots":g==="enemies"?"enemySlots":"banSlots");const arr=(g==="allies"&&isBlindRank())?state[g].slice(0,4):state[g];root.innerHTML=arr.map((n,i)=>{const h=hero(n),emptyLabel=(g==="allies"&&isBlindRank())?`teammate ${i+1}`:`${g.slice(0,-1)} ${i+1}`;return `<button type="button" class="slot ${n?"filled":""}" data-slot-group="${g}" data-slot-index="${i}">${n?`<span class="x" data-clear="1">×</span><div>${esc(displayName(h))}<small>${esc(h?.lane||"")}</small></div>`:emptyLabel}</button>`}).join("")}}
-function renderModes(){const groups=isBlindRank()?["allies"]:["allies","enemies","bans"];if(isBlindRank()&&picker.group!=="allies")picker={group:"allies",index:0};$("modeButtons").innerHTML=groups.map(g=>`<button type="button" class="btn mode ${picker.group===g?"active":""}" data-mode="${g}">${isBlindRank()?"Teammates":g[0].toUpperCase()+g.slice(1)}</button>`).join("")}
+/* v0.17.1: Hero Picker removed; draft slots retain on-demand hero search. */
+function renderModes(){if(isBlindRank()&&picker.group!=="allies")picker={group:"allies",index:0};if(isBlindRank())closeSlotEntry()}
 function available(n){const used=isBlindRank()?visibleAllies():[...state.allies,...state.enemies,...state.bans];return !used.includes(n)}
-function renderPickerLaneFilters(){const filters=["All","Clash Lane","Jungle","Mid Lane","Farm Lane","Roam"];$('pickerLaneFilters').innerHTML=filters.map(f=>`<button type="button" class="btn mode ${pickerLaneFilter===f?"active":""}" data-picker-lane="${esc(f)}">${f==="All"?"All":f.replace(" Lane","")}</button>`).join("");$('pickerOwnedToggle').classList.toggle('active',pickerOwnedOnly);$('pickerOwnedToggle').textContent='Owned only: '+(pickerOwnedOnly?'On':'Off')}
-function renderPicker(){const q=$("heroSearch").value.toLowerCase().trim(),owned=new Set(acct().owned);let filtered=HEROES.filter(h=>searchable(h).includes(q)&&(pickerLaneFilter==="All"||h.lane===pickerLaneFilter)&&(!pickerOwnedOnly||owned.has(h.n)));const pages=Math.max(1,Math.ceil(filtered.length/PICKER_PAGE_SIZE));pickerPage=Math.min(Math.max(1,pickerPage),pages);const start=(pickerPage-1)*PICKER_PAGE_SIZE,shown=filtered.slice(start,start+PICKER_PAGE_SIZE);$("pickerResultCount").textContent=filtered.length+" hero"+(filtered.length===1?"":"es");$("pickerPageInfo").textContent=pickerPage+" / "+pages;$("pickerPrev").disabled=pickerPage<=1;$("pickerNext").disabled=pickerPage>=pages;$("heroPicker").innerHTML=shown.length?shown.map(h=>`<button type="button" class="hero hero-pick" data-hero="${esc(h.n)}" ${available(h.n)?"":"disabled"}><div><div class="hero-name">${esc(displayName(h))}</div><div class="hero-meta">${esc(h.lane)} • ${esc(h.archetype)}</div></div><div><span class="pill tier${h.tier}">${h.tier}</span> <span class="pill ${owned.has(h.n)?"owned":""}">${owned.has(h.n)?"OWNED":"NOT OWNED"}</span></div></button>`).join(""):`<div class="picker-empty">No heroes match these filters.</div>`}
-function pickHero(n){if(!available(n))return;const arr=state[picker.group],limit=(isBlindRank()&&picker.group==="allies")?4:arr.length;let i=Math.min(picker.index,limit-1);if(arr[i]){i=-1;for(let j=0;j<limit;j++){if(!arr[j]){i=j;break}}}if(i<0)i=0;arr[i]=n;let next=-1;for(let j=i+1;j<limit;j++){if(!arr[j]){next=j;break}}if(next>=0)picker.index=next;save();renderSlots();renderPicker();liveAnalyze();setStatus(displayName(hero(n))+" added to "+(isBlindRank()?"teammates":""+picker.group)+".")}
+function closeSlotEntry(){const panel=$("slotEntryPanel");if(!panel)return;panel.classList.add("hidden");$("slotEntrySearch").value="";$("slotEntryMatches").replaceChildren()}
+function renderSlotMatches(){
+ const root=$("slotEntryMatches"),q=$("slotEntrySearch").value.trim().toLowerCase();
+ if(q.length<2){root.innerHTML='<span class="muted">Type at least two letters to search available heroes.</span>';return}
+ const matches=HEROES.filter(h=>available(h.n)&&[h.n,...(h.aliases||[])].some(n=>n.toLowerCase().includes(q)))
+   .sort((a,b)=>Number(!a.n.toLowerCase().startsWith(q))-Number(!b.n.toLowerCase().startsWith(q))||a.n.localeCompare(b.n)).slice(0,8);
+ root.innerHTML=matches.length?matches.map(h=>`<button type="button" class="slot-entry-match" data-slot-hero="${esc(h.n)}">${esc(displayName(h))}<small>${esc(h.lane)} · ${esc(h.archetype)}</small></button>`).join(""):'<span class="muted">No available heroes match.</span>';
+}
+function openSlotEntry(group,index){
+ if(isBlindRank()){closeSlotEntry();$("quickAllyInput").focus();return}
+ if(!["allies","enemies","bans"].includes(group)||!Number.isInteger(index)||index<0||index>=state[group].length)return;
+ picker={group,index};const kind={allies:"ally",enemies:"enemy",bans:"ban"}[group];
+ $("slotEntryTitle").textContent="Choose "+kind+" "+(index+1);
+ $("slotEntryPanel").classList.remove("hidden");
+ $("slotEntrySearch").value="";renderSlotMatches();$("slotEntrySearch").focus();
+}
+function selectSlotHero(name){
+ if(!available(name))return;
+ const group=picker.group,index=picker.index;
+ if(!state[group]||index<0||index>=state[group].length)return;
+ state[group][index]=name;closeSlotEntry();save();renderSlots();liveAnalyze();
+ setStatus(displayName(hero(name))+" added to "+group+" slot "+(index+1)+".");
+}
+function refreshSlotEntry(){if(!isBlindRank()&&!$("slotEntryPanel").classList.contains("hidden"))renderSlotMatches()}
 function renderRosterFilters(){const fs=["All","Clash Lane","Jungle","Mid Lane","Farm Lane","Roam"];$("rosterFilters").innerHTML=fs.map(f=>`<button type="button" class="btn mode ${rosterFilter===f?"active":""}" data-roster-filter="${f}">${f==="All"?"All":f.replace(" Lane","")}</button>`).join("")}
 function renderRoster(){const q=$("rosterSearch").value.toLowerCase().trim(),a=acct(),owned=new Set(a.owned),list=HEROES.filter(h=>(rosterFilter==="All"||h.lane===rosterFilter)&&searchable(h).includes(q));$("ownedCount").textContent=a.owned.length;$("rosterList").innerHTML=list.map(h=>`<button type="button" class="hero roster-hero" data-hero="${esc(h.n)}"><div><div class="hero-name">${esc(displayName(h))}</div><div class="hero-meta">${esc(h.lane)} • ${esc(h.archetype)}</div></div><div><span class="pill tier${h.tier}">${h.tier}</span> <span class="pill ${owned.has(h.n)?"owned":""}">${owned.has(h.n)?"OWNED":"ADD"}</span></div></button>`).join("")}
-function toggleOwned(n){const a=acct();a.owned=a.owned.includes(n)?a.owned.filter(x=>x!==n):[...a.owned,n];save();renderRoster();renderPicker();renderAccounts();renderPower();liveAnalyze();setStatus(displayName(hero(n))+(a.owned.includes(n)?" added to roster.":" removed from roster."))}
+function toggleOwned(n){const a=acct();a.owned=a.owned.includes(n)?a.owned.filter(x=>x!==n):[...a.owned,n];save();renderRoster();refreshSlotEntry();renderAccounts();renderPower();liveAnalyze();setStatus(displayName(hero(n))+(a.owned.includes(n)?" added to roster.":" removed from roster."))}
 function composition(names){const hs=names.filter(Boolean).map(hero).filter(Boolean),c=t=>hs.filter(h=>traits(h).includes(t)).length;return{count:hs.length,frontline:c("frontline"),cc:c("cc"),engage:c("engage"),damage:c("damage")+c("burst")+c("dps"),peel:c("peel"),mobility:c("mobility"),poke:c("poke"),sustain:c("sustain"),assassin:c("assassin"),dps:c("dps"),support:c("support"),squishy:hs.filter(h=>["Mid Lane","Farm Lane"].includes(h.lane)).length}}
 function allyIssues(){const allyNames=visibleAllies(),t=composition(allyNames),out=[];if(isBlindRank()&&t.count<3)return out;if(t.frontline===0)out.push("No frontline");if(t.cc===0)out.push("Low crowd control");if(t.engage===0)out.push("No reliable engage");if(t.damage<=1&&t.count>=2)out.push("Low damage pressure");if(t.peel===0&&t.squishy>=2)out.push("Backline lacks peel");const farms=allyNames.filter(Boolean).map(hero).filter(h=>h?.lane==="Farm Lane").length;if(farms>=2)out.push("Multiple farm carries");if(t.frontline===0&&t.squishy>=3)out.push("Fragile composition");return out}
 function enemyProfile(){if(isBlindRank())return[];const t=composition(state.enemies),out=[];if(t.assassin>=2||t.engage>=2)out.push("Heavy dive");if(t.frontline>=2)out.push("Heavy frontline");if(t.squishy>=3)out.push("Exposed backline");if(t.cc>=3)out.push("Heavy CC");if(t.sustain>=2)out.push("High sustain");return out}
@@ -785,7 +807,7 @@ function quickAddAlly(name){
  if(!isBlindRank()||!available(name))return;
  const i=visibleAllies().findIndex(n=>!n);if(i<0){setStatus("Four teammate slots are already filled; clear a slot to change a pick.");return}
  state.allies[i]=name;picker={group:"allies",index:Math.min(3,i+1)};$("quickAllyInput").value="";$("quickAllyMatches").innerHTML="";
- save();renderSlots();renderPicker();liveAnalyze();setStatus(displayName(hero(name))+" recorded as teammate "+(i+1));
+ save();renderSlots();refreshSlotEntry();liveAnalyze();setStatus(displayName(hero(name))+" recorded as teammate "+(i+1));
 }
 function confidenceInfo(h,b){const allies=visibleAllies().filter(Boolean).length,enemies=isBlindRank()?0:state.enemies.filter(Boolean).length,total=allies+enemies;let level="Low",why=isBlindRank()?"Limited teammate information":"Sparse draft information";if(isBlindRank()){if(allies>=3){level="High";why="Most teammate choices visible"}else if(allies>=1){level="Medium";why="Partial teammate composition"}}else if((b.match.evidence>=1&&total>=4)||total>=7){level="High";why=b.match.evidence?"Direct matchup evidence + developed draft":"Developed team compositions"}else if(total>=3||b.match.evidence>=1){level="Medium";why=b.match.evidence?"Some direct matchup evidence":"Partial composition information"}return{level,why,cls:level.toLowerCase()}}
 function pickType(h,b){const [solo,carry,ease]=baseStats(h);if(isBlindRank()){if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced blind pick",cls:"safe"}}if(b.match.laneDanger.length)return{label:"Risky countered pick",cls:"risk"};if(b.match.laneStrong.length||b.match.strong.length>=2)return{label:"Counterpick",cls:"counter"};if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(state.enemies.filter(Boolean).length<=1&&solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced pick",cls:"safe"}}
@@ -799,13 +821,13 @@ function liveAnalyze(){if(isBlindRank()||hasDraftInput())analyze(true);else rend
 
 function urgencyLevel(){if(isBlindRank()||draftPhase!=="pick")return "normal";if(timerRemaining<=5)return "emergency";if(timerRemaining<=10)return "commit";return "normal"}
 function visibleRecommendationCount(){const u=urgencyLevel();return u==="emergency"?1:u==="commit"?3:5}
-function updateRankModeUI(){const blind=isBlindRank();document.body.classList.toggle("blind-mode",blind);document.body.classList.toggle("draft-mode",!blind);$("allySectionTitle").textContent=blind?"Teammates / Intentions":"Allies";$("allySectionHint").textContent=blind?"enter up to 4 visible teammate choices":"tap a slot, then a hero";if(blind){picker={group:"allies",index:Math.min(picker.index,3)};$("blindRankBadge").textContent=state.rank+" • Blind Pick";$("rankModeNote").textContent=state.rank+" profile: no bans, no enemy counter data, higher weight on safe solo-queue picks."}renderModes();renderSlots();renderPicker()}
+function updateRankModeUI(){const blind=isBlindRank();document.body.classList.toggle("blind-mode",blind);document.body.classList.toggle("draft-mode",!blind);$("allySectionTitle").textContent=blind?"Teammates / Intentions":"Allies";$("allySectionHint").textContent=blind?"enter up to 4 visible teammate choices":"tap a slot, then a hero";if(blind){picker={group:"allies",index:Math.min(picker.index,3)};$("blindRankBadge").textContent=state.rank+" • Blind Pick";$("rankModeNote").textContent=state.rank+" profile: no bans, no enemy counter data, higher weight on safe solo-queue picks."}renderModes();renderSlots();refreshSlotEntry()}
 function updateClockUI(){const cfg=PHASES[draftPhase],m=Math.floor(timerRemaining/60),s=Math.max(0,timerRemaining%60),u=urgencyLevel();$("timerValue").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");$("timerLabel").textContent=cfg.label+" remaining";$("phaseTotalLabel").textContent=cfg.total;$("phaseGuideTitle").textContent=cfg.title;$("phaseGuideText").textContent=cfg.text;$("timerBox").className="timer-box"+(u!=="normal"?" "+u:"");$("decisionMode").className="decision-mode"+(u!=="normal"?" "+u:"");$("decisionMode").textContent=u==="emergency"?"Emergency: show top pick only":u==="commit"?"Commit: top 3 only":"Normal decision mode";$("timerStart").textContent=timerRunning?"Pause":"Start";document.querySelectorAll("[data-phase]").forEach(b=>b.classList.toggle("active",b.dataset.phase===draftPhase));const high=["Diamond","Master","Grandmaster"].includes(state.rank);$("clockRankNote").textContent=high?state.rank+" timing profile active":"Timing panel is tuned for Diamond–Grandmaster";if(hasDraftInput())analyze(true)}
 function setDraftPhase(phase){if(!PHASES[phase])return;draftPhase=phase;timerRunning=false;if(timerHandle){clearInterval(timerHandle);timerHandle=null}timerRemaining=PHASES[phase].seconds;updateClockUI()}
 function toggleTimer(){if(isBlindRank())return;if(timerRunning){timerRunning=false;if(timerHandle){clearInterval(timerHandle);timerHandle=null}updateClockUI();return}if(timerRemaining<=0)timerRemaining=PHASES[draftPhase].seconds;timerRunning=true;timerHandle=setInterval(()=>{timerRemaining=Math.max(0,timerRemaining-1);if(timerRemaining<=0){timerRunning=false;clearInterval(timerHandle);timerHandle=null}updateClockUI()},1000);updateClockUI()}
 function resetTimer(){if(isBlindRank())return;timerRunning=false;if(timerHandle){clearInterval(timerHandle);timerHandle=null}timerRemaining=PHASES[draftPhase].seconds;updateClockUI()}
 
-function renderAll(){renderAccounts();renderQuickAccounts();renderPickerLaneFilters();renderRosterFilters();renderRoster();renderPower();$("roleSelect").value=state.role;$("rankSelect").value=state.rank;updateRankModeUI();updateClockUI();if(isBlindRank()||hasDraftInput())analyze(true);else{renderDraftSummary();renderQuickDecision();$("teamIssues").innerHTML=""}}
+function renderAll(){renderAccounts();renderQuickAccounts();renderRosterFilters();renderRoster();renderPower();$("roleSelect").value=state.role;$("rankSelect").value=state.rank;updateRankModeUI();updateClockUI();if(isBlindRank()||hasDraftInput())analyze(true);else{renderDraftSummary();renderQuickDecision();$("teamIssues").innerHTML=""}}
 
 
 function isStandaloneMode(){
@@ -859,18 +881,21 @@ function wireEvents(){
   $("accountSelect").addEventListener("change",e=>activateAccount(e.target.value));
   $("roleSelect").addEventListener("change",e=>{state.role=e.target.value;quickHeldNames=null;save();if(isBlindRank())analyze(true);else liveAnalyze()});$("rankSelect").addEventListener("change",e=>{state.rank=e.target.value;quickReset();if(acct().workspace)acct().workspace.rank=state.rank;save();renderQuickAccounts();updateRankModeUI();updateClockUI();analyze(true)});
   $("phaseButtons").addEventListener("click",e=>{const b=e.target.closest("[data-phase]");if(b)setDraftPhase(b.dataset.phase)});$("timerStart").addEventListener("click",toggleTimer);$("timerReset").addEventListener("click",resetTimer);
-  $("heroSearch").addEventListener("input",()=>{pickerPage=1;renderPicker()});$("rosterSearch").addEventListener("input",renderRoster);$("powerSearch").addEventListener("input",renderPower);$("powerSort").addEventListener("change",e=>{powerSort=e.target.value;renderPower()});$("analyzeBtn").addEventListener("click",()=>analyze(false));
+  $("rosterSearch").addEventListener("input",renderRoster);$("powerSearch").addEventListener("input",renderPower);$("powerSort").addEventListener("change",e=>{powerSort=e.target.value;renderPower()});$("analyzeBtn").addEventListener("click",()=>analyze(false));
   $("quickStart").addEventListener("click",quickStartPause);
   $("quickReset").addEventListener("click",quickReset);
   $("quickHold").addEventListener("click",()=>{quickHeldNames=quickHeldNames?null:quickCandidates(quickPool()).map(x=>x.h.n);renderQuickDecision()});
   $("quickAllyInput").addEventListener("input",renderQuickAllyMatches);
   $("quickAllyInput").addEventListener("keydown",e=>{if(e.key==="Enter"){const b=$("quickAllyMatches").querySelector("[data-quick-hero]");if(b){e.preventDefault();quickAddAlly(b.dataset.quickHero)}}});
   $("quickAllyMatches").addEventListener("click",e=>{const b=e.target.closest("[data-quick-hero]");if(b)quickAddAlly(b.dataset.quickHero)});
-  $("pickerLaneFilters").addEventListener("click",e=>{const b=e.target.closest("[data-picker-lane]");if(!b)return;pickerLaneFilter=b.dataset.pickerLane;pickerPage=1;renderPickerLaneFilters();renderPicker()});
-  $("pickerOwnedToggle").addEventListener("click",()=>{pickerOwnedOnly=!pickerOwnedOnly;pickerPage=1;renderPickerLaneFilters();renderPicker()});
-  $("pickerPrev").addEventListener("click",()=>{if(pickerPage>1){pickerPage--;renderPicker();$("heroSearch").scrollIntoView({block:"center",behavior:"auto"})}});
-  $("pickerNext").addEventListener("click",()=>{pickerPage++;renderPicker();$("heroSearch").scrollIntoView({block:"center",behavior:"auto"})});
-  $("clearDraft").addEventListener("click",()=>{quickReset();state.allies=[null,null,null,null,null];state.enemies=[null,null,null,null,null];state.bans=[null,null,null,null,null];save();renderSlots();renderPicker();analyze(true);setStatus("Draft cleared. Safe blind picks are ready.")});
+  $("slotEntrySearch").addEventListener("input",renderSlotMatches);
+  $("slotEntrySearch").addEventListener("keydown",e=>{
+    if(e.key==="Escape"){e.preventDefault();closeSlotEntry()}
+    if(e.key==="Enter"){const first=$("slotEntryMatches").querySelector("[data-slot-hero]");if(first){e.preventDefault();selectSlotHero(first.dataset.slotHero)}}
+  });
+  $("slotEntryMatches").addEventListener("click",e=>{const b=e.target.closest("[data-slot-hero]");if(b)selectSlotHero(b.dataset.slotHero)});
+  $("slotEntryClose").addEventListener("click",closeSlotEntry);
+  $("clearDraft").addEventListener("click",()=>{quickReset();closeSlotEntry();state.allies=[null,null,null,null,null];state.enemies=[null,null,null,null,null];state.bans=[null,null,null,null,null];save();renderSlots();refreshSlotEntry();analyze(true);setStatus("Draft cleared. Safe blind picks are ready.")});
   $("addAccount").addEventListener("click",()=>{const name=$("newAccountName").value.trim(),uid=$("newAccountUid").value.trim();if(!name){setStatus("Enter an account label first.");return}if(uid&&state.accounts.some(a=>a.uid===uid)){setStatus("That HoK UID is already assigned to another account.");return}save();const id="a"+Date.now();const fresh={id,name,uid,owned:[],heroPower:{},powerDetails:{},rankingTargets:{},extendedCaptures:[],diagnostics:[],syncHistory:[],workspace:{rank:"Platinum",role:"Clash Lane",allies:[null,null,null,null,null],enemies:[null,null,null,null,null],bans:[null,null,null,null,null]}};state.accounts.push(fresh);state.active=id;loadWorkspace(fresh);$("newAccountName").value="";$("newAccountUid").value="";save();renderAll();showTab("accounts");setStatus("Account created: "+name+(uid?" • UID "+uid:"")+" • Platinum workspace")});
   $("accountList").addEventListener("click",e=>{const use=e.target.closest(".account-use"),del=e.target.closest(".account-delete"),saveProfile=e.target.closest(".account-save-profile");if(use)activateAccount(use.dataset.id);if(del)deleteAccount(del.dataset.id);if(saveProfile){const row=e.target.closest("[data-account-row]");saveAccountProfile(saveProfile.dataset.id,row)}});
   $("exportBackup").addEventListener("click",exportBackup);
@@ -880,8 +905,6 @@ function wireEvents(){
 
   $("quickAccounts").addEventListener("click",e=>{const b=e.target.closest("[data-quick-account]");if(b)activateAccount(b.dataset.quickAccount)});
   $("manageAccountsBtn").addEventListener("click",()=>showTab("accounts"));
-  $("modeButtons").addEventListener("click",e=>{const b=e.target.closest("[data-mode]");if(b){picker.group=b.dataset.mode;renderModes()}});
-  $("heroPicker").addEventListener("click",e=>{const b=e.target.closest(".hero-pick");if(b&&!b.disabled)pickHero(b.dataset.hero)});
   $("rosterFilters").addEventListener("click",e=>{const b=e.target.closest("[data-roster-filter]");if(b){rosterFilter=b.dataset.rosterFilter;renderRosterFilters();renderRoster()}});
   $("rosterList").addEventListener("click",e=>{const b=e.target.closest(".roster-hero");if(b)toggleOwned(b.dataset.hero)});
   $("powerLaneFilters").addEventListener("click",e=>{const b=e.target.closest("[data-power-lane]");if(b){powerLaneFilter=b.dataset.powerLane;renderPower()}});
@@ -912,7 +935,13 @@ function wireEvents(){
   });
   $("campOpenProfile").addEventListener("click",openCampProfileForActiveAccount);
   $("campCopyHelper").addEventListener("click",()=>{$("quickPowerPanel")?.scrollIntoView({behavior:"smooth",block:"start"});setTimeout(()=>$("quickPowerGrid")?.querySelector(".quick-power-input")?.focus(),250)});
-  for(const id of ["allySlots","enemySlots","banSlots"])$(id).addEventListener("click",e=>{const b=e.target.closest("[data-slot-group]");if(!b)return;const g=b.dataset.slotGroup,i=Number(b.dataset.slotIndex);if(e.target.closest("[data-clear]")){state[g][i]=null;save();renderSlots();renderPicker();liveAnalyze();return}picker={group:g,index:i};renderModes();setStatus("Select a hero for "+g+" slot "+(i+1)+".")});
+  for(const id of ["allySlots","enemySlots","banSlots"])$(id).addEventListener("click",e=>{
+    const b=e.target.closest("[data-slot-group]");if(!b)return;
+    const g=b.dataset.slotGroup,i=Number(b.dataset.slotIndex);
+    if(e.target.closest("[data-clear]")){state[g][i]=null;closeSlotEntry();save();renderSlots();liveAnalyze();return}
+    openSlotEntry(g,i);
+    setStatus(isBlindRank()?"Fast Teammate Entry is ready above. Type a hero name to add a teammate.":"Choose a hero for "+g+" slot "+(i+1)+".");
+  });
 }
 
 async function consumePendingExtensionData(){
@@ -946,4 +975,4 @@ function wireExtensionMessages(){
   });
 }
 
-try{applyUiScale(initialUiScale());wireEvents();registerMobileLifecycle();save();renderAll();showTab("draft");setStatus("v0.16.2 ready • Gold Blind Pick Quick Decision + 30s clock + manual Hero Power loaded.")}catch(err){console.error(err);setStatus("Error: "+err.message)}
+try{applyUiScale(initialUiScale());wireEvents();registerMobileLifecycle();save();renderAll();showTab("draft");setStatus("v0.17.1 ready • Clean Draft Layout + Quick Decision + manual Hero Power loaded.")}catch(err){console.error(err);setStatus("Error: "+err.message)}
