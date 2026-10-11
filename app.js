@@ -394,7 +394,7 @@ const ROAM_BUILDS={
       "Holy Grail",
       "Dawnlight",
       "Ominous Premonition",
-      "Frigid Charge"
+      "Succubus Cloak"
     ],
     "spell": "Flash",
     "arcana": "10 Fate • 10 Hunt • 10 Void",
@@ -436,7 +436,7 @@ const ROAM_BUILDS={
       "Holy Grail",
       "Frozen Breath",
       "Ominous Premonition",
-      "Frigid Charge"
+      "Succubus Cloak"
     ],
     "spell": "Flash",
     "arcana": "10 Fate • 10 Harmony • 10 Void",
@@ -450,7 +450,7 @@ const ROAM_BUILDS={
       "Holy Grail",
       "Frozen Breath",
       "Ominous Premonition",
-      "Frigid Charge"
+      "Succubus Cloak"
     ],
     "spell": "Flash",
     "arcana": "10 Fate • 10 Harmony • 10 Void",
@@ -490,9 +490,9 @@ const ROAM_BUILDS={
       "Crimson Shadow - Radiance",
       "Boots of Tranquility",
       "Frozen Breath",
+      "Dawnlight",
       "Ominous Premonition",
-      "Succubus Cloak",
-      "Dawnlight"
+      "Succubus Cloak"
     ],
     "spell": "Flash",
     "arcana": "10 Fate • 10 Harmony • 10 Void",
@@ -508,7 +508,7 @@ const ROAM_BUILDS={
       "Succubus Cloak",
       "Sage's Sanctuary"
     ],
-    "spell": "Flash",
+    "spell": "Sprint",
     "arcana": "10 Fate • 10 Hunt • 10 Void",
     "source": "Editorial Roam preset • 2026 roaming-item references"
   },
@@ -520,7 +520,7 @@ const ROAM_BUILDS={
       "Holy Grail",
       "Frozen Breath",
       "Ominous Premonition",
-      "Frigid Charge"
+      "Succubus Cloak"
     ],
     "spell": "Flash",
     "arcana": "10 Fate • 10 Harmony • 10 Void",
@@ -548,7 +548,7 @@ const ROAM_BUILDS={
       "Holy Grail",
       "Dawnlight",
       "Ominous Premonition",
-      "Frigid Charge"
+      "Succubus Cloak"
     ],
     "spell": "Flash",
     "arcana": "10 Fate • 10 Harmony • 10 Void",
@@ -1152,9 +1152,41 @@ const ITEM_KIND={
   "Axe of Torment":"core","Pure Sky":"core","Starbreaker":"counter","Cuirass of Savagery":"core","Overlord's Might":"core","Blood Rage":"core","Frostscar's Embrace":"defense","Mortal Punisher":"counter",
   "Doomsday":"core","Shadow Ripper":"core","Eternity Blade":"core","Daybreaker's Virtue":"counter","Bloodweeper":"core","Sunchaser":"core","Master Sword":"core","Sparkforged Dagger":"core",
   "Scepter of Reverberation":"core","Savant's Wrath":"core","Insatiable Tome":"core","Void Staff":"counter","Venomous Staff":"counter","Frozen Breath":"core","Mask of Agony":"core","Splendor":"defense","Holy Grail":"core",
-  "Guardian - Radiance":"core","Guardian - Redemption":"core","Guardian - Starspring":"core","Dawnlight":"core","Crimson Shadow - Radiance":"core","Crimson Shadow - Redemption":"core",
+  "Guardian - Radiance":"core","Guardian - Redemption":"core","Guardian - Starspring":"core","Dawnlight":"core","Crimson Shadow - Radiance":"core","Crimson Shadow - Redemption":"core","Crimson Shadow - Starspring":"core","Crimson Shadow - Howl":"core",
   "Rapacious Bite":"core","Runeblade":"core","Giant's Grip":"core","Dragon's Rage":"core","Deepfrost Siege":"core","Twinblades of Destruction":"core","Meteor":"core","Nettle Gauntlet":"core","Relentless Blade":"core"
 };
+// Flex-roam adaptation keeps support-income gear and boots; role-specific presets never borrow Mid/Clash build overrides.
+function adaptiveFlexRoamBuild(h){
+  const base=structuredClone(ROAM_BUILDS[h.n]),sig=enemyBuildSignals();
+  const variants=[{name:"Standard",items:[...base.items],why:"Support income, utility, then defense. Buy the basic roaming component before upgrading it."}];
+  let chosen={...base,label:sig.blind?"Safe blind":"Standard",items:[...base.items],
+    why:sig.blind?"Enemy draft is hidden: protect carries, scout and coordinate engages.":"Role-specific Roam economy, control and survivability."};
+  const isMage=["Mozi","Ziya","Shi","Wang Zhaojun","Liang","Yuhuan"].includes(h.n);
+  const isTank=["Lian Po","Xiang Yu","Dun","Flowborn (Tank)","Liu Bang","Bai Qi","Ata"].includes(h.n);
+  if(sig.sustain){
+    const items=[...base.items],anti=isMage?"Venomous Staff":"Blazing Cape";
+    if(!items.includes(anti))items[isMage?4:3]=anti;
+    const why=base.items.includes(anti)?anti+" is already included for healing reduction.":anti+" reduces enemy sustain without sacrificing Roam equipment.";
+    variants.push({name:"Anti-heal",items,why});
+    chosen={...base,label:"Anti-heal",items,why};
+  }
+  if(sig.frontline){
+    const items=[...base.items],canPierce=isMage&&["Mozi","Ziya","Wang Zhaojun"].includes(h.n);
+    if(canPierce)items[5]="Void Staff";
+    const why=canPierce?"Optional magic penetration when damage against high-magic-defense frontliners is required.":"Keep CC, peel and durability; forcing penetration onto a support tank is usually a poor trade.";
+    variants.push({name:"Versus tanks",items,why});
+    if(canPierce&&!sig.sustain&&!sig.dive&&!sig.cc)chosen={...base,label:"Versus tanks",items,why};
+  }
+  if(sig.dive||sig.cc){
+    const items=[...base.items];items[1]="Boots of Resistance";
+    if(!isTank&&!items.includes("Frigid Charge"))items[5]="Frigid Charge";
+    const why="Defensive boots and peel tools improve survivability against hard engage and control.";
+    variants.push({name:"Anti-burst",items,why});
+    if(!sig.sustain)chosen={...base,label:"Anti-burst",items,why};
+  }
+  const swaps=sig.blind?["Healing / lifesteal → anti-heal","Dive / CC → defensive boots","Heavy frontliners → maintain peel first"]:["Roaming income item stays in slot one","Protect the carry before chasing damage","Adapt defenses to enemy threats"];
+  return {...chosen,variants:variants.slice(0,4),swaps};
+}
 const BUILD_OVERRIDES={
   "Dun":{label:"Full tank",items:["Boots of Fortitude","Blazing Cape","Ominous Premonition","Eye of the Phoenix","Frigid Charge","Glacial Buckler"],spell:"Execute",arcana:"Fate • Hunt • Void",source:"Curated S16 public build baseline"},
   "Sun Ce":{label:"AD penetration",items:["Meteor","Boots of Fortitude","Axe of Torment","Frigid Charge","Succubus Cloak","Spikemail"],spell:"Flash",arcana:"Red Moon • Mutation • Hunt",source:"Curated S16 public build baseline"},
@@ -1176,6 +1208,7 @@ function enemyBuildSignals(){
 }
 function swapOne(items,from,to){const x=[...items],i=x.indexOf(from);if(i>=0)x[i]=to;else if(!x.includes(to))x[x.length-1]=to;return x}
 function adaptiveBuild(h){
+  if(isRoamFlex(h))return adaptiveFlexRoamBuild(h);
   const base=structuredClone(BUILD_OVERRIDES[h.n]||genericBuild(h)),sig=enemyBuildSignals(),variants=[];
   const safe={...base,label:sig.blind?"Safe blind":"Standard",items:[...base.items]};
   variants.push({name:"Standard",items:[...safe.items],why:"Balanced baseline when no specific enemy itemization pressure is confirmed."});
@@ -1201,7 +1234,7 @@ function renderBuildPreview(h){
   const b=adaptiveBuild(h);
   const items=b.items.slice(0,6).map((it,i)=>`<div class="item-card ${ITEM_KIND[it]||""}"><div class="item-icon">${esc(itemInitials(it))}</div><div class="item-name">${esc(it)}</div><div class="item-num">${i+1}</div></div>`).join("");
   const vars=b.variants.map((v,i)=>`<div class="variant-card ${i===0&&b.label==="Standard"?"recommended":v.name===b.label?"recommended":""}"><strong>${esc(v.name)}</strong><span>${esc(v.why)}</span></div>`).join("");
-  return `<div class="build-preview"><div class="build-head"><div class="build-title">Adaptive Build Preview</div><span class="build-badge">${esc(b.label)}</span></div><div class="item-strip">${items}</div><div class="build-reason">${esc(b.why)} <span class="muted">• ${esc(b.source)}</span></div><div class="build-swaps">${b.swaps.map(x=>`<span class="swap-chip">${esc(x)}</span>`).join("")}</div><details class="build-details"><summary>Show alternatives, spell & Arcana</summary><div class="build-variants">${vars}</div><div class="hero-meta" style="margin-top:7px">Spell: ${esc(b.spell)} • Arcana: ${esc(b.arcana)}</div></details></div>`;
+  return `<div class="build-preview"><div class="build-head"><div class="build-title">${isRoamFlex(h)?"Roam-Specific Build Preview":"Adaptive Build Preview"}</div><span class="build-badge">${esc(b.label)}</span></div><div class="item-strip">${items}</div><div class="build-reason">${esc(b.why)} <span class="muted">• ${esc(b.source)}</span></div>${isRoamFlex(h)?`<div class="hero-meta">Start with basic roaming-income gear. Slot 1 shows its eventual upgraded item, not the first full-price purchase.</div>`:""}<div class="build-swaps">${b.swaps.map(x=>`<span class="swap-chip">${esc(x)}</span>`).join("")}</div><details class="build-details"><summary>Show alternatives, spell & Arcana</summary><div class="build-variants">${vars}</div><div class="hero-meta" style="margin-top:7px">Spell: ${esc(b.spell)} • Arcana: ${esc(b.arcana)}</div></details></div>`;
 }
 function scoreBreakdown(h){const [solo,carry,ease]=candidateStats(h),w=RANK_WEIGHT[state.rank],issues=allyIssues(),enemy=enemyProfile(),match=matchupInfo(h),syn=synergyInfo(h),comfort=heroPowerComfort(h);const soloPart=solo*w.solo+carry*w.carry+ease*w.ease;const known=visibleAllies().filter(Boolean).length;
 const repairTrust=isBlindRank()?(known<3?0:known===3?.55:1):1;
@@ -1437,4 +1470,4 @@ function wireExtensionMessages(){
   });
 }
 
-try{applyUiScale(initialUiScale());wireEvents();registerMobileLifecycle();save();renderAll();showTab("draft");setStatus("v0.17.1 ready • Clean Draft Layout + Quick Decision + manual Hero Power loaded.")}catch(err){console.error(err);setStatus("Error: "+err.message)}
+try{applyUiScale(initialUiScale());wireEvents();registerMobileLifecycle();save();renderAll();showTab("draft");setStatus("v0.17.3 ready • Roam-specific flex scoring and builds loaded.")}catch(err){console.error(err);setStatus("Error: "+err.message)}
