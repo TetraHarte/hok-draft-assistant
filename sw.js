@@ -1,6 +1,6 @@
-/* v0.17.2 multi-game offline shell. HoK draft logic lives untouched in app.js. */
-const CACHE="solo-draft-v0172-roam-flex";
-const APP_SHELL=["./","./index.html","./app.js?v=0172-roam-flex","./game-switch.js","./game-switch.css","./manifest.webmanifest","./icons/icon-180.png","./icons/icon-192.png","./icons/icon-512.png","./mlbb/index.html"];
+/* v0.17.3 multi-game offline shell. HoK draft logic lives untouched in app.js. */
+const CACHE="solo-draft-v0173-roam-builds";
+const APP_SHELL=["./","./index.html","./app.js?v=0173-roam-builds","./game-switch.js","./game-switch.css","./manifest.webmanifest","./icons/icon-180.png","./icons/icon-192.png","./icons/icon-512.png","./mlbb/index.html"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith("hok-draft-")||k.startsWith("solo-draft-")).filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",event=>{
