@@ -146,6 +146,464 @@ const MATCHUP_SNAPSHOT="late September 2026";
 const STRONG_AGAINST={"Alessio":["Han Xin","Mai Shiranui","Sima Yi"],"Allain":["Kongming","Milady","Yixing"],"Angela":["Augran","Diaochan","Jing"],"Arli":["Sima Yi","Zilong"],"Athena":["Da Qiao","Luna","Shi"],"Augran":["Luna","Shangguan","Zhou Yu"],"Biron":["Kongming","Shangguan","Ziya"],"Butterfly":["Heino","Gan & Mo","Diaochan"],"Cai Yan":["Arthur","Cirrus","Li Xin"],"Charlotte":["Lady Zhen","Mai Shiranui","Ziya"],"Daji":["Augran","Jing","Xuance"],"Dharma":["Heino","Mi Yue","Yixing"],"Di Renjie":["Mai Shiranui","Ukyo Tachibana","Ying"],"Dian Wei":["Zhou Yu","Yixing","Mi Yue"],"Diaochan":["Mulan","Nakoruru","Xuance"],"Dolia":["Dharma","Augran","Mozi"],"Donghuang":["Allain","Cirrus","Kaizer"],"Dr Bian":["Mai Shiranui","Diaochan"],"Dun":["Diaochan","Fang","Erin"],"Dyadia":["Dian Wei","Liu Bei","Musashi"],"Erin":["Ying","Han Xin","Lam"],"Fang":["Mai Shiranui","Nakoruru","Zilong"],"Fuzi":["Milady","Luna","Mai Shiranui"],"Gan & Mo":["Cirrus","Jing","Pei"],"Gao":["Mai Shiranui","Wukong","Xuance"],"Garo":["Nakoruru","Xuance","Li Bai"],"Guan Yu":["Daji","Mi Yue","Yixing"],"Guiguzi":["Li Xin","Mozi","Zilong"],"Han Xin":["Lu Bu","Dun","Xiang Yu"],"Haya":["Sakeer","Zilong","Milady"],"Heino":["Diaochan","Mulan","Wukong"],"Hou Yi":["Cirrus","Mulan","Xuance"],"Huang Zhong":["Xuance","Mai Shiranui","Jing"],"Jing":["Dharma","Ata","Lian Po"],"Kaizer":["Da Qiao","Diaochan","Daji"],"Kongming":["Han Xin","Jing","Ukyo Tachibana"],"Kui":["Kaizer","Xiang Yu"],"Lady Sun":["Diaochan","Nakoruru","Ying"],"Lady Zhen":["Cirrus","Nakoruru","Sima Yi"],"Lam":["Lu Bu","Wuyan","Xiang Yu"],"Li Bai":["Dun","Lian Po","Liu Shan"],"Li Xin":["Da Qiao","Liang"],"Lian Po":["Luban No.7","Marco Polo"],"Liang":["Han Xin","Lam","Mulan"],"Liu Bang":["Marco Polo","Meng Ya","Shouyue"],"Liu Bei":["Lady Zhen","Nuwa","Xiao Qiao"],"Liu Shan":["Arthur","Augran","Biron"],"Lu Bu":["Heino","Daji","Luna"],"Luara":["Diaochan","Mulan","Lam"],"Luban No.7":["Ying","Ukyo Tachibana","Lam"],"Luna":["Yuhuan","Lady Zhen","Heino"],"Marco Polo":["Cirrus","Mai Shiranui","Wukong"],"Mayene":["Nuwa","Mi Yue","Liang"],"Meng Ya":["Mai Shiranui","Pei","Diaochan"],"Menki":["Lady Zhen","Mai Shiranui","Xiao Qiao"],"Milady":["Nakoruru","Pei","Mai Shiranui"],"Ming":["Cirrus","Menki","Wuyan"],"Mozi":["Cirrus","Lam","Li Bai"],"Mulan":["Liang","Mi Yue","Nuwa"],"Musashi":["Diaochan","Luna","Shangguan"],"Nakoruru":["Wukong","Athena","Xiang Yu"],"Nezha":["Mai Shiranui","Mozi","Nuwa"],"Nuwa":["Mulan","Nakoruru","Pei"],"Pei":["Arthur","Lu Bu","Wuyan"],"Sakeer":["Ying","Luna"],"Shangguan":["Diaochan","Mulan","Sima Yi"],"Shi":["Li Bai","Wukong","Ukyo Tachibana"],"Shouyue":["Diaochan","Nakoruru","Ying"],"Sima Yi":["Lu Bu","Wuyan","Menki"],"Sun Bin":["Kaizer","Musashi"],"Sun Ce":["Liang","Gan & Mo","Mi Yue"],"Ukyo Tachibana":["Arthur","Lian Po","Wuyan"],"Wukong":["Dun","Lian Po","Xiang Yu"],"Wuyan":["Kongming","Lady Zhen","Liang"],"Xiao Qiao":["Ukyo Tachibana","Han Xin"],"Yang Jian":["Diaochan","Luna","Dr Bian"],"Yao":["Angela","Mi Yue","Ziya"],"Yaria":["Dian Wei","Dun","Mayene"],"Ying":["Kongming","Liang","Yuhuan"],"Yixing":["Augran","Cirrus","Lam"],"Yuhuan":["Mai Shiranui","Nakoruru","Wukong"],"Zhang Fei":["Arli","Consort Yu","Marco Polo"],"Zhou Yu":["Cirrus","Nakoruru","Xuance"],"Zhuangzi":["Cirrus","Dian Wei","Menki"],"Zilong":["Heino","Lady Zhen"],"Ziya":["Diaochan","Ying","Zilong"]};
 const EXPLICIT_SYNERGY=[["Allain","Lam"],["Allain","Yaria"],["Lam","Lady Zhen"],["Lam","Gan & Mo"],["Lam","Mi Yue"],["Marco Polo","Dharma"],["Marco Polo","Liu Shan"],["Marco Polo","Zhang Fei"],["Liang","Dyadia"],["Liang","Ming"],["Liang","Yaria"],["Butterfly","Liu Bang"],["Butterfly","Yaria"],["Butterfly","Liu Shan"],["Ukyo Tachibana","Luna"],["Ukyo Tachibana","Mai Shiranui"],["Ukyo Tachibana","Xiao Qiao"],["Ying","Dyadia"],["Ying","Yaria"],["Ying","Zhuangzi"],["Da Qiao","Arli"],["Da Qiao","Di Renjie"],["Da Qiao","Shouyue"],["Dun","Luban No.7"],["Dun","Li Bai"],["Huang Zhong","Bai Qi"],["Huang Zhong","Xiang Yu"]];
 const DIRECT_MATCHUP_EDGE_COUNT=249;
+// Flex-Roam profile: editorial suitability, not an observed win rate.
+const ROAM_PROFILES={
+  "Mozi": {
+    "tier": "A",
+    "stats": [
+      3,
+      2,
+      4
+    ],
+    "traits": [
+      "cc",
+      "peel",
+      "poke",
+      "zone",
+      "utility"
+    ],
+    "focus": "Long-range stun and anti-dive control"
+  },
+  "Lian Po": {
+    "tier": "A",
+    "stats": [
+      4,
+      1,
+      4
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable",
+      "peel"
+    ],
+    "focus": "Initiation and frontline"
+  },
+  "Xiang Yu": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      4
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "peel",
+      "durable",
+      "engage"
+    ],
+    "focus": "Displacement and carry protection"
+  },
+  "Ziya": {
+    "tier": "C",
+    "stats": [
+      2,
+      1,
+      3
+    ],
+    "traits": [
+      "poke",
+      "zone",
+      "utility",
+      "damage"
+    ],
+    "focus": "Slow and team-level utility"
+  },
+  "Shi": {
+    "tier": "B",
+    "stats": [
+      3,
+      1,
+      3
+    ],
+    "traits": [
+      "cc",
+      "peel",
+      "zone",
+      "utility"
+    ],
+    "focus": "Pick creation and backline peel"
+  },
+  "Dun": {
+    "tier": "A",
+    "stats": [
+      4,
+      2,
+      4
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable",
+      "peel",
+      "sustain"
+    ],
+    "focus": "Durable engage and CC"
+  },
+  "Flowborn (Tank)": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      3
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable",
+      "peel"
+    ],
+    "focus": "Vanguard pressure"
+  },
+  "Wang Zhaojun": {
+    "tier": "B",
+    "stats": [
+      3,
+      2,
+      3
+    ],
+    "traits": [
+      "cc",
+      "peel",
+      "zone",
+      "poke",
+      "utility"
+    ],
+    "focus": "Freeze and disengage"
+  },
+  "Guan Yu": {
+    "tier": "C",
+    "stats": [
+      2,
+      2,
+      1
+    ],
+    "traits": [
+      "cc",
+      "engage",
+      "mobility",
+      "utility"
+    ],
+    "focus": "High-execution displacement"
+  },
+  "Liang": {
+    "tier": "A",
+    "stats": [
+      3,
+      1,
+      4
+    ],
+    "traits": [
+      "cc",
+      "peel",
+      "zone",
+      "utility"
+    ],
+    "focus": "Single-target lockdown"
+  },
+  "Liu Bang": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      3
+    ],
+    "traits": [
+      "frontline",
+      "peel",
+      "durable",
+      "utility",
+      "sustain"
+    ],
+    "focus": "Global ally rescue"
+  },
+  "Yuhuan": {
+    "tier": "B",
+    "stats": [
+      3,
+      2,
+      3
+    ],
+    "traits": [
+      "support",
+      "sustain",
+      "peel",
+      "utility",
+      "poke"
+    ],
+    "focus": "Healing and repeated slows"
+  },
+  "Bai Qi": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      3
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable"
+    ],
+    "focus": "Taunt initiation"
+  },
+  "Dharma": {
+    "tier": "C",
+    "stats": [
+      3,
+      2,
+      2
+    ],
+    "traits": [
+      "cc",
+      "engage",
+      "mobility",
+      "utility"
+    ],
+    "focus": "Wall-kick picks"
+  },
+  "Ata": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      3
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable",
+      "zone",
+      "peel"
+    ],
+    "focus": "Terrain denial"
+  }
+};
+const ROAM_BUILDS={
+  "Mozi": {
+    "label": "Long-range stun and anti-dive control",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Resistance",
+      "Holy Grail",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Hunt • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Lian Po": {
+    "label": "Initiation and frontline",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Blazing Cape",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Xiang Yu": {
+    "label": "Displacement and carry protection",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Fortitude",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Ziya": {
+    "label": "Slow and team-level utility",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Tranquility",
+      "Holy Grail",
+      "Frozen Breath",
+      "Ominous Premonition",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Shi": {
+    "label": "Pick creation and backline peel",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Tranquility",
+      "Holy Grail",
+      "Frozen Breath",
+      "Ominous Premonition",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Dun": {
+    "label": "Durable engage and CC",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Blazing Cape",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Flowborn (Tank)": {
+    "label": "Vanguard pressure",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Wang Zhaojun": {
+    "label": "Freeze and disengage",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Tranquility",
+      "Frozen Breath",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Dawnlight"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Guan Yu": {
+    "label": "High-execution displacement",
+    "items": [
+      "Crimson Shadow - Howl",
+      "Boots of Resistance",
+      "Cuirass of Savagery",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Sage's Sanctuary"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Hunt • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Liang": {
+    "label": "Single-target lockdown",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Tranquility",
+      "Holy Grail",
+      "Frozen Breath",
+      "Ominous Premonition",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Liu Bang": {
+    "label": "Global ally rescue",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Yuhuan": {
+    "label": "Healing and repeated slows",
+    "items": [
+      "Crimson Shadow - Starspring",
+      "Boots of Tranquility",
+      "Holy Grail",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Bai Qi": {
+    "label": "Taunt initiation",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Blazing Cape",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Dharma": {
+    "label": "Wall-kick picks",
+    "items": [
+      "Crimson Shadow - Howl",
+      "Boots of Resistance",
+      "Axe of Torment",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Hunt • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Ata": {
+    "label": "Terrain denial",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Fortitude",
+      "Blazing Cape",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  }
+};
+function isRoamFlex(h){return state.role==="Roam"&&Boolean(h&&ROAM_PROFILES[h.n])}
+function candidateTraits(h){return isRoamFlex(h)?ROAM_PROFILES[h.n].traits:traits(h)}
+function candidateStats(h){return isRoamFlex(h)?ROAM_PROFILES[h.n].stats:baseStats(h)}
+function tierForLane(h,lane){return lane==="Roam"&&ROAM_PROFILES[h?.n]?ROAM_PROFILES[h.n].tier:h.tier}
+function candidateTier(h){return tierForLane(h,state.role)}
+function candidateFocus(h){return isRoamFlex(h)?ROAM_PROFILES[h.n].focus:null}
+
 function traits(h){const t=TYPE_TRAITS[h?.archetype]||[];return h?.n==="Dun"?[...new Set([...t,"engage"])]:t} function baseStats(h){return BASE[h?.archetype]||BASE.Flexible} function heroLanes(h){return h?[h.lane,...(h.secondaryLanes||[])]:[]}
 function heroPlaysLane(h,lane){return heroLanes(h).includes(lane)}
 function laneLabel(h){return heroLanes(h).join(" / ")}
