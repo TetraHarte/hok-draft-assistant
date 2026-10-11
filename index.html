@@ -193,7 +193,7 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
 }
 
 
-/* v0.16.2 — Gold / Platinum Quick Decision (above Hero Picker) */
+/* v0.16.2 — Gold / Platinum Quick Decision */
 .quick-decision{border:1px solid #4577a3;background:linear-gradient(180deg,#102642,#0b192d);border-radius:15px;padding:12px;margin-bottom:11px}
 .quick-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
 .quick-head strong{font-size:17px}.quick-head small{display:block;color:#afc9e6;font-size:11px;margin-top:2px}
@@ -221,6 +221,19 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
  .quick-card{padding:7px}.quick-card strong{font-size:14px}.quick-label{font-size:9px}.quick-sub{font-size:9px}
  .quick-tools .btn{min-height:39px}.quick-entry{display:block}.quick-entry label{margin-bottom:6px}
 }
+
+/* v0.17.1 focused draft layout: contextual slot search only when a slot is selected */
+.draft-slot-tools{display:flex;gap:8px;align-items:center}
+.draft-slot-tools #clearDraft{min-height:32px;padding:5px 11px;font-size:12px}
+.slot-entry{border:1px solid #426c9c;background:#0b1e35;border-radius:11px;padding:10px;margin-top:10px}
+.slot-entry-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:7px}
+.slot-entry-head strong{font-size:13px}
+.slot-entry-head .btn{min-height:32px;font-size:12px}
+.slot-entry-matches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:9px;max-height:190px;overflow:auto}
+.slot-entry-match{background:#132944;border:1px solid #30577c;text-align:left;padding:9px 11px;border-radius:8px;font-size:13px;font-weight:650}
+.slot-entry-match:hover,.slot-entry-match:focus-visible{border-color:#68b5ff;background:#1d3d5f}
+.slot-entry-match small{display:block;color:var(--muted);font-size:10px;font-weight:400;margin-top:3px}
+@media(max-width:560px){.draft-slot-tools{gap:5px}.draft-slot-tools #allySectionHint{font-size:10px}.draft-slot-tools #clearDraft{padding:5px 8px}.slot-entry-matches{grid-template-columns:1fr}}
 </style>
 <link rel="manifest" href="./manifest.webmanifest"/>
 <link rel="apple-touch-icon" href="./icons/icon-180.png"/>
@@ -303,9 +316,14 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
   <div class="phase-math"><div><strong>15–20s</strong><span>pre-ban / intention</span></div><div><strong>~60–90s</strong><span>ban phase total</span></div><div><strong>10 × 20s</strong><span>up to ~200s picks</span></div><div><strong>20s</strong><span>adjust / trade</span></div></div>
 </div>
 <div class="panel">
-<div class="section-title"><span id="allySectionTitle">Allies</span><span class="muted" id="allySectionHint">tap a slot, then a hero</span></div><div class="slots" id="allySlots"></div>
+<div class="section-title"><span id="allySectionTitle">Allies</span><span class="draft-slot-tools"><span class="muted" id="allySectionHint">tap a slot, then a hero</span><button type="button" class="btn" id="clearDraft">Clear</button></span></div><div class="slots" id="allySlots"></div>
 <div class="enemy-only"><div class="section-title" style="margin-top:13px"><span>Enemies</span></div><div class="slots" id="enemySlots"></div></div>
 <div class="ban-only"><div class="section-title" style="margin-top:13px"><span>Bans</span></div><div class="slots" id="banSlots"></div></div>
+<div id="slotEntryPanel" class="slot-entry hidden" aria-label="Draft slot hero search">
+  <div class="slot-entry-head"><strong id="slotEntryTitle">Choose a hero</strong><button type="button" class="btn" id="slotEntryClose">Cancel</button></div>
+  <input type="search" id="slotEntrySearch" placeholder="Search hero or alias (2+ letters)" autocomplete="off" aria-label="Search hero for selected draft slot"/>
+  <div class="slot-entry-matches" id="slotEntryMatches" aria-live="polite"></div>
+</div>
 </div>
 <div class="quick-decision hidden" id="quickDecisionPanel">
   <div class="quick-head"><div><strong>Quick Decision • Blind Pick</strong><small>Best available now — no need to wait for all four teammates</small></div><span class="quick-time" id="quickTime">0:30</span></div>
@@ -316,7 +334,6 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
   <div class="quick-entry"><label for="quickAllyInput">Fast teammate entry</label><input id="quickAllyInput" type="text" autocomplete="off" placeholder="Type 2+ letters, tap hero, repeat" /></div>
   <div class="quick-matches" id="quickAllyMatches"></div>
 </div>
-<div class="panel"><div class="section-title"><span>Hero Picker</span><button type="button" class="btn" id="clearDraft">Clear</button></div><div class="modebar" id="modeButtons"></div><input id="heroSearch" type="text" placeholder="Search hero or alias (e.g. Princess Frost)..."/><div class="modebar" id="pickerLaneFilters"></div><div class="picker-toolbar"><button type="button" class="btn" id="pickerOwnedToggle">Owned only: Off</button><span class="result-count" id="pickerResultCount"></span></div><div class="hero-list picker-list" id="heroPicker"></div><div class="pager"><button type="button" class="btn" id="pickerPrev">Previous</button><span class="pager-info" id="pickerPageInfo">1 / 1</span><button type="button" class="btn" id="pickerNext">Next</button></div></div>
 <div class="panel"><div class="section-title"><span>Solo Queue Recommendations</span><button type="button" class="btn primary" id="analyzeBtn">Analyze</button></div><div id="teamIssues"></div><div id="draftSummary"></div><div id="recommendations"><div class="muted">Recommendations update automatically as teammate selections change.</div></div><div class="source-note">Gold/Platinum Blind Pick intentionally ignores hidden enemy draft data. Diamond–Grandmaster uses direct matchup signals. Hero Power remains a capped comfort signal. Build previews are draft-aware heuristics and should be adapted to the actual match.</div></div>
 </section>
 
