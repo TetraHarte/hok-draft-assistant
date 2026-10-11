@@ -25,7 +25,7 @@ html[data-theme="classic"]{--bg:#07111f;--bg2:#0a1322;--panel:#0f172a;--surface:
  <section class="panel"><div class="section-head"><h2>Solo Queue Recommendations</h2><button class="btn primary" id="analyze">Analyze</button></div><div id="teamIssues"></div><div id="draftIntelBrief" class="intel-brief" aria-live="polite"></div><div id="recommendations"></div><p class="subtle">Draft v0.18 distinguishes mechanic-based opportunities, risks, and synergy. Scores are relative heuristics, not win-rate forecasts. Unseen enemy picks remain unknown.</p></section>
 </section>
 <section id="rosterTab" class="page hidden"><section class="panel"><div class="section-head"><h2>MLBB Hero Roster</h2><strong id="ownedCount">0 / 133 owned</strong></div><div class="info">Mark heroes as owned to restrict recommendations to your actual account. These selections never alter your HoK roster.</div><div class="form-grid"><div><label for="rosterSearch">Search</label><input type="search" id="rosterSearch" placeholder="Find hero"></div><div><label for="rosterLane">Lane</label><select id="rosterLane"><option value="all">All lanes</option><option>EXP Lane</option><option>Jungle</option><option>Mid Lane</option><option>Gold Lane</option><option>Roam</option></select></div></div><div class="roster-grid" id="rosterGrid"></div></section></section>
-<section id="powerTab" class="page hidden"><section class="panel"><div class="section-head"><h2>MLBB Hero Proficiency</h2><span class="small-flag">MANUAL</span></div><p class="subtle">Track your own familiarity with MLBB heroes separately from HoK's Hero Power. Values entered here are personal notes, not imported in-game mastery or MMR.</p><div class="form-grid"><div><label for="powerHero">Hero</label><select id="powerHero"></select></div><div><label for="powerValue">Manual familiarity (0–100)</label><input id="powerValue" type="number" min="0" max="100" step="1" value="0"></div><div class="btn-holder"><button id="savePower" class="btn primary">Save familiarity</button></div></div><div id="powerList"></div></section></section>
+<section id="powerTab" class="page hidden"><section class="panel"><div class="section-head"><h2>MLBB Hero Power</h2><span class="small-flag">MANUAL</span></div><p class="subtle">Enter the exact Hero Power shown for each hero in MLBB. No 0–100 conversions. This is a manual entry, not an automatic MLBB account connection. Previous familiarity ratings are retained in your backups but are not treated as Hero Power.</p><div class="form-grid"><div><label for="powerHero">Hero</label><select id="powerHero"></select></div><div><label for="powerValue">Hero Power (shown in MLBB)</label><input id="powerValue" type="number" min="0" max="999999" step="1" placeholder="e.g. 2500"></div><div class="btn-holder"><button id="savePower" class="btn primary">Save Hero Power</button></div></div><div id="powerList"></div></section></section>
 <section id="accountsTab" class="page hidden"><section class="panel"><div class="section-head"><h2>MLBB Accounts</h2><span class="small-flag">SEPARATE STORAGE</span></div><div class="form-grid"><div><label for="newAccountName">New profile name</label><input id="newAccountName" type="text" maxlength="40" placeholder="e.g. MLBB Main"></div><div><label for="newAccountId">Account ID (optional)</label><input id="newAccountId" type="text" maxlength="40" placeholder="Optional, no password"></div><div class="btn-holder"><button id="addAccount" class="btn primary">Add profile</button></div></div><div id="accountList"></div></section><section class="panel"><h2>Data Safety</h2><p class="subtle">MLBB uses its own storage and backup schema. This workspace rejects HoK backups to prevent accidental overwrites.</p><div class="actions"><button class="btn primary" id="exportBackup">Export MLBB backup</button><label class="file-upload">Choose MLBB JSON<input type="file" id="importFile" accept=".json,application/json"></label><button class="btn" id="importBackup">Validate &amp; restore</button></div><p class="info" id="backupInfo">Local autosave is enabled where your browser permits it.</p></section></section>
 <footer>MLBB Draft Intelligence v0.18 testing · 133 MLBB heroes · HoK engine remains separate · $0</footer>
 </main>
@@ -140,7 +140,7 @@ const $=id=>document.getElementById(id);
 const blanks=n=>Array(n).fill(null);
 const ranks=['Warrior','Elite','Master','Grandmaster','Epic','Legend','Mythic','Mythical Honor','Mythical Glory','Mythical Immortal'];
 const cleanText=(s,max=40)=>String(s??'').trim().slice(0,max);
-const initial=()=>({schemaVersion:1,active:'main',accounts:[{id:'main',name:'MLBB Main',uid:'',rank:'Epic',role:'EXP Lane',owned:[],power:{},allies:blanks(5),enemies:blanks(5),bans:blanks(10)}]});
+const initial=()=>({schemaVersion:1,active:'main',accounts:[{id:'main',name:'MLBB Main',uid:'',rank:'Epic',role:'EXP Lane',owned:[],power:{},heroPower:{},allies:blanks(5),enemies:blanks(5),bans:blanks(10)}]});
 const state={data:initial(),tab:'draft',slot:{kind:'allies',index:0},query:'',laneFilter:'all',rosterQuery:'',rosterLane:'all',page:0,pageSize:12,ownedOnly:false,timerSeconds:30,timerEnds:0,timerRunning:false,timerInterval:null};
 function restore(){try{const raw=localStorage.getItem(KEY);if(raw){const parsed=JSON.parse(raw);const safe=validate(parsed);if(safe)state.data=safe}}catch(e){announce('Storage could not be read; in-memory mode is active.')}}
 function active(){return state.data.accounts.find(x=>x.id===state.data.active)||state.data.accounts[0]}
@@ -152,7 +152,9 @@ function validate(payload){
  for(const x of payload.accounts){if(!x||typeof x!=='object')return null;const id=cleanText(x.id,70);if(!id||ids.has(id))return null;ids.add(id);
   const owned=Array.isArray(x.owned)?[...new Set(x.owned.filter(n=>byName.has(n)))]:[];
   const power={};if(x.power&&typeof x.power==='object')for(const [n,v] of Object.entries(x.power)){if(byName.has(n)&&Number.isInteger(v)&&v>=0&&v<=100)power[n]=v}
-  arr.push({id,name:cleanText(x.name)||'MLBB Profile',uid:cleanText(x.uid),rank:ranks.includes(x.rank)?x.rank:'Epic',role:window.MLBB_HERO_DATA.lanes.includes(x.role)?x.role:'EXP Lane',owned,power,allies:uniqueKnown(x.allies,5),enemies:uniqueKnown(x.enemies,5),bans:uniqueKnown(x.bans,10)});
+  // Preserve pre-v0.18 familiarity in 'power' without confusing it with MLBB Hero Power.
+  const heroPower={};if(x.heroPower&&typeof x.heroPower==='object'&&!Array.isArray(x.heroPower))for(const [n,v] of Object.entries(x.heroPower)){if(byName.has(n)&&Number.isInteger(v)&&v>0&&v<=999999)heroPower[n]=v}
+  arr.push({id,name:cleanText(x.name)||'MLBB Profile',uid:cleanText(x.uid),rank:ranks.includes(x.rank)?x.rank:'Epic',role:window.MLBB_HERO_DATA.lanes.includes(x.role)?x.role:'EXP Lane',owned,power,heroPower,allies:uniqueKnown(x.allies,5),enemies:uniqueKnown(x.enemies,5),bans:uniqueKnown(x.bans,10)});
  }
  return {schemaVersion:1,active:ids.has(payload.active)?payload.active:arr[0].id,accounts:arr};
 }
@@ -213,8 +215,11 @@ function scoring(h,a,gaps){
  }
  const intel=INTEL.review(h,allies.map(n=>byName.get(n)).filter(Boolean),enemyHeroes);
  score+=intel.bonus;
- const familiarity=a.power[h.name]||0;score+=Math.min(5,Math.floor(familiarity/20));
- if(familiarity>=60)reason.push('Manually recorded familiarity');
+ // Hero Power is copied from MLBB, not a self-assessed 0–100 familiarity scale.
+ // Cap the weak progression signal at +5 so matchup/team-fit dominate recommendations.
+ const heroPower=a.heroPower?.[h.name]||0;
+ score+=Math.min(5,Math.floor(heroPower/1000));
+ if(heroPower>0)reason.push('Recorded MLBB Hero Power: '+heroPower.toLocaleString());
  if(a.owned.length&&a.owned.includes(h.name))score+=3;
  if(intel.positives.length)reason.push('Mechanic answer: '+intel.positives[0]);
  if(intel.synergies.length)reason.push('Synergy: '+intel.synergies[0]);
@@ -269,7 +274,20 @@ function renderAnalysis(){
  }
 }
 function renderRoster(){const a=active();$('ownedCount').textContent=a.owned.length+' / '+H.length+' owned';const q=state.rosterQuery.toLowerCase();const arr=H.filter(h=>(state.rosterLane==='all'||roleCompatible(h,state.rosterLane))&&h.name.toLowerCase().includes(q));const grid=$('rosterGrid');grid.replaceChildren();for(const h of arr){const on=a.owned.includes(h.name),el=mk('div','roster-item'+(on?' owned':'')),desc=mk('div');desc.append(mk('strong','',h.name),mk('small','',h.lane+' · '+h.cls));const b=mk('button','btn'+(on?' primary':''),on?'Owned ✓':'Mark owned');b.addEventListener('click',()=>{if(on)a.owned=a.owned.filter(n=>n!==h.name);else a.owned.push(h.name);save();renderRoster();renderPicker();renderAnalysis()});el.append(desc,b);grid.append(el)}if(!arr.length)grid.append(mk('div','empty','No matching MLBB heroes.'))}
-function renderPower(){const a=active();setOptions($('powerHero'),H.slice().sort((x,y)=>x.name.localeCompare(y.name)).map(h=>[h.name,h.name]),$('powerHero').value);$('powerValue').value=a.power[$('powerHero').value]||0;const list=$('powerList');list.replaceChildren();const entries=Object.entries(a.power).sort((a,b)=>b[1]-a[1]);for(const [n,v] of entries){const row=mk('div','power-row');row.append(mk('div','',n),mk('span','',String(v)+'/100'));list.append(row)}if(!entries.length)list.append(mk('div','info','No MLBB familiarity values recorded. Add a hero and score above.'))}
+function renderPower(){
+ const a=active();
+ setOptions($('powerHero'),H.slice().sort((x,y)=>x.name.localeCompare(y.name)).map(h=>[h.name,h.name]),$('powerHero').value);
+ const values=a.heroPower||{};
+ $('powerValue').value=values[$('powerHero').value]??'';
+ const list=$('powerList');list.replaceChildren();
+ const entries=Object.entries(values).sort((a,b)=>b[1]-a[1]);
+ for(const [n,v] of entries){
+   const row=mk('div','power-row');
+   row.append(mk('div','',n),mk('span','',v.toLocaleString()+' power'));
+   list.append(row);
+ }
+ if(!entries.length)list.append(mk('div','info','No Hero Power recorded yet. Choose a hero and enter the number shown in MLBB.'));
+}
 function renderAccounts(){const a=active();$('accountBadge').textContent=a.name;setOptions($('accountSelect'),state.data.accounts.map(x=>[x.id,x.name]),a.id);const list=$('accountList');list.replaceChildren();for(const x of state.data.accounts){const row=mk('div','account-row'),desc=mk('div');desc.append(mk('strong','',x.name+(x.id===state.data.active?' · Active':'')),mk('small','',x.rank+' · '+x.owned.length+' heroes'+(x.uid?' · ID '+x.uid:'')));const b=mk('button','btn',x.id===state.data.active?'Current':'Switch');b.disabled=x.id===state.data.active;b.addEventListener('click',()=>selectAccount(x.id));row.append(desc,b);list.append(row)}}
 function selectAccount(id){if(!state.data.accounts.some(x=>x.id===id))return;state.data.active=id;state.query='';$('heroSearch').value='';state.slot={kind:'allies',index:0};state.page=0;save();renderAll();announce('Switched to '+active().name)}
 function renderAll(){const a=active();setOptions($('accountSelect'),state.data.accounts.map(x=>[x.id,x.name]),a.id);$('accountBadge').textContent=a.name;rankRender();renderSlots();renderPicker();renderAnalysis();if(state.tab==='roster')renderRoster();if(state.tab==='power')renderPower();if(state.tab==='accounts')renderAccounts()}
@@ -289,7 +307,15 @@ $('prevPage').addEventListener('click',()=>{state.page=Math.max(0,state.page-1);
 $('clearSlot').addEventListener('click',()=>{const a=active();a[state.slot.kind][state.slot.index]=null;save();renderSlots();renderPicker();renderAnalysis();announce('Selected draft slot cleared.')});
 $('clearDraft').addEventListener('click',()=>{const a=active();a.allies=blanks(5);a.enemies=blanks(5);a.bans=blanks(10);state.slot={kind:'allies',index:0};save();renderAll();announce('MLBB draft slots cleared. Roster and familiarity preserved.')});$('analyze').addEventListener('click',renderAnalysis);
 $('rosterSearch').addEventListener('input',e=>{state.rosterQuery=e.target.value;renderRoster()});$('rosterLane').addEventListener('change',e=>{state.rosterLane=e.target.value;renderRoster()});
-$('powerHero').addEventListener('change',e=>{$('powerValue').value=active().power[e.target.value]||0});$('savePower').addEventListener('click',()=>{const n=$('powerHero').value,v=Number($('powerValue').value);if(!byName.has(n)||!Number.isInteger(v)||v<0||v>100){announce('Familiarity must be an integer from 0 to 100.');return}active().power[n]=v;save();renderPower();renderAnalysis();announce('Saved MLBB familiarity for '+n)});
+$('powerHero').addEventListener('change',e=>{$('powerValue').value=active().heroPower?.[e.target.value]??''});
+$('savePower').addEventListener('click',()=>{
+ const n=$('powerHero').value,raw=$('powerValue').value.trim(),v=raw===''?0:Number(raw);
+ if(!byName.has(n)||!Number.isInteger(v)||v<0||v>999999){announce('Enter a whole-number MLBB Hero Power between 0 and 999,999.');return}
+ const a=active();if(!a.heroPower)a.heroPower={};
+ if(v===0)delete a.heroPower[n];else a.heroPower[n]=v;
+ save();renderPower();renderAnalysis();
+ announce(v===0?'Cleared MLBB Hero Power for '+n:'Saved MLBB Hero Power for '+n);
+});
 $('addAccount').addEventListener('click',()=>{if(state.data.accounts.length>=16){announce('Maximum 16 MLBB profiles.');return}const name=cleanText($('newAccountName').value);if(!name){announce('Enter an MLBB profile name.');return}const p=initial().accounts[0];p.id='mlbb-'+Date.now().toString(36)+'-'+state.data.accounts.length;p.name=name;p.uid=cleanText($('newAccountId').value);state.data.accounts.push(p);state.data.active=p.id;$('newAccountName').value='';$('newAccountId').value='';save();renderAll();announce('Added MLBB profile '+name)});
 $('exportBackup').addEventListener('click',exportBackup);$('importBackup').addEventListener('click',importBackup);
 $('timerStart').addEventListener('click',clockToggle);$('timerReset').addEventListener('click',clockReset);$('timerSeconds').addEventListener('change',clockReset);
