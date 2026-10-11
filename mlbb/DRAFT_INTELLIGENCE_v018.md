@@ -2,6 +2,15 @@
 
 This update extends v0.17 without changing the HoK draft engine, the Chrome extension, MLBB account storage, or JSON backup schema.
 
+## Simplified Hero Power entry
+
+- The MLBB **Power** tab accepts the whole-number **Hero Power shown in MLBB** directly (for example, 2,500). No separate 0–100 confidence rating.
+- Existing v0.17 `power` familiarity records remain in the JSON/local data unchanged. They are **not** converted to Hero Power or used in v0.18 scoring.
+- New account-specific MLBB Hero Power records live under `heroPower` and stay independent of HoK's data; the existing MLBB backup format (`schemaVersion:1`) remains backward-compatible.
+- Current scoring gives a small, capped tie-breaker: +1 point per 1,000 recorded Hero Power, at most +5. This is a simple heuristic, **not** a published Moonton conversion or a win-rate probability.
+- No account sync was added. Users manually enter the number visible in MLBB.
+- Tested: legacy backup restoration, preserving legacy ratings, validation of Hero Power, and scoring at 0 / 2,500 / 5,000 / 500,000.
+
 ## New behavior
 
 - **Mechanic-specific counter opportunities** when an enemy pick is visible: anti-dash (Khufra, Minsitthar, Phoveus), anti-CC (Diggie), projectile defense (Lolita), anti-sustain (Baxia), anti-frontline damage (Karrie), anti-dive (Valir, Kaja, Franco, Akai), basic-attack deterrence (Belerick), shield absorption (Esmeralda), and isolated backline pressure (Natalia, Saber).
