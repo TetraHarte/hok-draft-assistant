@@ -1,6 +1,14 @@
-# HoK Solo Draft Assistant v0.17.1 — Clean Draft Layout
+# HoK Solo Draft Assistant v0.17.2 — Secondary Roam Roles
 
 Free browser-based draft assistant for Honor of Kings (HoK), with a separate Mobile Legends: Bang Bang (MLBB) workspace. Runs as a desktop web app or an installable iPhone PWA.
+
+## Changes in v0.17.2
+
+- Added **Roam as a secondary eligible lane** for Mozi, Lian Po, Xiang Yu, Ziya, Shi, Dun, Flowborn (Tank), Princess Frost (Wang Zhaojun), Guan Yu, Liang, Liu Bang, Yuhuan, Bai Qi, Dharma, and Ata.
+- All 15 retain their **original primary lanes**; they are still available for Mid Lane / Clash Lane picks.
+- Roam draft recommendations and the Roster and Hero Power lane filters now include those flex heroes when applicable, subject to ownership and draft exclusions.
+- Multiple eligible lanes are displayed together; role-specific hero scoring tiers and build presets have **not** been rebalanced in this update.
+- Refreshed the iPhone PWA cache and app.js asset revision to distribute the roster change without changing saved-data schema.
 
 ## Changes in v0.17.1
 
