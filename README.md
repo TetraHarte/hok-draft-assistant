@@ -1,6 +1,29 @@
-# HoK Solo Draft Assistant v0.17.2 — Secondary Roam Roles
+# HoK Solo Draft Assistant v0.17.3 — Role-Aware Roam Builds
 
 Free browser-based draft assistant for Honor of Kings (HoK), with a separate Mobile Legends: Bang Bang (MLBB) workspace. Runs as a desktop web app or an installable iPhone PWA.
+
+## Changes in v0.17.3
+
+- The 15 secondary Roam heroes now have role-specific **editorial Roam-fit tiers**, separate base scoring stats, and support-oriented utility traits (frontline, initiation, lockdown, peel, sustain and poke). These replace their Clash/Mid scoring attributes **only when Roam is selected**.
+- The Roster's Roam filter and the draft recommendations show the Roam-fit tier for these flex picks. All existing primary-lane tiers and item builds are preserved.
+- Each flex hero now has a dedicated 6-slot Roam build, a battle spell, and a 30-slot Arcana template. Every Roam build includes roaming equipment and boots. The first displayed full roaming item is an eventual upgrade: start with the basic roaming-income component.
+- Anti-heal, defensive/dive/CC and anti-frontline adaptations are available on Diamond+ when opponents are visible. Gold/Platinum blind picks retain the conservative baseline until threats become known.
+- Roam build adaptation never replaces the roaming equipment in slot 1. Quick Decision and role-fit explanations also use the Roam-specific traits.
+- When enemies have multiple possible lanes, direct same-lane counter labels conservatively use their primary lanes rather than assuming a secondary Roam pick is definitely supporting.
+- Updated the offline PWA cache revision and script reference. **No saved account data schema changes or resets.**
+
+### Data caveat and build references
+
+Roam-fit tiers and numerical scores are **editorial drafting heuristics**, not live Roam win-rate estimates or guarantees. Item recommendations are starting templates; actual builds depend on the current in-game patch, team composition, and match conditions.
+
+- [HoK Hub equipment reference — Guardian and Crimson Shadow roaming items](https://hub-game.com/hok/en/items)
+- [Mozi sample support configuration](https://hub-game.com/hok/en/heroes/mozi)
+- [Yuhuan sample support configuration](https://hub-game.com/hok/en/heroes/yang-yuhuan)
+- [Liu Bang support configuration](https://hub-game.com/hok/en/heroes/liu-bang)
+
+### Regression checks
+
+Run `node tests/roam-flex.test.cjs` in the repository to check all 15 role profiles, build slot integrity, role switching, the owned Roam shortlist, and conditional item adjustments.
 
 ## Changes in v0.17.2
 

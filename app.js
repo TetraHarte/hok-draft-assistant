@@ -146,6 +146,464 @@ const MATCHUP_SNAPSHOT="late September 2026";
 const STRONG_AGAINST={"Alessio":["Han Xin","Mai Shiranui","Sima Yi"],"Allain":["Kongming","Milady","Yixing"],"Angela":["Augran","Diaochan","Jing"],"Arli":["Sima Yi","Zilong"],"Athena":["Da Qiao","Luna","Shi"],"Augran":["Luna","Shangguan","Zhou Yu"],"Biron":["Kongming","Shangguan","Ziya"],"Butterfly":["Heino","Gan & Mo","Diaochan"],"Cai Yan":["Arthur","Cirrus","Li Xin"],"Charlotte":["Lady Zhen","Mai Shiranui","Ziya"],"Daji":["Augran","Jing","Xuance"],"Dharma":["Heino","Mi Yue","Yixing"],"Di Renjie":["Mai Shiranui","Ukyo Tachibana","Ying"],"Dian Wei":["Zhou Yu","Yixing","Mi Yue"],"Diaochan":["Mulan","Nakoruru","Xuance"],"Dolia":["Dharma","Augran","Mozi"],"Donghuang":["Allain","Cirrus","Kaizer"],"Dr Bian":["Mai Shiranui","Diaochan"],"Dun":["Diaochan","Fang","Erin"],"Dyadia":["Dian Wei","Liu Bei","Musashi"],"Erin":["Ying","Han Xin","Lam"],"Fang":["Mai Shiranui","Nakoruru","Zilong"],"Fuzi":["Milady","Luna","Mai Shiranui"],"Gan & Mo":["Cirrus","Jing","Pei"],"Gao":["Mai Shiranui","Wukong","Xuance"],"Garo":["Nakoruru","Xuance","Li Bai"],"Guan Yu":["Daji","Mi Yue","Yixing"],"Guiguzi":["Li Xin","Mozi","Zilong"],"Han Xin":["Lu Bu","Dun","Xiang Yu"],"Haya":["Sakeer","Zilong","Milady"],"Heino":["Diaochan","Mulan","Wukong"],"Hou Yi":["Cirrus","Mulan","Xuance"],"Huang Zhong":["Xuance","Mai Shiranui","Jing"],"Jing":["Dharma","Ata","Lian Po"],"Kaizer":["Da Qiao","Diaochan","Daji"],"Kongming":["Han Xin","Jing","Ukyo Tachibana"],"Kui":["Kaizer","Xiang Yu"],"Lady Sun":["Diaochan","Nakoruru","Ying"],"Lady Zhen":["Cirrus","Nakoruru","Sima Yi"],"Lam":["Lu Bu","Wuyan","Xiang Yu"],"Li Bai":["Dun","Lian Po","Liu Shan"],"Li Xin":["Da Qiao","Liang"],"Lian Po":["Luban No.7","Marco Polo"],"Liang":["Han Xin","Lam","Mulan"],"Liu Bang":["Marco Polo","Meng Ya","Shouyue"],"Liu Bei":["Lady Zhen","Nuwa","Xiao Qiao"],"Liu Shan":["Arthur","Augran","Biron"],"Lu Bu":["Heino","Daji","Luna"],"Luara":["Diaochan","Mulan","Lam"],"Luban No.7":["Ying","Ukyo Tachibana","Lam"],"Luna":["Yuhuan","Lady Zhen","Heino"],"Marco Polo":["Cirrus","Mai Shiranui","Wukong"],"Mayene":["Nuwa","Mi Yue","Liang"],"Meng Ya":["Mai Shiranui","Pei","Diaochan"],"Menki":["Lady Zhen","Mai Shiranui","Xiao Qiao"],"Milady":["Nakoruru","Pei","Mai Shiranui"],"Ming":["Cirrus","Menki","Wuyan"],"Mozi":["Cirrus","Lam","Li Bai"],"Mulan":["Liang","Mi Yue","Nuwa"],"Musashi":["Diaochan","Luna","Shangguan"],"Nakoruru":["Wukong","Athena","Xiang Yu"],"Nezha":["Mai Shiranui","Mozi","Nuwa"],"Nuwa":["Mulan","Nakoruru","Pei"],"Pei":["Arthur","Lu Bu","Wuyan"],"Sakeer":["Ying","Luna"],"Shangguan":["Diaochan","Mulan","Sima Yi"],"Shi":["Li Bai","Wukong","Ukyo Tachibana"],"Shouyue":["Diaochan","Nakoruru","Ying"],"Sima Yi":["Lu Bu","Wuyan","Menki"],"Sun Bin":["Kaizer","Musashi"],"Sun Ce":["Liang","Gan & Mo","Mi Yue"],"Ukyo Tachibana":["Arthur","Lian Po","Wuyan"],"Wukong":["Dun","Lian Po","Xiang Yu"],"Wuyan":["Kongming","Lady Zhen","Liang"],"Xiao Qiao":["Ukyo Tachibana","Han Xin"],"Yang Jian":["Diaochan","Luna","Dr Bian"],"Yao":["Angela","Mi Yue","Ziya"],"Yaria":["Dian Wei","Dun","Mayene"],"Ying":["Kongming","Liang","Yuhuan"],"Yixing":["Augran","Cirrus","Lam"],"Yuhuan":["Mai Shiranui","Nakoruru","Wukong"],"Zhang Fei":["Arli","Consort Yu","Marco Polo"],"Zhou Yu":["Cirrus","Nakoruru","Xuance"],"Zhuangzi":["Cirrus","Dian Wei","Menki"],"Zilong":["Heino","Lady Zhen"],"Ziya":["Diaochan","Ying","Zilong"]};
 const EXPLICIT_SYNERGY=[["Allain","Lam"],["Allain","Yaria"],["Lam","Lady Zhen"],["Lam","Gan & Mo"],["Lam","Mi Yue"],["Marco Polo","Dharma"],["Marco Polo","Liu Shan"],["Marco Polo","Zhang Fei"],["Liang","Dyadia"],["Liang","Ming"],["Liang","Yaria"],["Butterfly","Liu Bang"],["Butterfly","Yaria"],["Butterfly","Liu Shan"],["Ukyo Tachibana","Luna"],["Ukyo Tachibana","Mai Shiranui"],["Ukyo Tachibana","Xiao Qiao"],["Ying","Dyadia"],["Ying","Yaria"],["Ying","Zhuangzi"],["Da Qiao","Arli"],["Da Qiao","Di Renjie"],["Da Qiao","Shouyue"],["Dun","Luban No.7"],["Dun","Li Bai"],["Huang Zhong","Bai Qi"],["Huang Zhong","Xiang Yu"]];
 const DIRECT_MATCHUP_EDGE_COUNT=249;
+// Flex-Roam profile: editorial suitability, not an observed win rate.
+const ROAM_PROFILES={
+  "Mozi": {
+    "tier": "A",
+    "stats": [
+      3,
+      2,
+      4
+    ],
+    "traits": [
+      "cc",
+      "peel",
+      "poke",
+      "zone",
+      "utility"
+    ],
+    "focus": "Long-range stun and anti-dive control"
+  },
+  "Lian Po": {
+    "tier": "A",
+    "stats": [
+      4,
+      1,
+      4
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable",
+      "peel"
+    ],
+    "focus": "Initiation and frontline"
+  },
+  "Xiang Yu": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      4
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "peel",
+      "durable",
+      "engage"
+    ],
+    "focus": "Displacement and carry protection"
+  },
+  "Ziya": {
+    "tier": "C",
+    "stats": [
+      2,
+      1,
+      3
+    ],
+    "traits": [
+      "poke",
+      "zone",
+      "utility",
+      "damage"
+    ],
+    "focus": "Slow and team-level utility"
+  },
+  "Shi": {
+    "tier": "B",
+    "stats": [
+      3,
+      1,
+      3
+    ],
+    "traits": [
+      "cc",
+      "peel",
+      "zone",
+      "utility"
+    ],
+    "focus": "Pick creation and backline peel"
+  },
+  "Dun": {
+    "tier": "A",
+    "stats": [
+      4,
+      2,
+      4
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable",
+      "peel",
+      "sustain"
+    ],
+    "focus": "Durable engage and CC"
+  },
+  "Flowborn (Tank)": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      3
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable",
+      "peel"
+    ],
+    "focus": "Vanguard pressure"
+  },
+  "Wang Zhaojun": {
+    "tier": "B",
+    "stats": [
+      3,
+      2,
+      3
+    ],
+    "traits": [
+      "cc",
+      "peel",
+      "zone",
+      "poke",
+      "utility"
+    ],
+    "focus": "Freeze and disengage"
+  },
+  "Guan Yu": {
+    "tier": "C",
+    "stats": [
+      2,
+      2,
+      1
+    ],
+    "traits": [
+      "cc",
+      "engage",
+      "mobility",
+      "utility"
+    ],
+    "focus": "High-execution displacement"
+  },
+  "Liang": {
+    "tier": "A",
+    "stats": [
+      3,
+      1,
+      4
+    ],
+    "traits": [
+      "cc",
+      "peel",
+      "zone",
+      "utility"
+    ],
+    "focus": "Single-target lockdown"
+  },
+  "Liu Bang": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      3
+    ],
+    "traits": [
+      "frontline",
+      "peel",
+      "durable",
+      "utility",
+      "sustain"
+    ],
+    "focus": "Global ally rescue"
+  },
+  "Yuhuan": {
+    "tier": "B",
+    "stats": [
+      3,
+      2,
+      3
+    ],
+    "traits": [
+      "support",
+      "sustain",
+      "peel",
+      "utility",
+      "poke"
+    ],
+    "focus": "Healing and repeated slows"
+  },
+  "Bai Qi": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      3
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable"
+    ],
+    "focus": "Taunt initiation"
+  },
+  "Dharma": {
+    "tier": "C",
+    "stats": [
+      3,
+      2,
+      2
+    ],
+    "traits": [
+      "cc",
+      "engage",
+      "mobility",
+      "utility"
+    ],
+    "focus": "Wall-kick picks"
+  },
+  "Ata": {
+    "tier": "B",
+    "stats": [
+      4,
+      1,
+      3
+    ],
+    "traits": [
+      "frontline",
+      "cc",
+      "engage",
+      "durable",
+      "zone",
+      "peel"
+    ],
+    "focus": "Terrain denial"
+  }
+};
+const ROAM_BUILDS={
+  "Mozi": {
+    "label": "Long-range stun and anti-dive control",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Resistance",
+      "Holy Grail",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Hunt • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Lian Po": {
+    "label": "Initiation and frontline",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Blazing Cape",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Xiang Yu": {
+    "label": "Displacement and carry protection",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Fortitude",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Ziya": {
+    "label": "Slow and team-level utility",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Tranquility",
+      "Holy Grail",
+      "Frozen Breath",
+      "Ominous Premonition",
+      "Succubus Cloak"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Shi": {
+    "label": "Pick creation and backline peel",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Tranquility",
+      "Holy Grail",
+      "Frozen Breath",
+      "Ominous Premonition",
+      "Succubus Cloak"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Dun": {
+    "label": "Durable engage and CC",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Blazing Cape",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Flowborn (Tank)": {
+    "label": "Vanguard pressure",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Wang Zhaojun": {
+    "label": "Freeze and disengage",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Tranquility",
+      "Frozen Breath",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Guan Yu": {
+    "label": "High-execution displacement",
+    "items": [
+      "Crimson Shadow - Howl",
+      "Boots of Resistance",
+      "Cuirass of Savagery",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Sage's Sanctuary"
+    ],
+    "spell": "Sprint",
+    "arcana": "10 Fate • 10 Hunt • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Liang": {
+    "label": "Single-target lockdown",
+    "items": [
+      "Crimson Shadow - Radiance",
+      "Boots of Tranquility",
+      "Holy Grail",
+      "Frozen Breath",
+      "Ominous Premonition",
+      "Succubus Cloak"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Liu Bang": {
+    "label": "Global ally rescue",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Yuhuan": {
+    "label": "Healing and repeated slows",
+    "items": [
+      "Crimson Shadow - Starspring",
+      "Boots of Tranquility",
+      "Holy Grail",
+      "Dawnlight",
+      "Ominous Premonition",
+      "Succubus Cloak"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Bai Qi": {
+    "label": "Taunt initiation",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Resistance",
+      "Blazing Cape",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Dharma": {
+    "label": "Wall-kick picks",
+    "items": [
+      "Crimson Shadow - Howl",
+      "Boots of Resistance",
+      "Axe of Torment",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Hunt • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  },
+  "Ata": {
+    "label": "Terrain denial",
+    "items": [
+      "Guardian - Redemption",
+      "Boots of Fortitude",
+      "Blazing Cape",
+      "Ominous Premonition",
+      "Succubus Cloak",
+      "Frigid Charge"
+    ],
+    "spell": "Flash",
+    "arcana": "10 Fate • 10 Harmony • 10 Void",
+    "source": "Editorial Roam preset • 2026 roaming-item references"
+  }
+};
+function isRoamFlex(h){return state.role==="Roam"&&Boolean(h&&ROAM_PROFILES[h.n])}
+function candidateTraits(h){return isRoamFlex(h)?ROAM_PROFILES[h.n].traits:traits(h)}
+function candidateStats(h){return isRoamFlex(h)?ROAM_PROFILES[h.n].stats:baseStats(h)}
+function tierForLane(h,lane){return lane==="Roam"&&ROAM_PROFILES[h?.n]?ROAM_PROFILES[h.n].tier:h.tier}
+function candidateTier(h){return tierForLane(h,state.role)}
+function candidateFocus(h){return isRoamFlex(h)?ROAM_PROFILES[h.n].focus:null}
+
 function traits(h){const t=TYPE_TRAITS[h?.archetype]||[];return h?.n==="Dun"?[...new Set([...t,"engage"])]:t} function baseStats(h){return BASE[h?.archetype]||BASE.Flexible} function heroLanes(h){return h?[h.lane,...(h.secondaryLanes||[])]:[]}
 function heroPlaysLane(h,lane){return heroLanes(h).includes(lane)}
 function laneLabel(h){return heroLanes(h).join(" / ")}
@@ -652,18 +1110,18 @@ function selectSlotHero(name){
 }
 function refreshSlotEntry(){if(!isBlindRank()&&!$("slotEntryPanel").classList.contains("hidden"))renderSlotMatches()}
 function renderRosterFilters(){const fs=["All","Clash Lane","Jungle","Mid Lane","Farm Lane","Roam"];$("rosterFilters").innerHTML=fs.map(f=>`<button type="button" class="btn mode ${rosterFilter===f?"active":""}" data-roster-filter="${f}">${f==="All"?"All":f.replace(" Lane","")}</button>`).join("")}
-function renderRoster(){const q=$("rosterSearch").value.toLowerCase().trim(),a=acct(),owned=new Set(a.owned),list=HEROES.filter(h=>(rosterFilter==="All"||heroPlaysLane(h,rosterFilter))&&searchable(h).includes(q));$("ownedCount").textContent=a.owned.length;$("rosterList").innerHTML=list.map(h=>`<button type="button" class="hero roster-hero" data-hero="${esc(h.n)}"><div><div class="hero-name">${esc(displayName(h))}</div><div class="hero-meta">${esc(laneLabel(h))} • ${esc(h.archetype)}</div></div><div><span class="pill tier${h.tier}">${h.tier}</span> <span class="pill ${owned.has(h.n)?"owned":""}">${owned.has(h.n)?"OWNED":"ADD"}</span></div></button>`).join("")}
+function renderRoster(){const q=$("rosterSearch").value.toLowerCase().trim(),a=acct(),owned=new Set(a.owned),list=HEROES.filter(h=>(rosterFilter==="All"||heroPlaysLane(h,rosterFilter))&&searchable(h).includes(q));$("ownedCount").textContent=a.owned.length;$("rosterList").innerHTML=list.map(h=>`<button type="button" class="hero roster-hero" data-hero="${esc(h.n)}"><div><div class="hero-name">${esc(displayName(h))}</div><div class="hero-meta">${esc(laneLabel(h))} • ${esc(h.archetype)}</div></div><div><span class="pill tier${tierForLane(h,rosterFilter==="All"?h.lane:rosterFilter)}">${tierForLane(h,rosterFilter==="All"?h.lane:rosterFilter)}</span> <span class="pill ${owned.has(h.n)?"owned":""}">${owned.has(h.n)?"OWNED":"ADD"}</span></div></button>`).join("")}
 function toggleOwned(n){const a=acct();a.owned=a.owned.includes(n)?a.owned.filter(x=>x!==n):[...a.owned,n];save();renderRoster();refreshSlotEntry();renderAccounts();renderPower();liveAnalyze();setStatus(displayName(hero(n))+(a.owned.includes(n)?" added to roster.":" removed from roster."))}
 function composition(names){const hs=names.filter(Boolean).map(hero).filter(Boolean),c=t=>hs.filter(h=>traits(h).includes(t)).length;return{count:hs.length,frontline:c("frontline"),cc:c("cc"),engage:c("engage"),damage:c("damage")+c("burst")+c("dps"),peel:c("peel"),mobility:c("mobility"),poke:c("poke"),sustain:c("sustain"),assassin:c("assassin"),dps:c("dps"),support:c("support"),squishy:hs.filter(h=>["Mid Lane","Farm Lane"].includes(h.lane)).length}}
 function allyIssues(){const allyNames=visibleAllies(),t=composition(allyNames),out=[];if(isBlindRank()&&t.count<3)return out;if(t.frontline===0)out.push("No frontline");if(t.cc===0)out.push("Low crowd control");if(t.engage===0)out.push("No reliable engage");if(t.damage<=1&&t.count>=2)out.push("Low damage pressure");if(t.peel===0&&t.squishy>=2)out.push("Backline lacks peel");const farms=allyNames.filter(Boolean).map(hero).filter(h=>h?.lane==="Farm Lane").length;if(farms>=2)out.push("Multiple farm carries");if(t.frontline===0&&t.squishy>=3)out.push("Fragile composition");return out}
 function enemyProfile(){if(isBlindRank())return[];const t=composition(state.enemies),out=[];if(t.assassin>=2||t.engage>=2)out.push("Heavy dive");if(t.frontline>=2)out.push("Heavy frontline");if(t.squishy>=3)out.push("Exposed backline");if(t.cc>=3)out.push("Heavy CC");if(t.sustain>=2)out.push("High sustain");return out}
-function fitScore(h,issues,enemy){const tr=traits(h);let x=0;if(issues.includes("No frontline")&&tr.includes("frontline"))x+=4;if(issues.includes("Low crowd control")&&tr.includes("cc"))x+=3;if(issues.includes("No reliable engage")&&tr.includes("engage"))x+=3;if(issues.includes("Low damage pressure")&&(tr.includes("damage")||tr.includes("burst")||tr.includes("dps")))x+=3;if(issues.includes("Backline lacks peel")&&tr.includes("peel"))x+=3;if(issues.includes("Fragile composition")&&(tr.includes("frontline")||tr.includes("peel")))x+=3;if(enemy.includes("Heavy dive")&&(tr.includes("frontline")||tr.includes("peel")||tr.includes("cc")))x+=2.5;if(enemy.includes("Heavy frontline")&&tr.includes("dps"))x+=2.5;if(enemy.includes("Exposed backline")&&(tr.includes("engage")||tr.includes("assassin")||tr.includes("mobility")))x+=2;if(enemy.includes("Heavy CC")&&(tr.includes("poke")||tr.includes("durable")))x+=1.5;return x}
+function fitScore(h,issues,enemy){const tr=candidateTraits(h);let x=0;if(issues.includes("No frontline")&&tr.includes("frontline"))x+=4;if(issues.includes("Low crowd control")&&tr.includes("cc"))x+=3;if(issues.includes("No reliable engage")&&tr.includes("engage"))x+=3;if(issues.includes("Low damage pressure")&&(tr.includes("damage")||tr.includes("burst")||tr.includes("dps")))x+=3;if(issues.includes("Backline lacks peel")&&tr.includes("peel"))x+=3;if(issues.includes("Fragile composition")&&(tr.includes("frontline")||tr.includes("peel")))x+=3;if(enemy.includes("Heavy dive")&&(tr.includes("frontline")||tr.includes("peel")||tr.includes("cc")))x+=2.5;if(enemy.includes("Heavy frontline")&&tr.includes("dps"))x+=2.5;if(enemy.includes("Exposed backline")&&(tr.includes("engage")||tr.includes("assassin")||tr.includes("mobility")))x+=2;if(enemy.includes("Heavy CC")&&(tr.includes("poke")||tr.includes("durable")))x+=1.5;return x}
 function directCountersOf(name){const out=[];for(const [attacker,targets] of Object.entries(STRONG_AGAINST))if(targets.includes(name))out.push(attacker);return out}
 function matchupInfo(h){
   if(isBlindRank())return{strong:[],danger:[],laneStrong:[],laneDanger:[],score:0,evidence:0};
   const enemies=state.enemies.filter(Boolean),strong=(STRONG_AGAINST[h.n]||[]).filter(n=>enemies.includes(n)),danger=directCountersOf(h.n).filter(n=>enemies.includes(n));
   const candidateLane=heroPlaysLane(h,state.role)?state.role:h.lane;
-  const laneStrong=strong.filter(n=>heroPlaysLane(hero(n),candidateLane)),laneDanger=danger.filter(n=>heroPlaysLane(hero(n),candidateLane));
+  const laneStrong=strong.filter(n=>hero(n)?.lane===candidateLane),laneDanger=danger.filter(n=>hero(n)?.lane===candidateLane);
   const rankScale={Gold:.75,Platinum:.85,Diamond:1,Master:1.1,Grandmaster:1.2}[state.rank]||1;
   let raw=0;
   strong.forEach((n,i)=>raw+=(i===0?11:7));
@@ -672,8 +1130,8 @@ function matchupInfo(h){
   return{strong,danger,laneStrong,laneDanger,score:raw*rankScale,evidence:strong.length+danger.length};
 }
 function explicitSynergyPartners(name){const out=[];for(const pair of EXPLICIT_SYNERGY){if(pair[0]===name)out.push(pair[1]);else if(pair[1]===name)out.push(pair[0])}return out}
-function synergyInfo(h){const allies=visibleAllies().filter(Boolean),explicit=explicitSynergyPartners(h.n).filter(n=>allies.includes(n)),labels=[],tr=traits(h);let generic=0;const allyHeroes=allies.map(hero).filter(Boolean);const allyTraits=new Set(allyHeroes.flatMap(a=>traits(a)));const allyHasFarm=allyHeroes.some(a=>a.lane==="Farm Lane");const allyHasSquishy=allyHeroes.filter(a=>["Farm Lane","Mid Lane"].includes(a.lane)).length>=2;if((tr.includes("frontline")||tr.includes("peel"))&&allyHasSquishy){generic+=3;labels.push("frontline for carries")}if(tr.includes("engage")&&(allyTraits.has("burst")||allyTraits.has("damage")||allyTraits.has("dps"))){generic+=2;labels.push("engage + follow-up")}if(tr.includes("cc")&&allyTraits.has("assassin")){generic+=2;labels.push("CC setup for assassin")}if((tr.includes("dps")||tr.includes("damage"))&&(allyTraits.has("frontline")||allyTraits.has("cc"))){generic+=2;labels.push("damage behind setup")}if((tr.includes("support")||tr.includes("peel"))&&allyHasFarm){generic+=2;labels.push("protects farm carry")}if(tr.includes("assassin")&&(allyTraits.has("cc")||allyTraits.has("engage"))){generic+=2;labels.push("assassin follow-up")}generic=Math.min(generic,7);return{explicit,labels:[...new Set(labels)].slice(0,3),score:explicit.length*9+generic}}
-function blindPickBonus(h){const enemies=isBlindRank()?0:state.enemies.filter(Boolean).length;if(enemies>=2)return 0;const [solo,carry,ease]=baseStats(h),tr=traits(h);let b=(solo-3)*(isBlindRank()?5:3)+(ease-2)*(isBlindRank()?3:2);if(tr.includes("sustain")||tr.includes("mobility")||tr.includes("frontline"))b+=isBlindRank()?4:2;return Math.max(0,b)}
+function synergyInfo(h){const allies=visibleAllies().filter(Boolean),explicit=explicitSynergyPartners(h.n).filter(n=>allies.includes(n)),labels=[],tr=candidateTraits(h);let generic=0;const allyHeroes=allies.map(hero).filter(Boolean);const allyTraits=new Set(allyHeroes.flatMap(a=>traits(a)));const allyHasFarm=allyHeroes.some(a=>a.lane==="Farm Lane");const allyHasSquishy=allyHeroes.filter(a=>["Farm Lane","Mid Lane"].includes(a.lane)).length>=2;if((tr.includes("frontline")||tr.includes("peel"))&&allyHasSquishy){generic+=3;labels.push("frontline for carries")}if(tr.includes("engage")&&(allyTraits.has("burst")||allyTraits.has("damage")||allyTraits.has("dps"))){generic+=2;labels.push("engage + follow-up")}if(tr.includes("cc")&&allyTraits.has("assassin")){generic+=2;labels.push("CC setup for assassin")}if((tr.includes("dps")||tr.includes("damage"))&&(allyTraits.has("frontline")||allyTraits.has("cc"))){generic+=2;labels.push("damage behind setup")}if((tr.includes("support")||tr.includes("peel"))&&allyHasFarm){generic+=2;labels.push("protects farm carry")}if(tr.includes("assassin")&&(allyTraits.has("cc")||allyTraits.has("engage"))){generic+=2;labels.push("assassin follow-up")}generic=Math.min(generic,7);return{explicit,labels:[...new Set(labels)].slice(0,3),score:explicit.length*9+generic}}
+function blindPickBonus(h){const enemies=isBlindRank()?0:state.enemies.filter(Boolean).length;if(enemies>=2)return 0;const [solo,carry,ease]=candidateStats(h),tr=candidateTraits(h);let b=(solo-3)*(isBlindRank()?5:3)+(ease-2)*(isBlindRank()?3:2);if(tr.includes("sustain")||tr.includes("mobility")||tr.includes("frontline"))b+=isBlindRank()?4:2;return Math.max(0,b)}
 
 function heroPowerComfort(h){
   const a=acct(),r=powerRecord(a,h.n),cur=Number(r?.current);
@@ -694,9 +1152,41 @@ const ITEM_KIND={
   "Axe of Torment":"core","Pure Sky":"core","Starbreaker":"counter","Cuirass of Savagery":"core","Overlord's Might":"core","Blood Rage":"core","Frostscar's Embrace":"defense","Mortal Punisher":"counter",
   "Doomsday":"core","Shadow Ripper":"core","Eternity Blade":"core","Daybreaker's Virtue":"counter","Bloodweeper":"core","Sunchaser":"core","Master Sword":"core","Sparkforged Dagger":"core",
   "Scepter of Reverberation":"core","Savant's Wrath":"core","Insatiable Tome":"core","Void Staff":"counter","Venomous Staff":"counter","Frozen Breath":"core","Mask of Agony":"core","Splendor":"defense","Holy Grail":"core",
-  "Guardian - Radiance":"core","Guardian - Redemption":"core","Guardian - Starspring":"core","Dawnlight":"core","Crimson Shadow - Radiance":"core","Crimson Shadow - Redemption":"core",
+  "Guardian - Radiance":"core","Guardian - Redemption":"core","Guardian - Starspring":"core","Dawnlight":"core","Crimson Shadow - Radiance":"core","Crimson Shadow - Redemption":"core","Crimson Shadow - Starspring":"core","Crimson Shadow - Howl":"core",
   "Rapacious Bite":"core","Runeblade":"core","Giant's Grip":"core","Dragon's Rage":"core","Deepfrost Siege":"core","Twinblades of Destruction":"core","Meteor":"core","Nettle Gauntlet":"core","Relentless Blade":"core"
 };
+// Flex-roam adaptation keeps support-income gear and boots; role-specific presets never borrow Mid/Clash build overrides.
+function adaptiveFlexRoamBuild(h){
+  const base=structuredClone(ROAM_BUILDS[h.n]),sig=enemyBuildSignals();
+  const variants=[{name:"Standard",items:[...base.items],why:"Support income, utility, then defense. Buy the basic roaming component before upgrading it."}];
+  let chosen={...base,label:sig.blind?"Safe blind":"Standard",items:[...base.items],
+    why:sig.blind?"Enemy draft is hidden: protect carries, scout and coordinate engages.":"Role-specific Roam economy, control and survivability."};
+  const isMage=["Mozi","Ziya","Shi","Wang Zhaojun","Liang","Yuhuan"].includes(h.n);
+  const isTank=["Lian Po","Xiang Yu","Dun","Flowborn (Tank)","Liu Bang","Bai Qi","Ata"].includes(h.n);
+  if(sig.sustain){
+    const items=[...base.items],anti=isMage?"Venomous Staff":"Blazing Cape";
+    if(!items.includes(anti))items[isMage?4:3]=anti;
+    const why=base.items.includes(anti)?anti+" is already included for healing reduction.":anti+" reduces enemy sustain without sacrificing Roam equipment.";
+    variants.push({name:"Anti-heal",items,why});
+    chosen={...base,label:"Anti-heal",items,why};
+  }
+  if(sig.frontline){
+    const items=[...base.items],canPierce=isMage&&["Mozi","Ziya","Wang Zhaojun"].includes(h.n);
+    if(canPierce)items[5]="Void Staff";
+    const why=canPierce?"Optional magic penetration when damage against high-magic-defense frontliners is required.":"Keep CC, peel and durability; forcing penetration onto a support tank is usually a poor trade.";
+    variants.push({name:"Versus tanks",items,why});
+    if(canPierce&&!sig.sustain&&!sig.dive&&!sig.cc)chosen={...base,label:"Versus tanks",items,why};
+  }
+  if(sig.dive||sig.cc){
+    const items=[...base.items];items[1]="Boots of Resistance";
+    if(!isTank&&!items.includes("Frigid Charge"))items[5]="Frigid Charge";
+    const why="Defensive boots and peel tools improve survivability against hard engage and control.";
+    variants.push({name:"Anti-burst",items,why});
+    if(!sig.sustain)chosen={...base,label:"Anti-burst",items,why};
+  }
+  const swaps=sig.blind?["Healing / lifesteal → anti-heal","Dive / CC → defensive boots","Heavy frontliners → maintain peel first"]:["Roaming income item stays in slot one","Protect the carry before chasing damage","Adapt defenses to enemy threats"];
+  return {...chosen,variants:variants.slice(0,4),swaps};
+}
 const BUILD_OVERRIDES={
   "Dun":{label:"Full tank",items:["Boots of Fortitude","Blazing Cape","Ominous Premonition","Eye of the Phoenix","Frigid Charge","Glacial Buckler"],spell:"Execute",arcana:"Fate • Hunt • Void",source:"Curated S16 public build baseline"},
   "Sun Ce":{label:"AD penetration",items:["Meteor","Boots of Fortitude","Axe of Torment","Frigid Charge","Succubus Cloak","Spikemail"],spell:"Flash",arcana:"Red Moon • Mutation • Hunt",source:"Curated S16 public build baseline"},
@@ -718,6 +1208,7 @@ function enemyBuildSignals(){
 }
 function swapOne(items,from,to){const x=[...items],i=x.indexOf(from);if(i>=0)x[i]=to;else if(!x.includes(to))x[x.length-1]=to;return x}
 function adaptiveBuild(h){
+  if(isRoamFlex(h))return adaptiveFlexRoamBuild(h);
   const base=structuredClone(BUILD_OVERRIDES[h.n]||genericBuild(h)),sig=enemyBuildSignals(),variants=[];
   const safe={...base,label:sig.blind?"Safe blind":"Standard",items:[...base.items]};
   variants.push({name:"Standard",items:[...safe.items],why:"Balanced baseline when no specific enemy itemization pressure is confirmed."});
@@ -743,11 +1234,11 @@ function renderBuildPreview(h){
   const b=adaptiveBuild(h);
   const items=b.items.slice(0,6).map((it,i)=>`<div class="item-card ${ITEM_KIND[it]||""}"><div class="item-icon">${esc(itemInitials(it))}</div><div class="item-name">${esc(it)}</div><div class="item-num">${i+1}</div></div>`).join("");
   const vars=b.variants.map((v,i)=>`<div class="variant-card ${i===0&&b.label==="Standard"?"recommended":v.name===b.label?"recommended":""}"><strong>${esc(v.name)}</strong><span>${esc(v.why)}</span></div>`).join("");
-  return `<div class="build-preview"><div class="build-head"><div class="build-title">Adaptive Build Preview</div><span class="build-badge">${esc(b.label)}</span></div><div class="item-strip">${items}</div><div class="build-reason">${esc(b.why)} <span class="muted">• ${esc(b.source)}</span></div><div class="build-swaps">${b.swaps.map(x=>`<span class="swap-chip">${esc(x)}</span>`).join("")}</div><details class="build-details"><summary>Show alternatives, spell & Arcana</summary><div class="build-variants">${vars}</div><div class="hero-meta" style="margin-top:7px">Spell: ${esc(b.spell)} • Arcana: ${esc(b.arcana)}</div></details></div>`;
+  return `<div class="build-preview"><div class="build-head"><div class="build-title">${isRoamFlex(h)?"Roam-Specific Build Preview":"Adaptive Build Preview"}</div><span class="build-badge">${esc(b.label)}</span></div><div class="item-strip">${items}</div><div class="build-reason">${esc(b.why)} <span class="muted">• ${esc(b.source)}</span></div>${isRoamFlex(h)?`<div class="hero-meta">Start with basic roaming-income gear. Slot 1 shows its eventual upgraded item, not the first full-price purchase.</div>`:""}<div class="build-swaps">${b.swaps.map(x=>`<span class="swap-chip">${esc(x)}</span>`).join("")}</div><details class="build-details"><summary>Show alternatives, spell & Arcana</summary><div class="build-variants">${vars}</div><div class="hero-meta" style="margin-top:7px">Spell: ${esc(b.spell)} • Arcana: ${esc(b.arcana)}</div></details></div>`;
 }
-function scoreBreakdown(h){const [solo,carry,ease]=baseStats(h),w=RANK_WEIGHT[state.rank],issues=allyIssues(),enemy=enemyProfile(),match=matchupInfo(h),syn=synergyInfo(h),comfort=heroPowerComfort(h);const soloPart=solo*w.solo+carry*w.carry+ease*w.ease;const known=visibleAllies().filter(Boolean).length;
+function scoreBreakdown(h){const [solo,carry,ease]=candidateStats(h),w=RANK_WEIGHT[state.rank],issues=allyIssues(),enemy=enemyProfile(),match=matchupInfo(h),syn=synergyInfo(h),comfort=heroPowerComfort(h);const soloPart=solo*w.solo+carry*w.carry+ease*w.ease;const known=visibleAllies().filter(Boolean).length;
 const repairTrust=isBlindRank()?(known<3?0:known===3?.55:1):1;
-const repairPart=fitScore(h,issues,enemy)*w.fit*repairTrust;const metaPart=TIER_SCORE[h.tier]*w.meta;const blindPart=blindPickBonus(h);const comfortPart=comfort.score;const total=soloPart+repairPart+metaPart+match.score+syn.score+blindPart+comfortPart;return{total,soloPart,repairPart,metaPart,blindPart,comfortPart,comfort,match,syn}}
+const repairPart=fitScore(h,issues,enemy)*w.fit*repairTrust;const metaPart=TIER_SCORE[candidateTier(h)]*w.meta;const blindPart=blindPickBonus(h);const comfortPart=comfort.score;const total=soloPart+repairPart+metaPart+match.score+syn.score+blindPart+comfortPart;return{total,soloPart,repairPart,metaPart,blindPart,comfortPart,comfort,match,syn}}
 function scoreHero(h){return scoreBreakdown(h).total}
 
 // The shortlist is available from the first second: a primary pick and different
@@ -762,8 +1253,8 @@ function quickCandidates(pool){
   const result=[];
   const add=(x,label)=>{if(x&&!result.some(v=>v.h.n===x.h.n))result.push({...x,label})};
   add(pool[0],"BEST NOW");
-  add(pool.find(x=>!result.some(y=>y.h.n===x.h.n)&&traits(x.h).includes("frontline")),"FRONTLINE OPTION");
-  add(pool.find(x=>!result.some(y=>y.h.n===x.h.n)&&traits(x.h).some(t=>["damage","burst","dps","duelist"].includes(t))),"DAMAGE OPTION");
+  add(pool.find(x=>!result.some(y=>y.h.n===x.h.n)&&candidateTraits(x.h).includes("frontline")),"FRONTLINE OPTION");
+  add(pool.find(x=>!result.some(y=>y.h.n===x.h.n)&&candidateTraits(x.h).some(t=>["damage","burst","dps","duelist"].includes(t))),"DAMAGE OPTION");
   for(const x of pool)if(result.length<3)add(x,"ALTERNATIVE");
   return result;
 }
@@ -794,7 +1285,7 @@ function renderQuickDecision(){
     :`${known}/4 teammates known; ${unknown} still unknown. Choose a safe fallback now.`;
   $("quickNote").textContent=desc;
   $("quickChoices").innerHTML=choices.length?choices.map((x,i)=>{
-    const h=x.h,b=x.b,traitsList=traits(h),sub=traitsList.includes("frontline")?(traitsList.includes("cc")?"Frontline + CC":"Frontline / sustain"):traitsList.includes("damage")?"Damage / pressure":"Solo-safe option";
+    const h=x.h,b=x.b,traitsList=candidateTraits(h),sub=traitsList.includes("frontline")?(traitsList.includes("cc")?"Frontline + CC":"Frontline / sustain"):traitsList.includes("peel")?"Peel / utility":traitsList.includes("cc")?"Crowd control":traitsList.includes("damage")?"Damage / pressure":"Utility option";
     return `<div class="quick-card ${i===0?"quick-first":""}"><div class="quick-label">${esc(x.label)}</div><strong>${esc(displayName(h))}</strong><div class="quick-sub">${esc(sub)}</div><div class="quick-score">${Math.round(b.total)} <span>score</span></div></div>`
   }).join(""):`<div class="muted">No available owned heroes for ${esc(state.role)}. Check Roster or role.</div>`;
   const hint=$("quickUncertainty");
@@ -814,12 +1305,12 @@ function quickAddAlly(name){
  save();renderSlots();refreshSlotEntry();liveAnalyze();setStatus(displayName(hero(name))+" recorded as teammate "+(i+1));
 }
 function confidenceInfo(h,b){const allies=visibleAllies().filter(Boolean).length,enemies=isBlindRank()?0:state.enemies.filter(Boolean).length,total=allies+enemies;let level="Low",why=isBlindRank()?"Limited teammate information":"Sparse draft information";if(isBlindRank()){if(allies>=3){level="High";why="Most teammate choices visible"}else if(allies>=1){level="Medium";why="Partial teammate composition"}}else if((b.match.evidence>=1&&total>=4)||total>=7){level="High";why=b.match.evidence?"Direct matchup evidence + developed draft":"Developed team compositions"}else if(total>=3||b.match.evidence>=1){level="Medium";why=b.match.evidence?"Some direct matchup evidence":"Partial composition information"}return{level,why,cls:level.toLowerCase()}}
-function pickType(h,b){const [solo,carry,ease]=baseStats(h);if(isBlindRank()){if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced blind pick",cls:"safe"}}if(b.match.laneDanger.length)return{label:"Risky countered pick",cls:"risk"};if(b.match.laneStrong.length||b.match.strong.length>=2)return{label:"Counterpick",cls:"counter"};if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(state.enemies.filter(Boolean).length<=1&&solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced pick",cls:"safe"}}
-function reason(h,b){const tr=traits(h),issues=allyIssues(),enemy=enemyProfile(),bits=[],stats=baseStats(h),solo=stats[0],carry=stats[1],m=b||scoreBreakdown(h);if(m.comfort?.score>=7)bits.push("strong account comfort at "+formatPower(m.comfort.current)+" Hero Power");else if(m.comfort?.score>=4)bits.push("account familiarity boost from "+formatPower(m.comfort.current)+" Hero Power");if(isBlindRank()&&solo>=4)bits.push("safe blind-pick profile");if(m.match.laneStrong.length)bits.push("lane matchup edge into "+m.match.laneStrong.slice(0,2).map(n=>displayName(hero(n))).join(" + "));else if(m.match.strong.length)bits.push("direct matchup edge into "+m.match.strong.slice(0,2).map(n=>displayName(hero(n))).join(" + "));if(m.syn.explicit.length)bits.push("documented synergy with "+m.syn.explicit.slice(0,2).map(n=>displayName(hero(n))).join(" + "));if(solo>=5)bits.push("high solo-queue independence");else if(solo>=4)bits.push("reliable without coordinated teammates");if(issues.includes("No frontline")&&tr.includes("frontline"))bits.push("repairs your frontline");if(issues.includes("Low crowd control")&&tr.includes("cc"))bits.push("adds needed CC");if(issues.includes("No reliable engage")&&tr.includes("engage"))bits.push("adds initiation");if(issues.includes("Backline lacks peel")&&tr.includes("peel"))bits.push("protects your backline");if(enemy.includes("Heavy dive")&&(tr.includes("frontline")||tr.includes("peel")||tr.includes("cc")))bits.push("better into enemy dive");if(carry>=5)bits.push("high carry ceiling");if(h.tier==="S"||h.tier==="A")bits.push(h.tier+"-tier meta baseline");return(bits.slice(0,3).join("; ")||"solid role fit for this draft")+"."}
+function pickType(h,b){const [solo,carry,ease]=candidateStats(h);if(isBlindRank()){if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced blind pick",cls:"safe"}}if(b.match.laneDanger.length)return{label:"Risky countered pick",cls:"risk"};if(b.match.laneStrong.length||b.match.strong.length>=2)return{label:"Counterpick",cls:"counter"};if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(state.enemies.filter(Boolean).length<=1&&solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced pick",cls:"safe"}}
+function reason(h,b){const tr=candidateTraits(h),issues=allyIssues(),enemy=enemyProfile(),bits=[],stats=candidateStats(h),solo=stats[0],carry=stats[1],m=b||scoreBreakdown(h);if(m.comfort?.score>=7)bits.push("strong account comfort at "+formatPower(m.comfort.current)+" Hero Power");else if(m.comfort?.score>=4)bits.push("account familiarity boost from "+formatPower(m.comfort.current)+" Hero Power");if(isBlindRank()&&solo>=4)bits.push("safe blind-pick profile");if(m.match.laneStrong.length)bits.push("lane matchup edge into "+m.match.laneStrong.slice(0,2).map(n=>displayName(hero(n))).join(" + "));else if(m.match.strong.length)bits.push("direct matchup edge into "+m.match.strong.slice(0,2).map(n=>displayName(hero(n))).join(" + "));if(m.syn.explicit.length)bits.push("documented synergy with "+m.syn.explicit.slice(0,2).map(n=>displayName(hero(n))).join(" + "));if(solo>=5)bits.push("high solo-queue independence");else if(solo>=4)bits.push("reliable without coordinated teammates");if(issues.includes("No frontline")&&tr.includes("frontline"))bits.push("repairs your frontline");if(issues.includes("Low crowd control")&&tr.includes("cc"))bits.push("adds needed CC");if(issues.includes("No reliable engage")&&tr.includes("engage"))bits.push("adds initiation");if(issues.includes("Backline lacks peel")&&tr.includes("peel"))bits.push("protects your backline");if(enemy.includes("Heavy dive")&&(tr.includes("frontline")||tr.includes("peel")||tr.includes("cc")))bits.push("better into enemy dive");if(carry>=5)bits.push("high carry ceiling");if(isRoamFlex(h))bits.push("Roam role: "+candidateFocus(h).toLowerCase());else if(h.tier==="S"||h.tier==="A")bits.push(h.tier+"-tier meta baseline");return(bits.slice(0,3).join("; ")||"solid role fit for this draft")+"."}
 function detailTags(h,b){let html="";if(b.match.strong.length)html+=`<div class="recommendation-label">Direct matchup edges</div><div class="tags">${b.match.strong.map(n=>`<span class="tag match-good">✓ ${esc(displayName(hero(n)))}</span>`).join("")}</div>`;if(b.match.danger.length)html+=`<div class="recommendation-label">Enemy threats to this pick</div><div class="tags">${b.match.danger.map(n=>`<span class="tag match-bad">⚠ ${esc(displayName(hero(n)))}</span>`).join("")}</div>`;if(b.syn.explicit.length||b.syn.labels.length)html+=`<div class="recommendation-label">Synergy</div><div class="tags">${b.syn.explicit.map(n=>`<span class="tag syn-good">★ ${esc(displayName(hero(n)))}</span>`).join("")}${b.syn.labels.map(n=>`<span class="tag syn-good">+ ${esc(n)}</span>`).join("")}</div>`;if(b.comfort?.current!=null)html+=`<div class="recommendation-label">Your account</div><div class="tags"><span class="tag ${b.comfort.score>=7?"comfort-good":"comfort-mid"}">◆ ${formatPower(b.comfort.current)} Hero Power • +${Math.round(b.comfortPart)} comfort</span></div>`;if(b.match.laneDanger.length)html+=`<div class="warning-line">Lane warning: ${b.match.laneDanger.map(n=>esc(displayName(hero(n)))).join(" + ")} has direct evidence into this pick.</div>`;return html}
 function draftPlan(){const issues=allyIssues(),enemy=enemyProfile(),allies=visibleAllies().filter(Boolean).length,enemies=isBlindRank()?0:state.enemies.filter(Boolean).length;const priority=issues.length?issues.slice(0,2).join(" + "):"No urgent team repair";const threat=isBlindRank()?"Hidden in blind pick":(enemy.length?enemy.slice(0,2).join(" + "):"Enemy draft still unclear");let info=isBlindRank()?"Blind selection":"Early draft";if(!isBlindRank()){if(allies+enemies>=7)info="Late draft";else if(allies+enemies>=4)info="Mid draft"}return{priority,threat,info,allies,enemies}}
 function renderDraftSummary(){const p=draftPlan();const third=isBlindRank()?`${p.allies} of 4 teammate choices entered`:`${p.allies} ally / ${p.enemies} enemy picks entered`;$('draftSummary').innerHTML=`<div class="draft-summary"><div class="draft-summary-title">${isBlindRank()?"Blind-pick plan":"Draft plan"}</div><div class="draft-summary-grid"><div class="summary-cell"><strong>${esc(p.priority)}</strong><span>ally priority</span></div><div class="summary-cell"><strong>${esc(p.threat)}</strong><span>${isBlindRank()?"enemy information":"enemy read"}</span></div><div class="summary-cell"><strong>${esc(p.info)}</strong><span>${esc(third)}</span></div></div></div>`}
-function analyze(silent=false){const owned=new Set(acct().owned),blocked=new Set(isBlindRank()?visibleAllies().filter(Boolean):[...state.allies,...state.enemies,...state.bans].filter(Boolean)),issues=allyIssues(),enemy=enemyProfile(),pool=HEROES.filter(h=>owned.has(h.n)&&heroPlaysLane(h,state.role)&&!blocked.has(h.n)).map(h=>({h,b:scoreBreakdown(h)})).sort((a,b)=>b.b.total-a.b.total).slice(0,visibleRecommendationCount());let issueHtml="";const urgency=urgencyLevel();if(!isBlindRank()&&urgency==="emergency")issueHtml+=`<div class="urgent-banner">${timerRemaining}s left — emergency view: showing only the highest-ranked owned pick for ${esc(state.role)}.</div>`;else if(!isBlindRank()&&urgency==="commit")issueHtml+=`<div class="commit-banner">${timerRemaining}s left — commit view: shortlist reduced to the top 3.</div>`;if(isBlindRank())issueHtml+=`<div class="ok">${esc(state.rank)} Blind Pick: hidden enemies ignored. ${visibleAllies().filter(Boolean).length}/4 teammates known.</div>`;issueHtml+=issues.length?`<div class="issues">${issues.map(x=>`<span class="issue">${esc(isBlindRank()&&visibleAllies().filter(Boolean).length<4?"Potential: "+x:x)}</span>`).join("")}</div>`:`<div class="ok">No critical ally composition problem detected.</div>`;if(!isBlindRank()&&enemy.length)issueHtml+=`<div class="issues">${enemy.map(x=>`<span class="issue enemyissue">Enemy: ${esc(x)}</span>`).join("")}</div>`;if(!isBlindRank()){const directEnemies=state.enemies.filter(Boolean).filter(n=>directCountersOf(n).length||(STRONG_AGAINST[n]||[]).length);if(state.enemies.some(Boolean)&&!directEnemies.length)issueHtml+=`<div class="muted" style="margin-bottom:8px">No direct matchup record found for the entered enemy heroes; using composition logic.</div>`}$("teamIssues").innerHTML=issueHtml;renderDraftSummary();$("recommendations").innerHTML=pool.length?pool.map((x,i)=>{const h=x.h,b=x.b,tr=traits(h),type=pickType(h,b),conf=confidenceInfo(h,b);return `<div class="rec"><div class="rec-head"><div><span class="rank">#${i+1}</span> <strong>${esc(displayName(h))}</strong> <span class="pill tier${h.tier}">${h.tier}</span><span class="pick-badge ${type.cls}">${esc(type.label)}</span></div><div><span class="confidence ${conf.cls}">${conf.level} confidence</span> <span class="score">${Math.round(b.total)}</span></div></div><div class="reason">${esc(reason(h,b))}</div><div class="breakdown"><div class="metric"><strong>${Math.round(b.soloPart+b.blindPart)}</strong><span>Solo/Carry</span></div><div class="metric"><strong>${Math.round(b.repairPart)}</strong><span>Team Repair</span></div><div class="metric"><strong>${isBlindRank()?"N/A":((b.match.score>=0?"+":"")+Math.round(b.match.score))}</strong><span>${isBlindRank()?"Enemy Hidden":"Matchup"}</span></div><div class="metric"><strong>+${Math.round(b.syn.score)}</strong><span>Synergy</span></div><div class="metric"><strong>${b.comfort.current!=null?"+"+Math.round(b.comfortPart):"—"}</strong><span>Account Power</span></div></div>${detailTags(h,b)}${i<3?renderBuildPreview(h):""}<div class="tags">${tr.slice(0,5).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div><div class="statline"><span>${esc(laneLabel(h))} • ${esc(h.archetype)}</span><span>${esc(conf.why)}${isBlindRank()?" • blind-pick model":" • "+DIRECT_MATCHUP_EDGE_COUNT+" direct signals"}</span></div></div>`}).join(""):`<div class="muted">No available owned heroes are available for ${esc(state.role)}. Add heroes under Roster or change role.</div>`;renderQuickDecision();if(!silent)setStatus(isBlindRank()?"Blind-pick recommendations analyzed from your roster and teammate composition.":"Draft analyzed with confidence-aware counters, synergy, and draft repair.")}
+function analyze(silent=false){const owned=new Set(acct().owned),blocked=new Set(isBlindRank()?visibleAllies().filter(Boolean):[...state.allies,...state.enemies,...state.bans].filter(Boolean)),issues=allyIssues(),enemy=enemyProfile(),pool=HEROES.filter(h=>owned.has(h.n)&&heroPlaysLane(h,state.role)&&!blocked.has(h.n)).map(h=>({h,b:scoreBreakdown(h)})).sort((a,b)=>b.b.total-a.b.total).slice(0,visibleRecommendationCount());let issueHtml="";const urgency=urgencyLevel();if(!isBlindRank()&&urgency==="emergency")issueHtml+=`<div class="urgent-banner">${timerRemaining}s left — emergency view: showing only the highest-ranked owned pick for ${esc(state.role)}.</div>`;else if(!isBlindRank()&&urgency==="commit")issueHtml+=`<div class="commit-banner">${timerRemaining}s left — commit view: shortlist reduced to the top 3.</div>`;if(isBlindRank())issueHtml+=`<div class="ok">${esc(state.rank)} Blind Pick: hidden enemies ignored. ${visibleAllies().filter(Boolean).length}/4 teammates known.</div>`;issueHtml+=issues.length?`<div class="issues">${issues.map(x=>`<span class="issue">${esc(isBlindRank()&&visibleAllies().filter(Boolean).length<4?"Potential: "+x:x)}</span>`).join("")}</div>`:`<div class="ok">No critical ally composition problem detected.</div>`;if(!isBlindRank()&&enemy.length)issueHtml+=`<div class="issues">${enemy.map(x=>`<span class="issue enemyissue">Enemy: ${esc(x)}</span>`).join("")}</div>`;if(!isBlindRank()){const directEnemies=state.enemies.filter(Boolean).filter(n=>directCountersOf(n).length||(STRONG_AGAINST[n]||[]).length);if(state.enemies.some(Boolean)&&!directEnemies.length)issueHtml+=`<div class="muted" style="margin-bottom:8px">No direct matchup record found for the entered enemy heroes; using composition logic.</div>`}$("teamIssues").innerHTML=issueHtml;renderDraftSummary();$("recommendations").innerHTML=pool.length?pool.map((x,i)=>{const h=x.h,b=x.b,tr=candidateTraits(h),type=pickType(h,b),conf=confidenceInfo(h,b);return `<div class="rec"><div class="rec-head"><div><span class="rank">#${i+1}</span> <strong>${esc(displayName(h))}</strong> <span class="pill tier${candidateTier(h)}">${candidateTier(h)}${isRoamFlex(h)?" Roam fit":""}</span><span class="pick-badge ${type.cls}">${esc(type.label)}</span></div><div><span class="confidence ${conf.cls}">${conf.level} confidence</span> <span class="score">${Math.round(b.total)}</span></div></div><div class="reason">${esc(reason(h,b))}</div><div class="breakdown"><div class="metric"><strong>${Math.round(b.soloPart+b.blindPart)}</strong><span>Solo/Carry</span></div><div class="metric"><strong>${Math.round(b.repairPart)}</strong><span>Team Repair</span></div><div class="metric"><strong>${isBlindRank()?"N/A":((b.match.score>=0?"+":"")+Math.round(b.match.score))}</strong><span>${isBlindRank()?"Enemy Hidden":"Matchup"}</span></div><div class="metric"><strong>+${Math.round(b.syn.score)}</strong><span>Synergy</span></div><div class="metric"><strong>${b.comfort.current!=null?"+"+Math.round(b.comfortPart):"—"}</strong><span>Account Power</span></div></div>${detailTags(h,b)}${i<3?renderBuildPreview(h):""}<div class="tags">${tr.slice(0,5).map(t=>`<span class="tag">${esc(t)}</span>`).join("")}</div><div class="statline"><span>${esc(laneLabel(h))} • ${esc(h.archetype)}</span><span>${esc(conf.why)}${isBlindRank()?" • blind-pick model":" • "+DIRECT_MATCHUP_EDGE_COUNT+" direct signals"}</span></div></div>`}).join(""):`<div class="muted">No available owned heroes are available for ${esc(state.role)}. Add heroes under Roster or change role.</div>`;renderQuickDecision();if(!silent)setStatus(isBlindRank()?"Blind-pick recommendations analyzed from your roster and teammate composition.":"Draft analyzed with confidence-aware counters, synergy, and draft repair.")}
 function hasDraftInput(){return isBlindRank()?visibleAllies().some(Boolean):[...state.allies,...state.enemies,...state.bans].some(Boolean)}
 function liveAnalyze(){if(isBlindRank()||hasDraftInput())analyze(true);else renderQuickDecision()}
 
@@ -979,4 +1470,4 @@ function wireExtensionMessages(){
   });
 }
 
-try{applyUiScale(initialUiScale());wireEvents();registerMobileLifecycle();save();renderAll();showTab("draft");setStatus("v0.17.1 ready • Clean Draft Layout + Quick Decision + manual Hero Power loaded.")}catch(err){console.error(err);setStatus("Error: "+err.message)}
+try{applyUiScale(initialUiScale());wireEvents();registerMobileLifecycle();save();renderAll();showTab("draft");setStatus("v0.17.3 ready • Roam-specific flex scoring and builds loaded.")}catch(err){console.error(err);setStatus("Error: "+err.message)}
