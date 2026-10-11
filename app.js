@@ -177,7 +177,7 @@ function activateAccount(id){
   save();
   const next=state.accounts.find(a=>a.id===id);if(!next)return;
   state.active=id;loadWorkspace(next);save();
-  picker={group:"allies",index:0};
+  picker={group:"allies",index:0};closeSlotEntry();
   timerRunning=false;if(timerHandle){clearInterval(timerHandle);timerHandle=null}draftPhase="pick";timerRemaining=PHASES.pick.seconds;
   renderAll();renderPower();
   setStatus("Switched to "+next.name+" • "+state.rank+". Roster, draft workspace and Hero Power data changed with the account.");
@@ -895,7 +895,7 @@ function wireEvents(){
   });
   $("slotEntryMatches").addEventListener("click",e=>{const b=e.target.closest("[data-slot-hero]");if(b)selectSlotHero(b.dataset.slotHero)});
   $("slotEntryClose").addEventListener("click",closeSlotEntry);
-  $("clearDraft").addEventListener("click",()=>{quickReset();state.allies=[null,null,null,null,null];state.enemies=[null,null,null,null,null];state.bans=[null,null,null,null,null];save();renderSlots();refreshSlotEntry();analyze(true);setStatus("Draft cleared. Safe blind picks are ready.")});
+  $("clearDraft").addEventListener("click",()=>{quickReset();closeSlotEntry();state.allies=[null,null,null,null,null];state.enemies=[null,null,null,null,null];state.bans=[null,null,null,null,null];save();renderSlots();refreshSlotEntry();analyze(true);setStatus("Draft cleared. Safe blind picks are ready.")});
   $("addAccount").addEventListener("click",()=>{const name=$("newAccountName").value.trim(),uid=$("newAccountUid").value.trim();if(!name){setStatus("Enter an account label first.");return}if(uid&&state.accounts.some(a=>a.uid===uid)){setStatus("That HoK UID is already assigned to another account.");return}save();const id="a"+Date.now();const fresh={id,name,uid,owned:[],heroPower:{},powerDetails:{},rankingTargets:{},extendedCaptures:[],diagnostics:[],syncHistory:[],workspace:{rank:"Platinum",role:"Clash Lane",allies:[null,null,null,null,null],enemies:[null,null,null,null,null],bans:[null,null,null,null,null]}};state.accounts.push(fresh);state.active=id;loadWorkspace(fresh);$("newAccountName").value="";$("newAccountUid").value="";save();renderAll();showTab("accounts");setStatus("Account created: "+name+(uid?" • UID "+uid:"")+" • Platinum workspace")});
   $("accountList").addEventListener("click",e=>{const use=e.target.closest(".account-use"),del=e.target.closest(".account-delete"),saveProfile=e.target.closest(".account-save-profile");if(use)activateAccount(use.dataset.id);if(del)deleteAccount(del.dataset.id);if(saveProfile){const row=e.target.closest("[data-account-row]");saveAccountProfile(saveProfile.dataset.id,row)}});
   $("exportBackup").addEventListener("click",exportBackup);
