@@ -45,7 +45,7 @@ test("each hero reverts to original tier, stats, and build outside Roam",()=>{
   for(const h of flex){
     api.state.role="Roam";
     const r=api.adaptiveBuild(h),tier=api.candidateTier(h),stats=api.candidateStats(h);
-    assert.deepEqual(Array.from(stats),api.ROAM_PROFILES[h.n].stats,h.n);
+    assert.deepEqual(Array.from(stats),Array.from(api.ROAM_PROFILES[h.n].stats),h.n);
     assert.equal(tier,api.ROAM_PROFILES[h.n].tier);
     api.state.role=h.lane;
     const normal=api.adaptiveBuild(h);
