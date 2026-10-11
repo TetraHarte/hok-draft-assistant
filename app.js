@@ -975,4 +975,4 @@ function wireExtensionMessages(){
   });
 }
 
-try{applyUiScale(initialUiScale());wireEvents();registerMobileLifecycle();save();renderAll();showTab("draft");setStatus("v0.16.2 ready • Gold Blind Pick Quick Decision + 30s clock + manual Hero Power loaded.")}catch(err){console.error(err);setStatus("Error: "+err.message)}
+try{applyUiScale(initialUiScale());wireEvents();registerMobileLifecycle();save();renderAll();showTab("draft");setStatus("v0.17.1 ready • Clean Draft Layout + Quick Decision + manual Hero Power loaded.")}catch(err){console.error(err);setStatus("Error: "+err.message)}
