@@ -1,6 +1,18 @@
-# HoK Solo Draft Assistant v0.17.3 — Role-Aware Roam Builds
+# HoK Solo Draft Assistant v0.17.4 — Wang Wei Roster Addition
 
 Free browser-based draft assistant for Honor of Kings (HoK), with a separate Mobile Legends: Bang Bang (MLBB) workspace. Runs as a desktop web app or an installable iPhone PWA.
+
+## Changes in v0.17.4
+
+- Added **Wang Wei** (Mist Sage / 王维), released on the Honor of Kings Global server on **October 8, 2026**, as the **119th** HoK hero.
+- Registered as **Mid Lane • Control Mage**, using the existing control-mage trait, composition analysis, and baseline mage build logic. His ultimate provides mist-based traversal and map-wide rotation potential; this is **not** a secondary Roam role assignment.
+- Set a **provisional B-tier** drafting baseline, pending real matchup and post-release performance data. No unverified direct counters, individual synergies, or role-specific win rates were invented.
+- Added searchable aliases: `Mist Sage`, `Wangwei`, `王维`, `王維`. Existing accounts can mark Wang Wei as owned under **Roster** to include him in draft recommendations; optional Hero Power remains account-specific.
+- Preserved all 118 previous hero records, previous recommendations/builds, MLBB files, and saved-account schema. Updated the PWA asset version and service-worker cache to **v0.17.4**.
+
+**Release reference:** [Honor of Kings official Season 16 patch note mirror](https://playaware.gg/games/honor-of-kings/wiki/article/9-23-season-16-flow-as-one-patch-notes) · [Liquipedia Wang Wei hero details](https://liquipedia.net/honorofkings/Wang_Wei)
+
+**Regression test:** `node tests/wang-wei-roster.test.cjs`.
 
 ## Changes in v0.17.3
 
