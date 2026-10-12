@@ -1,6 +1,16 @@
-# HoK Solo Draft Assistant v0.17.4 — Wang Wei Roster Addition
+# HoK Solo Draft Assistant v0.17.5 — Multi-Lane Roster Expansion
 
 Free browser-based draft assistant for Honor of Kings (HoK), with a separate Mobile Legends: Bang Bang (MLBB) workspace. Runs as a desktop web app or an installable iPhone PWA.
+
+## Changes in v0.17.5 — Secondary and tertiary lanes
+
+- Added **31 assignments across 30 existing heroes** to the Global roster. Now **42 of 119 heroes have multiple eligible roles** (46 secondary/tertiary lane entries). Example: **Chicha — Clash/Jungle/Farm**; **Diaochan — Mid/Clash**.
+- Existing 15 secondary Roam entries, Roam-specific scoring/builds, all single-lane primaries and existing account data are preserved.
+- Non-Roam flex draft scoring and tiers are deliberately **conservative/provisional**. Their role-based confidence is capped at Medium; off-role primary S/A ratings are capped at B pending matchup evidence. A flex pick is *eligible*, not automatically meta-optimal.
+- Flex preview uses a **provisional role-appropriate six-item template** rather than a mismatched primary preset: Jungle includes a jungle item and Smite; Chicha's Farm and all secondary Clash/Mid entries have positional fallback loadouts. Actual hero-specific builds should be developed and verified separately.
+- No account-save schema changes, no Hero Power resets and no MLBB changes. The v0.17.5 service-worker cache forces a clean PWA refresh.
+- Sources: [HoKStats Global heroes/positions](https://hokstats.gg/heroes/), [Liquipedia Chicha](https://liquipedia.net/honorofkings/Chicha), [Liquipedia Diaochan](https://liquipedia.net/honorofkings/Diaochan_%28Honor_of_Kings%29), [Liquipedia Da Qiao](https://liquipedia.net/honorofkings/Da_Qiao), [Liquipedia Lapulapu](https://liquipedia.net/honorofkings/Lapulapu). These describe documented role eligibility, not verified position-specific win rates. The less conventional flexes still need playtesting.
+- Regression: `node tests/flex-lanes.test.cjs`.
 
 ## Changes in v0.17.4
 
