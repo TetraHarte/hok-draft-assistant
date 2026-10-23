@@ -1351,7 +1351,7 @@ function quickCandidates(pool){
   const result=[],add=(x,label)=>{if(x&&!result.some(v=>v.h.n===x.h.n))result.push({...x,label})};
   const preferred=pool.find(x=>x.safety.status!=="conditional")||pool[0];
   add(preferred,preferred.safety.status==="conditional"?"UNVERIFIED SUPPORT":"BEST NOW");
-  const issue=allyIssues(),needsTank=issue.some(t=>/frontline|Fragile|peel|engage/.test(t));
+  const issue=allyIssues(),needsTank=issue.some(t=>t==="No frontline"||t==="Fragile composition");
   if(state.role==="Roam"&&currentIntent()==="normal"&&visibleAllies().filter(Boolean).length===4&&!needsTank){
     const alt=pool.find(x=>!candidateTraits(x.h).includes("frontline")&&x.safety.status==="conditional");
     add(alt,"UNVERIFIED SUPPORT");
