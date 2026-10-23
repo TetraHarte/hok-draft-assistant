@@ -1,6 +1,6 @@
-/* v0.17.5 multi-game offline shell. HoK draft logic lives untouched in app.js. */
-const CACHE="solo-draft-v0175-flex-lanes";
-const APP_SHELL=["./","./index.html","./app.js?v=0175-flex-lanes","./game-switch.js","./game-switch.css","./manifest.webmanifest","./icons/icon-180.png","./icons/icon-192.png","./icons/icon-512.png","./mlbb/index.html"];
+/* v0.18.0 multi-game offline shell: draft safety and Oct 21 patch. */
+const CACHE="solo-draft-v0180-dunshan";
+const APP_SHELL=["./","./index.html","./draft-safety.js?v=0180-dunshan","./app.js?v=0180-dunshan","./game-switch.js","./game-switch.css","./manifest.webmanifest","./icons/icon-180.png","./icons/icon-192.png","./icons/icon-512.png","./mlbb/index.html"];
 self.addEventListener("install",event=>{event.waitUntil(caches.open(CACHE).then(c=>c.addAll(APP_SHELL)).then(()=>self.skipWaiting()))});
 self.addEventListener("activate",event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith("hok-draft-")||k.startsWith("solo-draft-")).filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",event=>{
@@ -11,7 +11,7 @@ self.addEventListener("fetch",event=>{
   return;
  }
  // Load core scripts and styles from the network first; keep an offline copy as fallback.
- if(url.pathname.endsWith("/app.js")||url.pathname.endsWith("/game-switch.js")||url.pathname.endsWith("/game-switch.css")){
+ if(url.pathname.endsWith("/draft-safety.js")||url.pathname.endsWith("/app.js")||url.pathname.endsWith("/game-switch.js")||url.pathname.endsWith("/game-switch.css")){
    event.respondWith((async()=>{
      try{
        const response=await fetch(event.request);
