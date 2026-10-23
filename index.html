@@ -291,6 +291,12 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
 </div>
 
 <section id="draftTab">
+<div class="panel"><div class="section-title"><span>Draft Objective</span><span class="muted">Saved separately by account</span></div>
+<label for="matchIntent">Recommendation intent</label><select id="matchIntent">
+<option value="ranked">Competitive / Ranked — only validated non-tank Roam auto-picks</option>
+<option value="normal">Normal Match / Learning — show conditional hero alternatives</option>
+</select><div class="source-note">Conditional non-tank Roam picks are for manual evaluation, not guaranteed safe. The safety model has not achieved a measured 99% accuracy rate.</div>
+</div>
 <div class="panel"><div class="grid">
 <div><label>Account</label><select id="accountSelect"></select></div>
 <div><label>Your role</label><select id="roleSelect"><option>Clash Lane</option><option>Jungle</option><option>Mid Lane</option><option>Farm Lane</option><option>Roam</option></select></div>
@@ -335,9 +341,19 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
   <div class="quick-matches" id="quickAllyMatches"></div>
 </div>
 <div class="panel"><div class="section-title"><span>Solo Queue Recommendations</span><button type="button" class="btn primary" id="analyzeBtn">Analyze</button></div><div id="teamIssues"></div><div id="draftSummary"></div><div id="recommendations"><div class="muted">Recommendations update automatically as teammate selections change.</div></div><div class="source-note">Gold/Platinum Blind Pick intentionally ignores hidden enemy draft data. Diamond–Grandmaster uses direct matchup signals. Hero Power remains a capped comfort signal. Build previews are draft-aware heuristics and should be adapted to the actual match.</div></div>
+<div class="panel"><div class="section-title"><span>Explore every owned hero</span><span class="muted">Eligible for selected role</span></div>
+<label for="heroExplorer">Inspect any available owned hero, including those below the top five</label>
+<select id="heroExplorer"></select><div id="heroExplorerResult" class="source-note" aria-live="polite"></div></div>
+<div class="panel"><details><summary><strong>October 21, 2026 patch review</strong> · New hero and seven balance changes</summary>
+<div class="source-note">New: <strong>Dunshan</strong> (Roam, tank/support). Provisional profile: projectile-blocking shield, enemy displacement and tower protection.</div>
+<div class="source-note">Buffed: <strong>Sun Ce, Yuhuan, Lady Sun, Arke.</strong> Reassess role strength, carry support, and dive threats.</div>
+<div class="source-note">Adjusted: <strong>Zilong, Lian Po, Dun.</strong> Reassess their damage, durability and reliability as frontline or Jungle picks.</div>
+<div class="source-note">No automatic tier promotion or numerical win-rate claims until post-patch data is validated. Cosmetic and event updates do not affect the draft model.</div>
+<div class="source-note"><a href="https://www.honorofkings.com/global-en/news-detail.html?content_id=aca43154a906da4284abe1ea47fe9521f856&amp;father_content_id=aca43154a906da4284abe1ea47fe9521f856&amp;sid=576" target="_blank" rel="noopener noreferrer">Official October 21 update announcement</a></div>
+</details></div>
 </section>
 
-<section id="rosterTab" class="hidden"><div class="panel"><div class="section-title"><span>Owned Heroes</span><span class="muted"><span id="ownedCount"></span> / 118</span></div><input id="rosterSearch" type="text" placeholder="Search hero, alias, lane or archetype..."/><div class="modebar" id="rosterFilters"></div><div class="hero-list" id="rosterList"></div></div></section>
+<section id="rosterTab" class="hidden"><div class="panel"><div class="section-title"><span>Owned Heroes</span><span class="muted"><span id="ownedCount"></span> / 120</span></div><input id="rosterSearch" type="text" placeholder="Search hero, alias, lane or archetype..."/><div class="modebar" id="rosterFilters"></div><div class="hero-list" id="rosterList"></div></div></section>
 
 <section id="powerTab" class="hidden">
 <div class="panel">
@@ -410,8 +426,9 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
   </div>
   <div class="account-note" id="backupStatus">Automatic pre-migration and last-known-good snapshots are kept locally when possible.</div>
 </div></div></section>
-<div class="footer">v0.17.5 • desktop web + iPhone PWA • manual Hero Power • $0.</div>
+<div class="footer">v0.18.0 (review preview) • desktop web + iPhone PWA • manual Hero Power • $0.</div>
 </div>
 
-<script src="./app.js?v=0175-flex-lanes"></script>
+<script src="./draft-safety.js?v=0180-dunshan"></script>
+<script src="./app.js?v=0180-dunshan"></script>
 </body></html>
