@@ -293,9 +293,9 @@ button,.btn,.tab,.mode,.hero,.quick-account,.roster-hero{touch-action:manipulati
 <section id="draftTab">
 <div class="panel"><div class="section-title"><span>Draft Objective</span><span class="muted">Saved separately by account</span></div>
 <label for="matchIntent">Recommendation intent</label><select id="matchIntent">
-<option value="ranked">Competitive / Ranked — only validated non-tank Roam auto-picks</option>
-<option value="normal">Normal Match / Learning — show conditional hero alternatives</option>
-</select><div class="source-note">Conditional non-tank Roam picks are for manual evaluation, not guaranteed safe. The safety model has not achieved a measured 99% accuracy rate.</div>
+<option value="ranked">Competitive / Ranked — cautious composition-fit recommendations</option>
+<option value="normal">Normal Match / Learning — consider more playable hero alternatives</option>
+</select><div class="source-note">Non-tank Roam picks require lane coverage, frontline, crowd-control, damage, protection, and matchup screening. Enemy-hidden recommendations are labeled and cannot guarantee a win.</div>
 </div>
 <div class="panel"><div class="grid">
 <div><label>Account</label><select id="accountSelect"></select></div>
