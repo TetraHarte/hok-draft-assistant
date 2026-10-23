@@ -52,19 +52,19 @@ test("Reject a two-Clash composition without a documented Jungler",()=>{
  assert.match(a.safetyFor(a.hero("Mozi")).reasons.join(" "),/cannot fill/i);
  assert.ok(!a.recommendationPool().some(x=>x.h.n==="Mozi"));
 });
-test("Valid four primary lanes permit conditional Normal exploration, never unvalidated Ranked approval",()=>{
+test("Valid four primary lanes can support a cautious non-tank Roam option in both modes",()=>{
  setup({allies:standard});
  const result=a.safetyFor(a.hero("Mozi"));
  assert.equal(result.role.status,"primary");
- assert.equal(result.status,"conditional");
+ assert.equal(result.status,"ally-compatible");
  assert.match(result.reasons.join(" "),/hidden/i);
- assert.equal(a.confidenceInfo(a.hero("Mozi"),a.scoreBreakdown(a.hero("Mozi"))).level,"Low");
- assert.ok(!a.recommendationPool().some(x=>x.h.n==="Mozi"));
+ assert.equal(a.confidenceInfo(a.hero("Mozi"),a.scoreBreakdown(a.hero("Mozi"))).level,"Medium");
+ assert.ok(a.recommendationPool().some(x=>x.h.n==="Mozi"));
  assert.ok(a.eligibleOwnedPool().some(x=>x.h.n==="Mozi"));
  assert.ok(a.recommendationPool().some(x=>x.h.n==="Dunshan"));
  a.state.accounts[0].draftIntent="normal";
  assert.ok(a.recommendationPool().some(x=>x.h.n==="Mozi"));
- assert.ok(a.quickCandidates(a.quickPool()).some(x=>x.label==="UNVERIFIED SUPPORT"));
+ assert.ok(a.quickCandidates(a.quickPool()).some(x=>x.label==="ALLY FIT · ENEMY UNKNOWN"));
  assert.ok(a.quickCandidates(a.quickPool())[0].label==="BEST NOW");
 });
 test("Flex-only lane coverage is manual review rather than automatic approval",()=>{
@@ -92,19 +92,25 @@ test("Refuse non-tank Roam if no frontline anchor or opponent dive is extreme",(
  setup({intent:"normal",rank:"Diamond",allies:standard,enemies:["Jing","Lam","Angela","Di Renjie","Liu Bang"]});
  assert.equal(a.safetyFor(a.hero("Mozi")).status,"rejected");
 });
-test("Six candidate support styles are individually inspectable with adequate primary-lane CC",()=>{
+test("All six support styles remain eligible when primary-lane structure supports them",()=>{
  setup({intent:"normal",allies:protector});
  for(const hero of ["Flowborn (Roamer)","Mozi","Shi","Wang Zhaojun","Yuhuan","Liang"]){
-   assert.equal(a.safetyFor(a.hero(hero)).status,"conditional",hero);
+   assert.equal(a.safetyFor(a.hero(hero)).status,"ally-compatible",hero);
    assert.ok(a.eligibleOwnedPool().some(x=>x.h.n===hero),hero+" available for evaluation");
  }
 });
-test("Blind pick never uses unseen enemies; complete Diamond draft still has no fake approval",()=>{
- setup({intent:"normal",allies:standard,enemies:["Jing","Lam","Angela","Di Renjie","Liu Bang"]});
- assert.equal(a.safetyFor(a.hero("Mozi")).status,"conditional");
+test("Blind enemy information stays unknown; complete favorable draft supports a conditional-strength recommendation",()=>{
+ setup({intent:"ranked",allies:standard,enemies:["Jing","Lam","Angela","Di Renjie","Liu Bang"]});
+ assert.equal(a.safetyFor(a.hero("Mozi")).status,"ally-compatible");
  a.state.rank="Diamond";
- assert.notEqual(a.safetyFor(a.hero("Mozi")).status,"approved");
- assert.equal(context.window.HOKDraftSafety.REVIEWED_MODEL,false);
+ assert.equal(a.safetyFor(a.hero("Mozi")).status,"rejected");
+ assert.ok(!a.recommendationPool().some(x=>x.h.n==="Mozi"));
+ setup({intent:"ranked",rank:"Diamond",allies:standard,enemies:["Daji","Arthur","Di Renjie","Butterfly","Zhang Fei"]});
+ assert.equal(a.safetyFor(a.hero("Mozi")).status,"recommended");
+ assert.ok(a.recommendationPool().some(x=>x.h.n==="Mozi"));
+ setup({intent:"ranked",rank:"Diamond",allies:standard,enemies:["Daji","Arthur"]});
+ assert.equal(a.safetyFor(a.hero("Mozi")).status,"conditional");
+ assert.ok(!a.recommendationPool().some(x=>x.h.n==="Mozi"));
 });
 test("Normal and Ranked preferences, ownership and power remain account-isolated",()=>{
  setup({intent:"normal",allies:standard,owned:["Dun","Mozi"]});
