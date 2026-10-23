@@ -6,6 +6,7 @@ const path=require("node:path");
 const vm=require("node:vm");
 
 const source=fs.readFileSync(path.join(__dirname,"..","app.js"),"utf8");
+const safety=fs.readFileSync(path.join(__dirname,"..","draft-safety.js"),"utf8");
 const bootstrap=source.lastIndexOf("\ntry{applyUiScale(initialUiScale());wireEvents();");
 assert.ok(bootstrap>0,"Expected recognizable browser bootstrap");
 const context={
@@ -15,17 +16,18 @@ const context={
   structuredClone:(value)=>JSON.parse(JSON.stringify(value))
 };
 vm.createContext(context);
+vm.runInContext(safety,context);
 vm.runInContext(source.slice(0,bootstrap)+
-  "\nglobalThis.hokTest={HEROES,ROAM_PROFILES,ROAM_BUILDS,state,heroPlaysLane,candidateStats,candidateTraits,candidateTier,tierForLane,adaptiveBuild,scoreBreakdown,quickPool};",context);
+  "\nglobalThis.hokTest={HEROES,ROAM_PROFILES,ROAM_BUILDS,state,heroPlaysLane,candidateStats,candidateTraits,candidateTier,tierForLane,adaptiveBuild,scoreBreakdown,quickPool,eligibleOwnedPool};",context);
 const api=context.hokTest,heroes=api.HEROES;
 const flex=heroes.filter(h=>h.secondaryLanes?.includes("Roam"));
 const byName=name=>{const h=heroes.find(x=>x.n===name);assert.ok(h,name+" must exist");return h};
 
-test("exactly 15 secondary Roam profiles and 32 eligible Roam heroes",()=>{
+test("exactly 15 secondary Roam profiles and 33 eligible Roam heroes including Dunshan",()=>{
   assert.equal(flex.length,15);
   assert.equal(Object.keys(api.ROAM_PROFILES).length,15);
   assert.equal(Object.keys(api.ROAM_BUILDS).length,15);
-  assert.equal(heroes.filter(h=>api.heroPlaysLane(h,"Roam")).length,32);
+  assert.equal(heroes.filter(h=>api.heroPlaysLane(h,"Roam")).length,33);
   assert.ok(flex.every(h=>h.lane!=="Roam"&&api.ROAM_PROFILES[h.n]&&api.ROAM_BUILDS[h.n]));
 });
 
@@ -59,9 +61,11 @@ test("blind-pick shortlist respects owned heroes and eligible Roam role",()=>{
   api.state.role="Roam";
   api.state.enemies=[null,null,null,null,null];
   api.state.accounts[0].owned=flex.map(h=>h.n);
-  assert.equal(api.quickPool().length,15);
+  assert.equal(api.eligibleOwnedPool().length,15);
+  assert.ok(api.quickPool().length<15,"Unvalidated non-tank Roamers must not enter automatic Ranked picks");
   api.state.accounts[0].owned=["Mozi","Dun"];
-  assert.equal(api.quickPool().length,2);
+  assert.equal(api.eligibleOwnedPool().length,2);
+  assert.deepEqual(Array.from(api.quickPool().map(x=>x.h.n)),["Dun"]);
 });
 
 test("Diamond+ signals choose anti-heal, frontline and anti-burst alternatives",()=>{
