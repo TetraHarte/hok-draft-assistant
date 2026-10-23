@@ -51,6 +51,7 @@ function safety(candidate,allies,enemies,{blind=false,validated=false,hardCounte
  if(aa.length===4&&!enoughEngage){reasons.push("No reliable ally initiation; this Roamer does not solve it.");critical=true}
  if(aa.length===4&&!enoughControl){reasons.push("Insufficient reliable crowd control.");critical=true}
  if(aa.length===4&&!enoughDamage){reasons.push("Allied damage profile needs review before removing a frontline slot.");critical=true}
+ if(aa.length===4&&protectedCarries>=2&&!enoughPeel){reasons.push("Vulnerable carries lack sufficient peel.");critical=true}
  if(aa.length>=3&&dive>=2&&!enoughPeel&&protectedCarries>=2){reasons.push("Enemy dive threatens carries without reliable peel.");critical=true}
  if(hardCounter){reasons.push("Visible enemy counter warning requires matchup review.");critical=true}
  if(critical)return{status:"rejected",reasons,complete,frontline,anchor,dive};
