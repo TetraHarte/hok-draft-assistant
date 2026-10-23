@@ -1,7 +1,6 @@
-/* v0.18.0: conservative draft-safety screen, NOT a statistically validated win predictor. */
+/* v0.18.0: draft compatibility screen, not a win predictor. */
 (function(root){
 "use strict";
-const REVIEWED_MODEL=false;
 const ROLES=["Clash Lane","Jungle","Mid Lane","Farm Lane"];
 const ANCHORS=new Set(["Dun","Lian Po","Ata","Flowborn (Tank)","Bai Qi","Xiang Yu","Liu Bang","Zhang Fei","Dunshan"]);
 const KNOWN_DIVE=new Set(["Lam","Jing","Han Xin","Butterfly","Nakoruru","Wukong","Arke","Sima Yi","Gao Changgong","Li Bai","Zilong"]);
@@ -41,7 +40,7 @@ function roleCoverage(allies){
  const best=[...solutions].sort((x,y)=>y.filter(e=>e.primary).length-x.filter(e=>e.primary).length)[0];
  return{status:"flex-unconfirmed",reason:"Lane coverage depends on unconfirmed flex-role assignments: "+best.filter(e=>!e.primary).map(e=>e.name+" → "+e.lane).join(", ")+".",assignments:best};
 }
-function safety(candidate,allies,enemies,{blind=false,validated=false,hardCounter=false}={}){
+function safety(candidate,allies,enemies,{blind=false,hardCounter=false}={}){
  const cs=candidate?.traits||[];
  if(cs.includes("frontline"))return{status:"frontline",reasons:["Frontline Roamer; ordinary draft ranking applies (not a win guarantee)."],complete:false};
  const aa=(allies||[]).filter(Boolean),ee=blind?[]:(enemies||[]).filter(Boolean);
@@ -73,8 +72,10 @@ function safety(candidate,allies,enemies,{blind=false,validated=false,hardCounte
  if(blind)reasons.push("Enemy composition is hidden; only ally structure can be screened.");
  else if(ee.length<5)reasons.push("Enemy lineup incomplete ("+ee.length+"/5). Counter exposure unknown.");
  else reasons.push("Enemy champions are visible, but hero-specific matchup data remain provisional.");
- if(!REVIEWED_MODEL||!validated)reasons.push("Unvalidated heuristic: no 99% safety claim or win-rate guarantee.");
- return{...info,status:complete&&anchor>=2&&REVIEWED_MODEL&&validated?"approved":"conditional"};
+ reasons.push("Composition screening is advisory and cannot guarantee match outcomes.");
+ if(blind)return{...info,status:"ally-compatible"};
+ if(!complete)return{...info,status:"conditional"};
+ return{...info,status:"recommended"};
 }
-root.HOKDraftSafety=Object.freeze({safety,roleCoverage,PATCH,PATCH_DATE,OFFICIAL_SOURCE,REVIEWED_MODEL});
+root.HOKDraftSafety=Object.freeze({safety,roleCoverage,PATCH,PATCH_DATE,OFFICIAL_SOURCE});
 })(typeof window!=="undefined"?window:globalThis);
