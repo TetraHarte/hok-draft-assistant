@@ -5,7 +5,7 @@
 (function(root){
 "use strict";
 const REVIEWED_MODEL=false; // Do not enable based on hand-written tests alone.
-const ANCHORS=new Set(["Dun","Lian Po","Ata","Flowborn (Tank)","Bai Qi","Xiang Yu","Liu Bang","Kaizer","Zhang Fei","Dunshan","Arthur","Zhuangzi"]);
+const ANCHORS=new Set(["Dun","Lian Po","Ata","Flowborn (Tank)","Bai Qi","Xiang Yu","Liu Bang","Zhang Fei","Dunshan"]);
 const KNOWN_DIVE=new Set(["Lam","Jing","Han Xin","Butterfly","Nakoruru","Wukong","Arke","Sima Yi","Prince of Lanling","Gao Changgong","Li Bai","Zilong"]);
 const PATCH_DATE="2026-10-21";
 const OFFICIAL_SOURCE="https://www.honorofkings.com/global-en/news-detail.html?content_id=aca43154a906da4284abe1ea47fe9521f856&father_content_id=aca43154a906da4284abe1ea47fe9521f856&sid=576";
