@@ -1273,7 +1273,7 @@ function renderBuildPreview(h){
 }
 function scoreBreakdown(h){const [solo,carry,ease]=candidateStats(h),w=RANK_WEIGHT[state.rank],issues=allyIssues(),enemy=enemyProfile(),match=matchupInfo(h),syn=synergyInfo(h),comfort=heroPowerComfort(h);const soloPart=solo*w.solo+carry*w.carry+ease*w.ease;const known=visibleAllies().filter(Boolean).length;
 const repairTrust=isBlindRank()?(known<3?0:known===3?.55:1):1;
-const repairPart=fitScore(h,issues,enemy)*w.fit*repairTrust;const metaPart=TIER_SCORE[candidateTier(h)]*w.meta;const blindPart=blindPickBonus(h);const comfortPart=comfort.score;const total=soloPart+repairPart+metaPart+match.score+syn.score+blindPart+comfortPart;return{total,soloPart,repairPart,metaPart,blindPart,comfortPart,comfort,match,syn}}
+const repairPart=fitScore(h,issues,enemy)*w.fit*repairTrust;const metaPart=TIER_SCORE[candidateTier(h)]*w.meta;const blindPart=blindPickBonus(h);const comfortPart=comfort.score;const patchPart=({"Sun Ce":2,"Yuhuan":2,"Lady Sun":2,"Arke":2,"Zilong":-1,"Lian Po":-1,"Dun":-1}[h.n]||0);const total=soloPart+repairPart+metaPart+match.score+syn.score+blindPart+comfortPart+patchPart;return{total,patchPart,soloPart,repairPart,metaPart,blindPart,comfortPart,comfort,match,syn}}
 function scoreHero(h){return scoreBreakdown(h).total}
 
 // The shortlist is available from the first second: a primary pick and different
