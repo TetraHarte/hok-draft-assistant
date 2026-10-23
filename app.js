@@ -1306,15 +1306,15 @@ function eligibleOwnedPool(){
     .sort((a,b)=>b.b.total-a.b.total);
 }
 function recommendationPool(){
-  const normal=currentIntent()==="normal",known=visibleAllies().filter(Boolean).length;
-  return eligibleOwnedPool().filter(x=>{
-    if(state.role!=="Roam")return true;
-    if(x.safety.status==="frontline"||x.safety.status==="approved")return true;
-    return normal&&known===4&&x.safety.status==="conditional";
-  }).sort((a,b)=>{
-    const score=x=>x.b.total-(x.safety.status==="conditional"?14:0);
-    return score(b)-score(a);
-  });
+ const normal=currentIntent()==="normal";
+ return eligibleOwnedPool().filter(x=>{
+  if(state.role!=="Roam")return true;
+  if(["frontline","recommended","ally-compatible"].includes(x.safety.status))return true;
+  return normal&&x.safety.status==="conditional";
+ }).sort((a,b)=>{
+  const score=x=>x.b.total-({"ally-compatible":12,"recommended":5,"conditional":18}[x.safety.status]||0);
+  return score(b)-score(a);
+ });
 }
 function quickPool(){return recommendationPool();}
 function safetyNotice(h){
@@ -1339,27 +1339,28 @@ function renderHeroExplorer(){
   select.value=exploreHeroName;
   const x=all.find(a=>a.h.n===exploreHeroName);
   const v=x.safety,score=Math.round(x.b.total);
-  const verdict=state.role==="Roam"?(v.status==="frontline"?"Standard frontline evaluation":v.status==="rejected"?"REJECTED — composition not supported":v.status==="conditional"?"CONDITIONAL — Normal only, unvalidated":v.status==="insufficient"?"INSUFFICIENT — more teammates needed":v.status==="manual-review"?"MANUAL REVIEW — teammate flex lane unconfirmed":v.status==="approved"?"VALIDATED APPROVAL":"Not assessed"):"No Roam safety gate required";
+  const verdict=state.role==="Roam"?(v.status==="frontline"?"Standard frontline evaluation":v.status==="rejected"?"REJECTED — composition not supported":v.status==="conditional"?"CONDITIONAL — enemy information incomplete":v.status==="insufficient"?"INSUFFICIENT — more teammates needed":v.status==="manual-review"?"MANUAL REVIEW — teammate flex lane unconfirmed":v.status==="recommended"?"DRAFT-COMPATIBLE — no guarantee":v.status==="ally-compatible"?"ALLY-COMPATIBLE — enemies hidden":"Not assessed"):"No Roam safety gate required";
   const reasons=v.reasons?.length?v.reasons.join(" "):"This hero is eligible for the selected lane.";
   root.innerHTML='<strong>'+esc(displayName(x.h))+'</strong> · '+esc(laneLabel(x.h))+' · Draft score '+score+
     '<div class="recommendation-label">'+esc(verdict)+'</div><div class="muted">'+esc(reasons)+'</div>'+
-    (x.safety.status!=="frontline"&&state.role==="Roam"?'<div class="muted">Available for manual inspection, not a verified Ranked or win-rate guarantee. Teammate lane assignment is inferred, not confirmed.</div>':"")+
+    (x.safety.status!=="frontline"&&state.role==="Roam"?'<div class="muted">Draft suitability is advisory, not a win-rate guarantee. Teammate lanes are inferred, not confirmed.</div>':"")+
     patchNotice(x.h);
 }
 function quickCandidates(pool){
-  if(!pool.length)return[];
-  const result=[],add=(x,label)=>{if(x&&!result.some(v=>v.h.n===x.h.n))result.push({...x,label})};
-  const preferred=pool.find(x=>x.safety.status!=="conditional")||pool[0];
-  add(preferred,preferred.safety.status==="conditional"?"UNVERIFIED SUPPORT":"BEST NOW");
-  const issue=allyIssues(),needsTank=issue.some(t=>t==="No frontline"||t==="Fragile composition");
-  if(state.role==="Roam"&&currentIntent()==="normal"&&visibleAllies().filter(Boolean).length===4&&!needsTank){
-    const alt=pool.find(x=>!candidateTraits(x.h).includes("frontline")&&x.safety.status==="conditional");
-    add(alt,"UNVERIFIED SUPPORT");
-  }
-  if(needsTank||result.length<2)add(pool.find(x=>!result.some(y=>y.h.n===x.h.n)&&candidateTraits(x.h).includes("frontline")),"FRONTLINE OPTION");
-  add(pool.find(x=>!result.some(y=>y.h.n===x.h.n)&&candidateTraits(x.h).some(t=>["damage","burst","dps","duelist"].includes(t))),"DAMAGE OPTION");
-  for(const x of pool)if(result.length<3)add(x,"ALTERNATIVE");
-  return result.slice(0,3);
+ if(!pool.length)return[];
+ const result=[],add=(x,label)=>{if(x&&!result.some(v=>v.h.n===x.h.n))result.push({...x,label})};
+ const first=pool.find(x=>x.safety.status!=="conditional")||pool[0];
+ const label=x=>x.safety.status==="recommended"?"DRAFT FIT":x.safety.status==="ally-compatible"?"ALLY FIT · ENEMY UNKNOWN":x.safety.status==="conditional"?"CONDITIONAL · REVIEW":"BEST NOW";
+ add(first,label(first));
+ if(state.role==="Roam"){
+  const alternative=pool.find(x=>!candidateTraits(x.h).includes("frontline")&&["recommended","ally-compatible","conditional"].includes(x.safety.status));
+  if(alternative)add(alternative,label(alternative));
+ }
+ const needsTank=allyIssues().some(t=>t==="No frontline"||t==="Fragile composition");
+ if(needsTank||result.length<2)add(pool.find(x=>!result.some(y=>y.h.n===x.h.n)&&candidateTraits(x.h).includes("frontline")),"FRONTLINE OPTION");
+ add(pool.find(x=>!result.some(y=>y.h.n===x.h.n)&&candidateTraits(x.h).some(t=>["damage","burst","dps","duelist"].includes(t))),"DAMAGE OPTION");
+ for(const x of pool)if(result.length<3)add(x,"ALTERNATIVE");
+ return result.slice(0,3);
 }
 function displayedQuickCandidates(){
   const pool=quickPool(),current=quickCandidates(pool);
@@ -1407,15 +1408,19 @@ function quickAddAlly(name){
  state.allies[i]=name;picker={group:"allies",index:Math.min(3,i+1)};$("quickAllyInput").value="";$("quickAllyMatches").innerHTML="";
  save();renderSlots();refreshSlotEntry();liveAnalyze();setStatus(displayName(hero(name))+" recorded as teammate "+(i+1));
 }
-function confidenceInfo(h,b){const allies=visibleAllies().filter(Boolean).length,enemies=isBlindRank()?0:state.enemies.filter(Boolean).length,total=allies+enemies;let level="Low",why=isBlindRank()?"Limited teammate information":"Sparse draft information";if(isBlindRank()){if(allies>=3){level="High";why="Most teammate choices visible"}else if(allies>=1){level="Medium";why="Partial teammate composition"}}else if((b.match.evidence>=1&&total>=4)||total>=7){level="High";why=b.match.evidence?"Direct matchup evidence + developed draft":"Developed team compositions"}else if(total>=3||b.match.evidence>=1){level="Medium";why=b.match.evidence?"Some direct matchup evidence":"Partial composition information"}if(isNonRoamFlex(h)){if(level==="High")level="Medium";why="Flex-role matchups and scoring are provisional"}if(state.role==="Roam"&&!candidateTraits(h).includes("frontline")){const v=safetyFor(h);if(v.status!=="approved"){level="Low";why="Non-tank Roam is not validated for high-confidence automatic drafting"}}return{level,why,cls:level.toLowerCase()}}
-function pickType(h,b){if(state.role==="Roam"){const safety=safetyFor(h);if(safety.status!=="frontline"&&safety.status!=="approved")return{label:"Conditional — not verified",cls:"risk"}}const [solo,carry,ease]=candidateStats(h);if(isBlindRank()){if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced blind pick",cls:"safe"}}if(b.match.laneDanger.length)return{label:"Risky countered pick",cls:"risk"};if(b.match.laneStrong.length||b.match.strong.length>=2)return{label:"Counterpick",cls:"counter"};if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(state.enemies.filter(Boolean).length<=1&&solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced pick",cls:"safe"}}
+function confidenceInfo(h,b){const allies=visibleAllies().filter(Boolean).length,enemies=isBlindRank()?0:state.enemies.filter(Boolean).length,total=allies+enemies;let level="Low",why=isBlindRank()?"Limited teammate information":"Sparse draft information";if(isBlindRank()){if(allies>=3){level="High";why="Most teammate choices visible"}else if(allies>=1){level="Medium";why="Partial teammate composition"}}else if((b.match.evidence>=1&&total>=4)||total>=7){level="High";why=b.match.evidence?"Direct matchup evidence + developed draft":"Developed team compositions"}else if(total>=3||b.match.evidence>=1){level="Medium";why=b.match.evidence?"Some direct matchup evidence":"Partial composition information"}if(isNonRoamFlex(h)){if(level==="High")level="Medium";why="Flex-role matchups and scoring are provisional"}if(state.role==="Roam"&&!candidateTraits(h).includes("frontline")){
+ const v=safetyFor(h);
+ if(["recommended","ally-compatible"].includes(v.status)){level="Medium";why=v.status==="ally-compatible"?"Allied structure fits; enemy champions are hidden":"Draft structure and visible enemy threats screened"}
+ else{level="Low";why="Draft coverage, enemy information or counter-risk requires review"}
+}return{level,why,cls:level.toLowerCase()}}
+function pickType(h,b){if(state.role==="Roam"){const v=safetyFor(h);if(v.status==="recommended")return{label:"Draft-compatible",cls:"synergy"};if(v.status==="ally-compatible")return{label:"Ally fit; enemy hidden",cls:"synergy"};if(v.status!=="frontline")return{label:"Conditional — review",cls:"risk"}}const [solo,carry,ease]=candidateStats(h);if(isBlindRank()){if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced blind pick",cls:"safe"}}if(b.match.laneDanger.length)return{label:"Risky countered pick",cls:"risk"};if(b.match.laneStrong.length||b.match.strong.length>=2)return{label:"Counterpick",cls:"counter"};if(b.repairPart>=30)return{label:"Team fix",cls:"teamfix"};if(b.syn.explicit.length)return{label:"Synergy pick",cls:"synergy"};if(state.enemies.filter(Boolean).length<=1&&solo>=4&&ease>=3)return{label:"Safe blind pick",cls:"safe"};if(carry>=5)return{label:"Carry pick",cls:"carry"};return{label:"Balanced pick",cls:"safe"}}
 function reason(h,b){const tr=candidateTraits(h),issues=allyIssues(),enemy=enemyProfile(),bits=[],stats=candidateStats(h),solo=stats[0],carry=stats[1],m=b||scoreBreakdown(h);if(isNonRoamFlex(h))bits.push("documented "+state.role+" flex; provisional off-role strength");if(m.comfort?.score>=7)bits.push("strong account comfort at "+formatPower(m.comfort.current)+" Hero Power");else if(m.comfort?.score>=4)bits.push("account familiarity boost from "+formatPower(m.comfort.current)+" Hero Power");if(isBlindRank()&&solo>=4)bits.push("safe blind-pick profile");if(m.match.laneStrong.length)bits.push("lane matchup edge into "+m.match.laneStrong.slice(0,2).map(n=>displayName(hero(n))).join(" + "));else if(m.match.strong.length)bits.push("direct matchup edge into "+m.match.strong.slice(0,2).map(n=>displayName(hero(n))).join(" + "));if(m.syn.explicit.length)bits.push("documented synergy with "+m.syn.explicit.slice(0,2).map(n=>displayName(hero(n))).join(" + "));if(solo>=5)bits.push("high solo-queue independence");else if(solo>=4)bits.push("reliable without coordinated teammates");if(issues.includes("No frontline")&&tr.includes("frontline"))bits.push("repairs your frontline");if(issues.includes("Low crowd control")&&tr.includes("cc"))bits.push("adds needed CC");if(issues.includes("No reliable engage")&&tr.includes("engage"))bits.push("adds initiation");if(issues.includes("Backline lacks peel")&&tr.includes("peel"))bits.push("protects your backline");if(enemy.includes("Heavy dive")&&(tr.includes("frontline")||tr.includes("peel")||tr.includes("cc")))bits.push("better into enemy dive");if(carry>=5)bits.push("high carry ceiling");if(isRoamFlex(h))bits.push("Roam role: "+candidateFocus(h).toLowerCase());else if(h.tier==="S"||h.tier==="A")bits.push(h.tier+"-tier meta baseline");return(bits.slice(0,3).join("; ")||"solid role fit for this draft")+"."}
 function detailTags(h,b){let html="";if(b.match.strong.length)html+=`<div class="recommendation-label">Direct matchup edges</div><div class="tags">${b.match.strong.map(n=>`<span class="tag match-good">✓ ${esc(displayName(hero(n)))}</span>`).join("")}</div>`;if(b.match.danger.length)html+=`<div class="recommendation-label">Enemy threats to this pick</div><div class="tags">${b.match.danger.map(n=>`<span class="tag match-bad">⚠ ${esc(displayName(hero(n)))}</span>`).join("")}</div>`;if(b.syn.explicit.length||b.syn.labels.length)html+=`<div class="recommendation-label">Synergy</div><div class="tags">${b.syn.explicit.map(n=>`<span class="tag syn-good">★ ${esc(displayName(hero(n)))}</span>`).join("")}${b.syn.labels.map(n=>`<span class="tag syn-good">+ ${esc(n)}</span>`).join("")}</div>`;if(b.comfort?.current!=null)html+=`<div class="recommendation-label">Your account</div><div class="tags"><span class="tag ${b.comfort.score>=7?"comfort-good":"comfort-mid"}">◆ ${formatPower(b.comfort.current)} Hero Power • +${Math.round(b.comfortPart)} comfort</span></div>`;if(b.match.laneDanger.length)html+=`<div class="warning-line">Lane warning: ${b.match.laneDanger.map(n=>esc(displayName(hero(n)))).join(" + ")} has direct evidence into this pick.</div>`;return html}
 function draftPlan(){const issues=allyIssues(),enemy=enemyProfile(),allies=visibleAllies().filter(Boolean).length,enemies=isBlindRank()?0:state.enemies.filter(Boolean).length;const priority=issues.length?issues.slice(0,2).join(" + "):"No urgent team repair";const threat=isBlindRank()?"Hidden in blind pick":(enemy.length?enemy.slice(0,2).join(" + "):"Enemy draft still unclear");let info=isBlindRank()?"Blind selection":"Early draft";if(!isBlindRank()){if(allies+enemies>=7)info="Late draft";else if(allies+enemies>=4)info="Mid draft"}return{priority,threat,info,allies,enemies}}
 function renderDraftSummary(){const p=draftPlan();const third=isBlindRank()?`${p.allies} of 4 teammate choices entered`:`${p.allies} ally / ${p.enemies} enemy picks entered`;$('draftSummary').innerHTML=`<div class="draft-summary"><div class="draft-summary-title">${isBlindRank()?"Blind-pick plan":"Draft plan"}</div><div class="draft-summary-grid"><div class="summary-cell"><strong>${esc(p.priority)}</strong><span>ally priority</span></div><div class="summary-cell"><strong>${esc(p.threat)}</strong><span>${isBlindRank()?"enemy information":"enemy read"}</span></div><div class="summary-cell"><strong>${esc(p.info)}</strong><span>${esc(third)}</span></div></div></div>`}
 function analyze(silent=false){const issues=allyIssues(),enemy=enemyProfile(),full=recommendationPool();let pool=full.slice(0,visibleRecommendationCount());
-if(state.role==="Roam"&&currentIntent()==="normal"&&pool.length>=3&&visibleAllies().filter(Boolean).length===4){
-  const alt=full.find(x=>x.safety.status==="conditional"&&!candidateTraits(x.h).includes("frontline")&&!pool.some(p=>p.h.n===x.h.n));
+if(state.role==="Roam"&&pool.length>=3&&visibleAllies().filter(Boolean).length===4){
+  const alt=full.find(x=>["recommended","ally-compatible","conditional"].includes(x.safety.status)&&!candidateTraits(x.h).includes("frontline")&&!pool.some(p=>p.h.n===x.h.n));
   if(alt&&alt.b.total>=pool[pool.length-1].b.total-20)pool=[...pool.slice(0,-1),alt];
 }let issueHtml="";const urgency=urgencyLevel();if(!isBlindRank()&&urgency==="emergency")issueHtml+=`<div class="urgent-banner">${timerRemaining}s left — emergency view: showing only the highest-ranked owned pick for ${esc(state.role)}.</div>`;else if(!isBlindRank()&&urgency==="commit")issueHtml+=`<div class="commit-banner">${timerRemaining}s left — commit view: shortlist reduced to the top 3.</div>`;if(isBlindRank())issueHtml+=`<div class="ok">${esc(state.rank)} Blind Pick: hidden enemies ignored. ${visibleAllies().filter(Boolean).length}/4 teammates known.</div>`;issueHtml+=issues.length?`<div class="issues">${issues.map(x=>`<span class="issue">${esc(isBlindRank()&&visibleAllies().filter(Boolean).length<4?"Potential: "+x:x)}</span>`).join("")}</div>`:`<div class="ok">No critical ally composition problem detected.</div>`;
 if(state.role==="Roam"){
