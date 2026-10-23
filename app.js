@@ -1303,7 +1303,7 @@ function recommendationPool(){
   return eligibleOwnedPool().filter(x=>{
     if(state.role!=="Roam")return true;
     if(x.safety.status==="frontline"||x.safety.status==="approved")return true;
-    return normal&&known>=3&&x.safety.status==="conditional";
+    return normal&&known===4&&x.safety.status==="conditional";
   }).sort((a,b)=>{
     const score=x=>x.b.total-(x.safety.status==="conditional"?14:0);
     return score(b)-score(a);
