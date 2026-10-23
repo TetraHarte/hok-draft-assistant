@@ -1,3 +1,23 @@
+# HoK Solo Draft Assistant v0.18.0 — Conservative Draft Safety & Dunshan
+
+Free browser-based Honor of Kings drafting tool for desktop and iPhone PWA; Mobile Legends remains a separate, unchanged workspace.
+
+## v0.18.0 review branch (not merged)
+
+- **Dunshan:** added as the 120th unique hero, primary **Roam**, provisional **C-tier** Vanguard Tank. Search aliases: Shield Eternal / 盾山. His six-item Roam template is provisional and includes a Roam support item; it is not a verified optimal build. Existing account ownership is **not** automatically changed.
+- **October 21, 2026 Global patch:** new Dunshan; patch-review flags for confirmed buffs **Sun Ce, Yuhuan, Lady Sun, Arke** and stat adjustments **Zilong, Lian Po, Dun**. No quantitative draft-score offsets are applied until the changes are independently assessed. Profiles for the seven are flagged for reassessment; the update alone does not establish new roles, reliable matchup data, or guaranteed outcomes.
+- **Non-tank Roam composition-safety gate:** verify Clash/Jungle/Mid/Farm lane coverage, distinguish primary-role feasibility from unconfirmed flex-lane assignments, and assess visible frontline anchors, initiation, CC, damage distribution, carry peel, and enemy dive. Uses frontline, rejected, insufficient, manual-review, conditional, ally-compatible (enemies hidden) and recommended (complete draft) verdicts. Severe weaknesses cause rejection. These verdicts concern draft fit, not win probabilities.
+- **Conservative rather than impossible standard:** percentage figures are not used as pick guarantees or release locks. In both Ranked and Normal, the assistant can recommend a non-tank Roamer when all four allies have feasible primary-lane coverage and the structural safety checks pass. Blind-pick decisions are labeled **ALLY FIT · ENEMY UNKNOWN**, whereas complete compatible drafts can receive **DRAFT FIT**. Incomplete enemy information requires conditional manual review in higher-rank drafts, and high-risk enemy compositions still block picks. Flex-dependent team lanes are manual-review only.
+- **Per-account Ranked versus Normal choice:** controls the recommendation behavior without changing the account's existing Rank or rewriting saved Hero Power. Use Normal for informed practice; Ranked uses conservative auto-picks.
+- **Inspect all owned, role-eligible heroes:** new Hero Explorer lists options that did not make the top three/five. A rejected or conditional hero stays inspectable, with reasons. Existing Jungle, Clash and Farm eligibility is unaffected.
+- **Account/PWA safety:** no storage-schema migration, no automatic ownership changes, no MLBB changes. Updated app/service-worker cache to version 0180-dunshan.
+- **Regression and CI:** `.github/workflows/draft-safety-v0180.yml` runs syntax checks and `node --test tests/*.test.cjs` on the feature branch and pull requests. Historical hero-count/cache expectations were updated; await a passing GitHub Actions run before merge.
+
+**Primary patch source:** [Official October 21 Global server announcement](https://www.honorofkings.com/global-en/news-detail.html?content_id=aca43154a906da4284abe1ea47fe9521f856&father_content_id=aca43154a906da4284abe1ea47fe9521f856&sid=576). The global server announcement was published October 20. Only draft-relevant updates were coded; anniversary cosmetics/events do not influence recommendations.
+
+**Release gate:** Do not merge without the user's approval. Maintain green automated tests, test real draft examples, verify Dunshan's provisional data, and check desktop/iPhone PWA behavior. Recommendation confidence communicates evidence and uncertainty, not a predicted win rate.
+
+---
 # HoK Solo Draft Assistant v0.17.5 — Multi-Lane Roster Expansion
 
 Free browser-based draft assistant for Honor of Kings (HoK), with a separate Mobile Legends: Bang Bang (MLBB) workspace. Runs as a desktop web app or an installable iPhone PWA.

@@ -6,6 +6,7 @@ const path=require("node:path");
 const vm=require("node:vm");
 
 const app=fs.readFileSync(path.join(__dirname,"..","app.js"),"utf8");
+const safety=fs.readFileSync(path.join(__dirname,"..","draft-safety.js"),"utf8");
 const html=fs.readFileSync(path.join(__dirname,"..","index.html"),"utf8");
 const sw=fs.readFileSync(path.join(__dirname,"..","sw.js"),"utf8");
 const bootstrap=app.lastIndexOf("\ntry{applyUiScale(initialUiScale());wireEvents();");
@@ -18,8 +19,9 @@ const ctx={
  structuredClone:x=>JSON.parse(JSON.stringify(x))
 };
 vm.createContext(ctx);
+vm.runInContext(safety,ctx);
 vm.runInContext(app.slice(0,bootstrap)+
- "\nglobalThis.testApi={HEROES,state,hero,heroPlaysLane,laneLabel,quickPool,candidateTier,candidateStats,scoreBreakdown,confidenceInfo,adaptiveBuild,isNonRoamFlex,isRoamFlex};",ctx);
+ "\nglobalThis.testApi={HEROES,state,hero,heroPlaysLane,laneLabel,quickPool,eligibleOwnedPool,candidateTier,candidateStats,scoreBreakdown,confidenceInfo,adaptiveBuild,isNonRoamFlex,isRoamFlex};",ctx);
 const a=ctx.testApi;
 const added={
  "Chicha":["Jungle","Farm Lane"],
@@ -29,9 +31,9 @@ const added={
  "Chano":["Jungle"],"Fang":["Jungle"],"Kongming":["Jungle"],"Sima Yi":["Mid Lane"]
 };
 
-test("All 119 heroes remain unique; 42 multi-lane heroes hold 46 extra lane assignments",()=>{
- assert.equal(a.HEROES.length,119);
- assert.equal(new Set(a.HEROES.map(x=>x.n)).size,119);
+test("All 120 heroes remain unique; 42 multi-lane heroes hold 46 extra lane assignments",()=>{
+ assert.equal(a.HEROES.length,120);
+ assert.equal(new Set(a.HEROES.map(x=>x.n)).size,120);
  assert.equal(a.HEROES.filter(h=>(h.secondaryLanes||[]).length).length,42);
  assert.equal(a.HEROES.reduce((s,h)=>s+(h.secondaryLanes||[]).length,0),46);
  assert.equal(Object.keys(added).length,30);
@@ -98,7 +100,7 @@ test("Original Roam-specific templates and existing draft role filters are prese
  const mozi=a.hero("Mozi");
  assert.equal(a.isRoamFlex(mozi),true);
  assert.ok(a.adaptiveBuild(mozi).items[0].startsWith("Crimson Shadow"));
- assert.ok(a.quickPool().some(x=>x.h.n==="Mozi"));
+ assert.ok(a.eligibleOwnedPool().some(x=>x.h.n==="Mozi"),"Roam flex remains inspectable despite conservative Ranked filtering");
  a.state.role="Jungle";
  assert.equal(a.heroPlaysLane(a.hero("Dun"),"Jungle"),false);
  a.state.role="Mid Lane";
@@ -109,8 +111,8 @@ test("Original Roam-specific templates and existing draft role filters are prese
 test("Saved-account schema and PWA cache version remain compatible",()=>{
  assert.match(app,/const DATA_SCHEMA_VERSION=161;/);
  assert.match(app,/const STORAGE="hokDraftAssistantV01";/);
- assert.match(html,/v0\.17\.5/);
- assert.match(html,/app\.js\?v=0175-flex-lanes/);
- assert.match(sw,/solo-draft-v0175-flex-lanes/);
- assert.match(sw,/app\.js\?v=0175-flex-lanes/);
+ assert.match(html,/v0\.18\.0/);
+ assert.match(html,/app\.js\?v=0180-dunshan/);
+ assert.match(sw,/solo-draft-v0180-dunshan/);
+ assert.match(sw,/app\.js\?v=0180-dunshan/);
 });

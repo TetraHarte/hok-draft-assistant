@@ -6,6 +6,7 @@ const path=require("node:path");
 const vm=require("node:vm");
 
 const app=fs.readFileSync(path.join(__dirname,"..","app.js"),"utf8");
+const safety=fs.readFileSync(path.join(__dirname,"..","draft-safety.js"),"utf8");
 const html=fs.readFileSync(path.join(__dirname,"..","index.html"),"utf8");
 const sw=fs.readFileSync(path.join(__dirname,"..","sw.js"),"utf8");
 const bootstrap=app.lastIndexOf("\ntry{applyUiScale(initialUiScale());wireEvents();");
@@ -18,13 +19,14 @@ const context={
  structuredClone:value=>JSON.parse(JSON.stringify(value))
 };
 vm.createContext(context);
+vm.runInContext(safety,context);
 vm.runInContext(app.slice(0,bootstrap)+
  "\nglobalThis.testApi={HEROES,state,hero,campNameToLocal,heroPlaysLane,searchable,baseStats,traits,scoreBreakdown,genericBuild,quickPool};",context);
 const api=context.testApi;
 const wang=api.hero("Wang Wei");
 
-test("Wang Wei is added exactly once as the 119th hero",()=>{
- assert.equal(api.HEROES.length,119);
+test("Wang Wei remains unique after adding Dunshan as the 120th hero",()=>{
+ assert.equal(api.HEROES.length,120);
  assert.equal(api.HEROES.filter(h=>h.n==="Wang Wei").length,1);
  assert.ok(wang);
  assert.equal(wang.lane,"Mid Lane");
@@ -60,8 +62,8 @@ test("draft only offers owned Wang Wei when player is assigned Mid Lane",()=>{
  assert.equal(api.quickPool().some(x=>x.h.n==="Wang Wei"),false);
 });
 test("offline shell and version are updated together",()=>{
- assert.match(html,/v0\.17\.4/);
- assert.match(html,/app\.js\?v=0174-wang-wei/);
- assert.match(sw,/solo-draft-v0174-wang-wei/);
- assert.match(sw,/app\.js\?v=0174-wang-wei/);
+ assert.match(html,/v0\.18\.0/);
+ assert.match(html,/app\.js\?v=0180-dunshan/);
+ assert.match(sw,/solo-draft-v0180-dunshan/);
+ assert.match(sw,/app\.js\?v=0180-dunshan/);
 });
